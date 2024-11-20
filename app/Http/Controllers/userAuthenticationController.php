@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 
+
 class userAuthenticationController extends Controller
 {
     public function userRegister()
@@ -91,7 +92,7 @@ class userAuthenticationController extends Controller
         ];
 
         // Build the full API URL dynamically using the config
-        $apiUrl = config('api.base_url') . '/login'; // The /login endpoint of the external API
+        $apiUrl = config('api.base_url') . '/login'; 
         Log::info('Connecting to API URL: ' . $apiUrl);
 
         try {
@@ -106,17 +107,22 @@ class userAuthenticationController extends Controller
             if ($response->successful()) {
                 $responseData = $response->json();
 
-                // Assuming the API returns a token and user data
-                session([
-                    'api_token' => $responseData['data']['authorization']['token'],
-                    'user' => $responseData['data']['user'],
-                ]);
+                // Store the token and user data in the session
+                if (isset($responseData['data']['authorization']['token'])) {
+                    session([
+                        'api_token' => $responseData['data']['authorization']['token'],
+                        'user' => $responseData['data']['user'],
+                    ]);
+                } else {
+                    // If no token returned, handle accordingly
+                    return back()->withErrors(['login_error' => 'Authentication failed.']);
+                }
 
                 // Redirect to the dashboard with a success message
                 return redirect()->route('user.dashboard')->with('success', 'Login successful! Welcome back.');
             } else {
                 // If API login failed, show the error message
-                return back()->withErrors(['login_error' => $response->json()['message']]);
+                return back()->withErrors(['login_error' => $response->json()['message'] ?? 'Login failed.']);
             }
         } catch (\Exception $e) {
             // Handle any exceptions that occur during the API request

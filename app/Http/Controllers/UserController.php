@@ -17,13 +17,5 @@ class UserController extends Controller
         return view('welcome');
     }
 
-    public function newsCategoryList()
-    {
-        return view('news.show');
-    }
-
-    public function newDetails()
-    {
-        return view('news.details');
-    }
+   
 }

@@ -1,5 +1,5 @@
 @extends('dashboard.base')
-@Section('title', 'Essential News')
+@Section('title', 'Create Post')
 
 
 @section('sidebar')
@@ -8,5 +8,5 @@
 
 
 @section('content')
-    @include('partials.dashboard')
+    @include('category.create-category')
 @endsection

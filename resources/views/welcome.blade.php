@@ -1,176 +1,1764 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('base.base')
+@section('title', 'Home - Essential Nigeria News')
 
-        <title>Laravel</title>
+@section('content')
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <div class="bg-gray-100 min-h-screen">
 
-        <!-- Styles / Scripts -->
-        @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-            @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @else
-            <style>
-                /* ! tailwindcss v3.4.1 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Figtree, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]{display:none}*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }.absolute{position:absolute}.relative{position:relative}.-left-20{left:-5rem}.top-0{top:0px}.-bottom-16{bottom:-4rem}.-left-16{left:-4rem}.-mx-3{margin-left:-0.75rem;margin-right:-0.75rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.aspect-video{aspect-ratio:16 / 9}.size-12{width:3rem;height:3rem}.size-5{width:1.25rem;height:1.25rem}.size-6{width:1.5rem;height:1.5rem}.h-12{height:3rem}.h-40{height:10rem}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-full{width:100%}.w-\[calc\(100\%\+8rem\)\]{width:calc(100% + 8rem)}.w-auto{width:auto}.max-w-\[877px\]{max-width:877px}.max-w-2xl{max-width:42rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.items-stretch{align-items:stretch}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.self-center{align-self:center}.overflow-hidden{overflow:hidden}.rounded-\[10px\]{border-radius:10px}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-sm{border-radius:0.125rem}.bg-\[\#FF2D20\]\/10{background-color:rgb(255 45 32 / 0.1)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity))}.bg-gradient-to-b{background-image:linear-gradient(to bottom, var(--tw-gradient-stops))}.from-transparent{--tw-gradient-from:transparent var(--tw-gradient-from-position);--tw-gradient-to:rgb(0 0 0 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-white{--tw-gradient-to:rgb(255 255 255 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #fff var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-white{--tw-gradient-to:#fff var(--tw-gradient-to-position)}.stroke-\[\#FF2D20\]{stroke:#FF2D20}.object-cover{object-fit:cover}.object-top{object-position:top}.p-6{padding:1.5rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pt-3{padding-top:0.75rem}.text-center{text-align:center}.font-sans{font-family:Figtree, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-sm\/relaxed{font-size:0.875rem;line-height:1.625}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-semibold{font-weight:600}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.shadow-\[0px_14px_34px_0px_rgba\(0\2c 0\2c 0\2c 0\.08\)\]{--tw-shadow:0px 14px 34px 0px rgba(0,0,0,0.08);--tw-shadow-colored:0px 14px 34px 0px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.ring-1{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.ring-transparent{--tw-ring-color:transparent}.ring-white\/\[0\.05\]{--tw-ring-color:rgb(255 255 255 / 0.05)}.drop-shadow-\[0px_4px_34px_rgba\(0\2c 0\2c 0\2c 0\.06\)\]{--tw-drop-shadow:drop-shadow(0px 4px 34px rgba(0,0,0,0.06));filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.drop-shadow-\[0px_4px_34px_rgba\(0\2c 0\2c 0\2c 0\.25\)\]{--tw-drop-shadow:drop-shadow(0px 4px 34px rgba(0,0,0,0.25));filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.selection\:bg-\[\#FF2D20\] *::selection{--tw-bg-opacity:1;background-color:rgb(255 45 32 / var(--tw-bg-opacity))}.selection\:text-white *::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.selection\:bg-\[\#FF2D20\]::selection{--tw-bg-opacity:1;background-color:rgb(255 45 32 / var(--tw-bg-opacity))}.selection\:text-white::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.hover\:text-black:hover{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity))}.hover\:text-black\/70:hover{color:rgb(0 0 0 / 0.7)}.hover\:ring-black\/20:hover{--tw-ring-color:rgb(0 0 0 / 0.2)}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus-visible\:ring-1:focus-visible{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus-visible\:ring-\[\#FF2D20\]:focus-visible{--tw-ring-opacity:1;--tw-ring-color:rgb(255 45 32 / var(--tw-ring-opacity))}@media (min-width: 640px){.sm\:size-16{width:4rem;height:4rem}.sm\:size-6{width:1.5rem;height:1.5rem}.sm\:pt-5{padding-top:1.25rem}}@media (min-width: 768px){.md\:row-span-3{grid-row:span 3 / span 3}}@media (min-width: 1024px){.lg\:col-start-2{grid-column-start:2}.lg\:h-16{height:4rem}.lg\:max-w-7xl{max-width:80rem}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:flex-col{flex-direction:column}.lg\:items-end{align-items:flex-end}.lg\:justify-center{justify-content:center}.lg\:gap-8{gap:2rem}.lg\:p-10{padding:2.5rem}.lg\:pb-10{padding-bottom:2.5rem}.lg\:pt-0{padding-top:0px}.lg\:text-\[\#FF2D20\]{--tw-text-opacity:1;color:rgb(255 45 32 / var(--tw-text-opacity))}}@media (prefers-color-scheme: dark){.dark\:block{display:block}.dark\:hidden{display:none}.dark\:bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity))}.dark\:bg-zinc-900{--tw-bg-opacity:1;background-color:rgb(24 24 27 / var(--tw-bg-opacity))}.dark\:via-zinc-900{--tw-gradient-to:rgb(24 24 27 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #18181b var(--tw-gradient-via-position), var(--tw-gradient-to)}.dark\:to-zinc-900{--tw-gradient-to:#18181b var(--tw-gradient-to-position)}.dark\:text-white\/50{color:rgb(255 255 255 / 0.5)}.dark\:text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.dark\:text-white\/70{color:rgb(255 255 255 / 0.7)}.dark\:ring-zinc-800{--tw-ring-opacity:1;--tw-ring-color:rgb(39 39 42 / var(--tw-ring-opacity))}.dark\:hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity))}.dark\:hover\:text-white\/70:hover{color:rgb(255 255 255 / 0.7)}.dark\:hover\:text-white\/80:hover{color:rgb(255 255 255 / 0.8)}.dark\:hover\:ring-zinc-700:hover{--tw-ring-opacity:1;--tw-ring-color:rgb(63 63 70 / var(--tw-ring-opacity))}.dark\:focus-visible\:ring-\[\#FF2D20\]:focus-visible{--tw-ring-opacity:1;--tw-ring-color:rgb(255 45 32 / var(--tw-ring-opacity))}.dark\:focus-visible\:ring-white:focus-visible{--tw-ring-opacity:1;--tw-ring-color:rgb(255 255 255 / var(--tw-ring-opacity))}}
-            </style>
-        @endif
-    </head>
-    <body class="font-sans antialiased dark:bg-black dark:text-white/50">
-        <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
-            <img id="background" class="absolute -left-20 top-0 max-w-[877px]" src="https://laravel.com/assets/img/welcome/background.svg" alt="Laravel background" />
-            <div class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
-                <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                    <header class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3">
-                        <div class="flex lg:justify-center lg:col-start-2">
-                            <svg class="h-12 w-auto text-white lg:h-16 lg:text-[#FF2D20]" viewBox="0 0 62 65" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M61.8548 14.6253C61.8778 14.7102 61.8895 14.7978 61.8897 14.8858V28.5615C61.8898 28.737 61.8434 28.9095 61.7554 29.0614C61.6675 29.2132 61.5409 29.3392 61.3887 29.4265L49.9104 36.0351V49.1337C49.9104 49.4902 49.7209 49.8192 49.4118 49.9987L25.4519 63.7916C25.3971 63.8227 25.3372 63.8427 25.2774 63.8639C25.255 63.8714 25.2338 63.8851 25.2101 63.8913C25.0426 63.9354 24.8666 63.9354 24.6991 63.8913C24.6716 63.8838 24.6467 63.8689 24.6205 63.8589C24.5657 63.8389 24.5084 63.8215 24.456 63.7916L0.501061 49.9987C0.348882 49.9113 0.222437 49.7853 0.134469 49.6334C0.0465019 49.4816 0.000120578 49.3092 0 49.1337L0 8.10652C0 8.01678 0.0124642 7.92953 0.0348998 7.84477C0.0423783 7.8161 0.0598282 7.78993 0.0697995 7.76126C0.0884958 7.70891 0.105946 7.65531 0.133367 7.6067C0.152063 7.5743 0.179485 7.54812 0.20192 7.51821C0.230588 7.47832 0.256763 7.43719 0.290416 7.40229C0.319084 7.37362 0.356476 7.35243 0.388883 7.32751C0.425029 7.29759 0.457436 7.26518 0.498568 7.2415L12.4779 0.345059C12.6296 0.257786 12.8015 0.211853 12.9765 0.211853C13.1515 0.211853 13.3234 0.257786 13.475 0.345059L25.4531 7.2415H25.4556C25.4955 7.26643 25.5292 7.29759 25.5653 7.32626C25.5977 7.35119 25.6339 7.37362 25.6625 7.40104C25.6974 7.43719 25.7224 7.47832 25.7523 7.51821C25.7735 7.54812 25.8021 7.5743 25.8196 7.6067C25.8483 7.65656 25.8645 7.70891 25.8844 7.76126C25.8944 7.78993 25.9118 7.8161 25.9193 7.84602C25.9423 7.93096 25.954 8.01853 25.9542 8.10652V33.7317L35.9355 27.9844V14.8846C35.9355 14.7973 35.948 14.7088 35.9704 14.6253C35.9792 14.5954 35.9954 14.5692 36.0053 14.5405C36.0253 14.4882 36.0427 14.4346 36.0702 14.386C36.0888 14.3536 36.1163 14.3274 36.1375 14.2975C36.1674 14.2576 36.1923 14.2165 36.2272 14.1816C36.2559 14.1529 36.292 14.1317 36.3244 14.1068C36.3618 14.0769 36.3942 14.0445 36.4341 14.0208L48.4147 7.12434C48.5663 7.03694 48.7383 6.99094 48.9133 6.99094C49.0883 6.99094 49.2602 7.03694 49.4118 7.12434L61.3899 14.0208C61.4323 14.0457 61.4647 14.0769 61.5021 14.1055C61.5333 14.1305 61.5694 14.1529 61.5981 14.1803C61.633 14.2165 61.6579 14.2576 61.6878 14.2975C61.7103 14.3274 61.7377 14.3536 61.7551 14.386C61.7838 14.4346 61.8 14.4882 61.8199 14.5405C61.8312 14.5692 61.8474 14.5954 61.8548 14.6253ZM59.893 27.9844V16.6121L55.7013 19.0252L49.9104 22.3593V33.7317L59.8942 27.9844H59.893ZM47.9149 48.5566V37.1768L42.2187 40.4299L25.953 49.7133V61.2003L47.9149 48.5566ZM1.99677 9.83281V48.5566L23.9562 61.199V49.7145L12.4841 43.2219L12.4804 43.2194L12.4754 43.2169C12.4368 43.1945 12.4044 43.1621 12.3682 43.1347C12.3371 43.1097 12.3009 43.0898 12.2735 43.0624L12.271 43.0586C12.2386 43.0275 12.2162 42.9888 12.1887 42.9539C12.1638 42.9203 12.1339 42.8916 12.114 42.8567L12.1127 42.853C12.0903 42.8156 12.0766 42.7707 12.0604 42.7283C12.0442 42.6909 12.023 42.656 12.013 42.6161C12.0005 42.5688 11.998 42.5177 11.9931 42.4691C11.9881 42.4317 11.9781 42.3943 11.9781 42.3569V15.5801L6.18848 12.2446L1.99677 9.83281ZM12.9777 2.36177L2.99764 8.10652L12.9752 13.8513L22.9541 8.10527L12.9752 2.36177H12.9777ZM18.1678 38.2138L23.9574 34.8809V9.83281L19.7657 12.2459L13.9749 15.5801V40.6281L18.1678 38.2138ZM48.9133 9.14105L38.9344 14.8858L48.9133 20.6305L58.8909 14.8846L48.9133 9.14105ZM47.9149 22.3593L42.124 19.0252L37.9323 16.6121V27.9844L43.7219 31.3174L47.9149 33.7317V22.3593ZM24.9533 47.987L39.59 39.631L46.9065 35.4555L36.9352 29.7145L25.4544 36.3242L14.9907 42.3482L24.9533 47.987Z" fill="currentColor"/></svg>
-                        </div>
-                        @if (Route::has('user.login'))
-                            <nav class="-mx-3 flex flex-1 justify-end">
-                                @auth
-                                    <a
-                                        href="{{ url('/dashboard') }}"
-                                        class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                    >
-                                        Dashboard
-                                    </a>
-                                @else
-                                    <a
-                                        href="{{ route('user.login') }}"
-                                        class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                    >
-                                        Log in
-                                    </a>
 
-                                    @if (Route::has('user.register'))
-                                        <a
-                                            href="{{ route('user.register') }}"
-                                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                                        >
-                                            Register
-                                        </a>
-                                    @endif
-                                @endauth
-                            </nav>
+        <main class="container mx-auto px-4 py-8">
+            <section class="bg-purple-700 text-white p-4 md:p-8 rounded-lg mb-8">
+                <h1 class="text-2xl md:text-3xl font-bold mb-4">EXPLORE THE WORLD WITH US</h1>
+                <form action="#" method="GET" class="flex">
+                    <input type="text" name="query" placeholder="Search news, birthday, obituary..."
+                        class="flex-grow p-2 rounded-l-lg text-black">
+                    <button type="submit" class="bg-pink-500 p-2 rounded-r-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </button>
+                </form>
+            </section>
+
+            <!--- START OF TEST CONTAINER--->
+
+            <section class="mb-8">
+                @if (count($postsData['posts']) > 0)
+                    @foreach ($postsData['posts'] as $post)
+                        <article class="mb-6">
+                            @if ($post['featured_image'])
+                                <img src="{{ $post['featured_image'] }}" alt="{{ ucwords(strtolower($post['title'])) }}"
+                                    class="w-full h-48 md:h-64 object-cover rounded-lg mb-4">
+                            @else
+                                <img src="{{ asset('/images/news-image.jpeg') }}" alt="News image"
+                                    class="w-full h-48 md:h-64 object-cover rounded-lg mb-4">
+                            @endif
+                            <h2 class="text-xl md:text-2xl font-bold mb-2">
+                                <a href="{{ route('post.details', $post['slug']) }}"
+                                    class="text-xl md:text-2xl font-bold mb-2">
+                                    {{ \Illuminate\Support\Str::title($post['title']) }}
+                                </a>
+                            </h2>
+
+                            <p class="text-gray-600 text-sm md:text-base mb-2">
+                                {{ Str::limit($post['excerpt'] ?? 'Emerging reports indicate that the total monthly remuneration of 68 non-principal officers of the Nigerian Senate surpasses N2 billion...', 150) }}
+                            </p>
+                            <p class="text-gray-500 text-xs">
+                                <span>{{ ucfirst($post['status']) }}</span> |
+                                <span>{{ \Carbon\Carbon::parse($post['created_at'])->format('d M Y H:i') }}</span> |
+                                <span>{{ $post['scheduled_time'] ? \Carbon\Carbon::parse($post['scheduled_time'])->format('d M Y H:i') : 'N/A' }}</span>
+                            </p>
+                        </article>
+                    @endforeach
+
+                    <!-- Pagination -->
+                    <div class="pagination mt-4">
+                        @if (isset($pagination['total']) &&
+                                $pagination['total'] > 0 &&
+                                isset($pagination['last_page']) &&
+                                $pagination['last_page'] > 1)
+                            <ul class="pagination flex space-x-2">
+                                @if (isset($pagination['prev_page_url']) && $pagination['prev_page_url'])
+                                    <li class="page-item">
+                                        <a class="page-link text-blue-600 hover:underline"
+                                            href="{{ $pagination['prev_page_url'] }}">Previous</a>
+                                    </li>
+                                @endif
+
+                                @for ($i = 1; $i <= $pagination['last_page']; $i++)
+                                    <li class="page-item {{ $i == $pagination['current_page'] ? 'bg-blue-100' : '' }}">
+                                        <a class="page-link text-blue-600 hover:underline"
+                                            href="{{ route('news.pending_posts', ['page' => $i]) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if (isset($pagination['next_page_url']) && $pagination['next_page_url'])
+                                    <li class="page-item">
+                                        <a class="page-link text-blue-600 hover:underline"
+                                            href="{{ $pagination['next_page_url'] }}">Next</a>
+                                    </li>
+                                @endif
+                            </ul>
                         @endif
-                    </header>
+                    </div>
+                @else
+                    <p>No pending posts found.</p>
+                @endif
+            </section>
 
-                    <main class="mt-6">
-                        <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-                            <a
-                                href="https://laravel.com/docs"
-                                id="docs-card"
-                                class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
-                            >
-                                <div id="screenshot-container" class="relative flex w-full flex-1 items-stretch">
-                                    <img
-                                        src="https://laravel.com/assets/img/welcome/docs-light.svg"
-                                        alt="Laravel documentation screenshot"
-                                        class="aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.06)] dark:hidden"
-                                        onerror="
-                                            document.getElementById('screenshot-container').classList.add('!hidden');
-                                            document.getElementById('docs-card').classList.add('!row-span-1');
-                                            document.getElementById('docs-card-content').classList.add('!flex-row');
-                                            document.getElementById('background').classList.add('!hidden');
-                                        "
-                                    />
-                                    <img
-                                        src="https://laravel.com/assets/img/welcome/docs-dark.svg"
-                                        alt="Laravel documentation screenshot"
-                                        class="hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.25)] dark:block"
-                                    />
-                                    <div
-                                        class="absolute -bottom-16 -left-16 h-40 w-[calc(100%+8rem)] bg-gradient-to-b from-transparent via-white to-white dark:via-zinc-900 dark:to-zinc-900"
-                                    ></div>
+
+            <!--- END OF TEST CONTAINER-->
+
+
+            <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
+                @php
+                    $categories = [
+                        ['title' => 'News', 'count' => '1M'],
+                        ['title' => 'Public Notice', 'count' => '53'],
+                        ['title' => 'Forums', 'count' => '100'],
+                        ['title' => 'Loss of Document', 'count' => '2000'],
+                        ['title' => 'Forums', 'count' => '100'],
+                        ['title' => 'Loss of Document', 'count' => '2000'],
+                        ['title' => 'Obituary', 'count' => '1M'],
+                    ];
+                @endphp
+
+                @foreach ($categories as $category)
+                    <div class="text-center">
+                        <div class="font-bold text-lg">{{ $category['count'] }}</div>
+                        <div class="text-sm text-gray-600">{{ $category['title'] }}</div>
+                    </div>
+                @endforeach
+            </section>
+
+
+
+
+            <div class="bg-gray-100 p-4">
+                <h2 class="text-2xl font-bold mb-4 bg-gray-300 p-2">Photo News</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    @for ($i = 0; $i < 8; $i++)
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="relative">
+                                <img src="/images/news-image.jpeg" alt="News Image" class="w-full h-48 object-cover">
+                                <span
+                                    class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+                                    LIVE
+                                </span>
+                            </div>
+
+                            <div class="p-4">
+                                <h3 class="text-lg font-semibold mb-2">
+                                    Nigerian Senators' Monthly Pay Exceeds N2 Billion: Controversy Over Legislative Salaries
+                                    and Allowances
+                                </h3>
+
+                                <p class="text-sm text-gray-600 mb-4">
+                                    Emerging reports indicate that the total monthly remuneration of 68 non-principal
+                                    officers of the Nigerian Senate surpa...
+                                </p>
+
+                                <!-- Author and Category -->
+                                <div class="mb-3">
+                                    <p class="text-sm text-gray-600 mb-1">
+                                        By <span class="font-medium">Shola Akinyele</span>
+                                    </p>
+                                    <span class="inline-block text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                        Local News
+                                    </span>
                                 </div>
 
-                                <div class="relative flex items-center gap-6 lg:items-end">
-                                    <div id="docs-card-content" class="flex items-start gap-6 lg:flex-col">
-                                        <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
-                                            <svg class="size-5 sm:size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#FF2D20" d="M23 4a1 1 0 0 0-1.447-.894L12.224 7.77a.5.5 0 0 1-.448 0L2.447 3.106A1 1 0 0 0 1 4v13.382a1.99 1.99 0 0 0 1.105 1.79l9.448 4.728c.14.065.293.1.447.1.154-.005.306-.04.447-.105l9.453-4.724a1.99 1.99 0 0 0 1.1-1.789V4ZM3 6.023a.25.25 0 0 1 .362-.223l7.5 3.75a.251.251 0 0 1 .138.223v11.2a.25.25 0 0 1-.362.224l-7.5-3.75a.25.25 0 0 1-.138-.22V6.023Zm18 11.2a.25.25 0 0 1-.138.224l-7.5 3.75a.249.249 0 0 1-.329-.099.249.249 0 0 1-.033-.12V9.772a.251.251 0 0 1 .138-.224l7.5-3.75a.25.25 0 0 1 .362.224v11.2Z"/><path fill="#FF2D20" d="m3.55 1.893 8 4.048a1.008 1.008 0 0 0 .9 0l8-4.048a1 1 0 0 0-.9-1.785l-7.322 3.706a.506.506 0 0 1-.452 0L4.454.108a1 1 0 0 0-.9 1.785H3.55Z"/></svg>
-                                        </div>
-
-                                        <div class="pt-3 sm:pt-5 lg:pt-0">
-                                            <h2 class="text-xl font-semibold text-black dark:text-white">Documentation</h2>
-
-                                            <p class="mt-4 text-sm/relaxed">
-                                                Laravel has wonderful documentation covering every aspect of the framework. Whether you are a newcomer or have prior experience with Laravel, we recommend reading our documentation from beginning to end.
-                                            </p>
-                                        </div>
+                                <!-- Engagement Metrics -->
+                                <div class="flex items-center space-x-6 text-sm text-gray-500 pt-3 border-t">
+                                    <!-- Likes -->
+                                    <div class="flex items-center space-x-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
+                                            viewBox="0 0 20 20" fill="currentColor">
+                                            <path
+                                                d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                        </svg>
+                                        <span>123</span>
                                     </div>
 
-                                    <svg class="size-6 shrink-0 stroke-[#FF2D20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/></svg>
-                                </div>
-                            </a>
+                                    <!-- Comments -->
+                                    <div class="flex items-center space-x-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
+                                            viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <span>20</span>
+                                    </div>
 
-                            <a
-                                href="https://laracasts.com"
-                                class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
-                            >
-                                <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
-                                    <svg class="size-5 sm:size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><g fill="#FF2D20"><path d="M24 8.25a.5.5 0 0 0-.5-.5H.5a.5.5 0 0 0-.5.5v12a2.5 2.5 0 0 0 2.5 2.5h19a2.5 2.5 0 0 0 2.5-2.5v-12Zm-7.765 5.868a1.221 1.221 0 0 1 0 2.264l-6.626 2.776A1.153 1.153 0 0 1 8 18.123v-5.746a1.151 1.151 0 0 1 1.609-1.035l6.626 2.776ZM19.564 1.677a.25.25 0 0 0-.177-.427H15.6a.106.106 0 0 0-.072.03l-4.54 4.543a.25.25 0 0 0 .177.427h3.783c.027 0 .054-.01.073-.03l4.543-4.543ZM22.071 1.318a.047.047 0 0 0-.045.013l-4.492 4.492a.249.249 0 0 0 .038.385.25.25 0 0 0 .14.042h5.784a.5.5 0 0 0 .5-.5v-2a2.5 2.5 0 0 0-1.925-2.432ZM13.014 1.677a.25.25 0 0 0-.178-.427H9.101a.106.106 0 0 0-.073.03l-4.54 4.543a.25.25 0 0 0 .177.427H8.4a.106.106 0 0 0 .073-.03l4.54-4.543ZM6.513 1.677a.25.25 0 0 0-.177-.427H2.5A2.5 2.5 0 0 0 0 3.75v2a.5.5 0 0 0 .5.5h1.4a.106.106 0 0 0 .073-.03l4.54-4.543Z"/></g></svg>
-                                </div>
-
-                                <div class="pt-3 sm:pt-5">
-                                    <h2 class="text-xl font-semibold text-black dark:text-white">Laracasts</h2>
-
-                                    <p class="mt-4 text-sm/relaxed">
-                                        Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development. Check them out, see for yourself, and massively level up your development skills in the process.
-                                    </p>
-                                </div>
-
-                                <svg class="size-6 shrink-0 self-center stroke-[#FF2D20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/></svg>
-                            </a>
-
-                            <a
-                                href="https://laravel-news.com"
-                                class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
-                            >
-                                <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
-                                    <svg class="size-5 sm:size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><g fill="#FF2D20"><path d="M8.75 4.5H5.5c-.69 0-1.25.56-1.25 1.25v4.75c0 .69.56 1.25 1.25 1.25h3.25c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25Z"/><path d="M24 10a3 3 0 0 0-3-3h-2V2.5a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2V20a3.5 3.5 0 0 0 3.5 3.5h17A3.5 3.5 0 0 0 24 20V10ZM3.5 21.5A1.5 1.5 0 0 1 2 20V3a.5.5 0 0 1 .5-.5h14a.5.5 0 0 1 .5.5v17c0 .295.037.588.11.874a.5.5 0 0 1-.484.625L3.5 21.5ZM22 20a1.5 1.5 0 1 1-3 0V9.5a.5.5 0 0 1 .5-.5H21a1 1 0 0 1 1 1v10Z"/><path d="M12.751 6.047h2a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-.75.75h-2A.75.75 0 0 1 12 7.3v-.5a.75.75 0 0 1 .751-.753ZM12.751 10.047h2a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-.75.75h-2A.75.75 0 0 1 12 11.3v-.5a.75.75 0 0 1 .751-.753ZM4.751 14.047h10a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-.75.75h-10A.75.75 0 0 1 4 15.3v-.5a.75.75 0 0 1 .751-.753ZM4.75 18.047h7.5a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-.75.75h-7.5A.75.75 0 0 1 4 19.3v-.5a.75.75 0 0 1 .75-.753Z"/></g></svg>
-                                </div>
-
-                                <div class="pt-3 sm:pt-5">
-                                    <h2 class="text-xl font-semibold text-black dark:text-white">Laravel News</h2>
-
-                                    <p class="mt-4 text-sm/relaxed">
-                                        Laravel News is a community driven portal and newsletter aggregating all of the latest and most important news in the Laravel ecosystem, including new package releases and tutorials.
-                                    </p>
-                                </div>
-
-                                <svg class="size-6 shrink-0 self-center stroke-[#FF2D20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/></svg>
-                            </a>
-
-                            <div class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]">
-                                <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
-                                    <svg class="size-5 sm:size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <g fill="#FF2D20">
-                                            <path
-                                                d="M16.597 12.635a.247.247 0 0 0-.08-.237 2.234 2.234 0 0 1-.769-1.68c.001-.195.03-.39.084-.578a.25.25 0 0 0-.09-.267 8.8 8.8 0 0 0-4.826-1.66.25.25 0 0 0-.268.181 2.5 2.5 0 0 1-2.4 1.824.045.045 0 0 0-.045.037 12.255 12.255 0 0 0-.093 3.86.251.251 0 0 0 .208.214c2.22.366 4.367 1.08 6.362 2.118a.252.252 0 0 0 .32-.079 10.09 10.09 0 0 0 1.597-3.733ZM13.616 17.968a.25.25 0 0 0-.063-.407A19.697 19.697 0 0 0 8.91 15.98a.25.25 0 0 0-.287.325c.151.455.334.898.548 1.328.437.827.981 1.594 1.619 2.28a.249.249 0 0 0 .32.044 29.13 29.13 0 0 0 2.506-1.99ZM6.303 14.105a.25.25 0 0 0 .265-.274 13.048 13.048 0 0 1 .205-4.045.062.062 0 0 0-.022-.07 2.5 2.5 0 0 1-.777-.982.25.25 0 0 0-.271-.149 11 11 0 0 0-5.6 2.815.255.255 0 0 0-.075.163c-.008.135-.02.27-.02.406.002.8.084 1.598.246 2.381a.25.25 0 0 0 .303.193 19.924 19.924 0 0 1 5.746-.438ZM9.228 20.914a.25.25 0 0 0 .1-.393 11.53 11.53 0 0 1-1.5-2.22 12.238 12.238 0 0 1-.91-2.465.248.248 0 0 0-.22-.187 18.876 18.876 0 0 0-5.69.33.249.249 0 0 0-.179.336c.838 2.142 2.272 4 4.132 5.353a.254.254 0 0 0 .15.048c1.41-.01 2.807-.282 4.117-.802ZM18.93 12.957l-.005-.008a.25.25 0 0 0-.268-.082 2.21 2.21 0 0 1-.41.081.25.25 0 0 0-.217.2c-.582 2.66-2.127 5.35-5.75 7.843a.248.248 0 0 0-.09.299.25.25 0 0 0 .065.091 28.703 28.703 0 0 0 2.662 2.12.246.246 0 0 0 .209.037c2.579-.701 4.85-2.242 6.456-4.378a.25.25 0 0 0 .048-.189 13.51 13.51 0 0 0-2.7-6.014ZM5.702 7.058a.254.254 0 0 0 .2-.165A2.488 2.488 0 0 1 7.98 5.245a.093.093 0 0 0 .078-.062 19.734 19.734 0 0 1 3.055-4.74.25.25 0 0 0-.21-.41 12.009 12.009 0 0 0-10.4 8.558.25.25 0 0 0 .373.281 12.912 12.912 0 0 1 4.826-1.814ZM10.773 22.052a.25.25 0 0 0-.28-.046c-.758.356-1.55.635-2.365.833a.25.25 0 0 0-.022.48c1.252.43 2.568.65 3.893.65.1 0 .2 0 .3-.008a.25.25 0 0 0 .147-.444c-.526-.424-1.1-.917-1.673-1.465ZM18.744 8.436a.249.249 0 0 0 .15.228 2.246 2.246 0 0 1 1.352 2.054c0 .337-.08.67-.23.972a.25.25 0 0 0 .042.28l.007.009a15.016 15.016 0 0 1 2.52 4.6.25.25 0 0 0 .37.132.25.25 0 0 0 .096-.114c.623-1.464.944-3.039.945-4.63a12.005 12.005 0 0 0-5.78-10.258.25.25 0 0 0-.373.274c.547 2.109.85 4.274.901 6.453ZM9.61 5.38a.25.25 0 0 0 .08.31c.34.24.616.561.8.935a.25.25 0 0 0 .3.127.631.631 0 0 1 .206-.034c2.054.078 4.036.772 5.69 1.991a.251.251 0 0 0 .267.024c.046-.024.093-.047.141-.067a.25.25 0 0 0 .151-.23A29.98 29.98 0 0 0 15.957.764a.25.25 0 0 0-.16-.164 11.924 11.924 0 0 0-2.21-.518.252.252 0 0 0-.215.076A22.456 22.456 0 0 0 9.61 5.38Z"
-                                            />
-                                        </g>
-                                    </svg>
-                                </div>
-
-                                <div class="pt-3 sm:pt-5">
-                                    <h2 class="text-xl font-semibold text-black dark:text-white">Vibrant Ecosystem</h2>
-
-                                    <p class="mt-4 text-sm/relaxed">
-                                        Laravel's robust library of first-party tools and libraries, such as <a href="https://forge.laravel.com" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white dark:focus-visible:ring-[#FF2D20]">Forge</a>, <a href="https://vapor.laravel.com" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Vapor</a>, <a href="https://nova.laravel.com" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Nova</a>, <a href="https://envoyer.io" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Envoyer</a>, and <a href="https://herd.laravel.com" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Herd</a> help you take your projects to the next level. Pair them with powerful open source libraries like <a href="https://laravel.com/docs/billing" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Cashier</a>, <a href="https://laravel.com/docs/dusk" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Dusk</a>, <a href="https://laravel.com/docs/broadcasting" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Echo</a>, <a href="https://laravel.com/docs/horizon" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Horizon</a>, <a href="https://laravel.com/docs/sanctum" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Sanctum</a>, <a href="https://laravel.com/docs/telescope" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Telescope</a>, and more.
-                                    </p>
+                                    <!-- Views -->
+                                    <div class="flex items-center space-x-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
+                                            viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                            <path fill-rule="evenodd"
+                                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <span>1.2k views</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </main>
+                    @endfor
+                </div>
+            </div>
+            <!--- End of the news higlight-->
+    </div>
 
-                    <footer class="py-16 text-center text-sm text-black dark:text-white/70">
-                        Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
-                    </footer>
+
+
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6">Public Notice</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Notice 1 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="/images/news-image.jpeg" alt="Car for sale" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h2 class="text-xl font-semibold mb-2">Car for sale</h2>
+                    <p class="text-gray-600 mb-4">VOX 340 G4 for sale. White covet with shield properties and V6
+                        enabled...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-500">Aug 25 2024</span>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-1" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                            </svg>
+                            <span class="text-sm text-gray-500">123</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notice 2 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://via.placeholder.com/400x200?text=NUC+release+memo" alt="NUC release memo"
+                    class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h2 class="text-xl font-semibold mb-2">NUC release memo on strike</h2>
+                    <p class="text-gray-600 mb-4">VOX 340 G4 for sale. White covet with shield properties and V6
+                        enabled...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-500">Aug 25 2024</span>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-1"
+                                viewBox="0 0 20 20" fill="currentColor">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                            </svg>
+                            <span class="text-sm text-gray-500">20</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notice 3 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://via.placeholder.com/400x200?text=John+James" alt="John James"
+                    class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h2 class="text-xl font-semibold mb-2">John James has escaped from Prison</h2>
+                    <p class="text-gray-600 mb-4">The Long contained lunatic - Joh james that was arrested on the
+                        5th day of Ju...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-500">Aug 25 2024</span>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-1"
+                                viewBox="0 0 20 20" fill="currentColor">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                            </svg>
+                            <span class="text-sm text-gray-500">20</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notice 4 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://via.placeholder.com/400x200?text=Maryland+bridge" alt="Maryland bridge"
+                    class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h2 class="text-xl font-semibold mb-2">Maryland bridge is under construction</h2>
+                    <p class="text-gray-600 mb-4">VOX 340 G4 for sale. White covet with shield properties and V6
+                        enabled...</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-500">Aug 25 2024</span>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-1"
+                                viewBox="0 0 20 20" fill="currentColor">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                            </svg>
+                            <span class="text-sm text-gray-500">20</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </body>
-</html>
+
+        <div class="mt-8 text-center">
+            <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                See more
+            </button>
+        </div>
+    </div>
+
+
+
+
+    <section class="bg-gray-100 py-8 overflow-hidden">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-6">Announcements</h2>
+
+            <div class="relative">
+                <div class="flex overflow-x-auto pb-4 scrolling-touch" id="scrollingAnnouncements">
+                    <!-- Announcement items -->
+                    <div class="flex-none w-64 mx-2">
+                        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-yellow-500 rounded-full"></div>
+                            <h3 class="text-lg font-semibold">Important Notice</h3>
+                            <p class="text-sm text-gray-600 mt-2">Annual General Meeting</p>
+                        </div>
+                    </div>
+
+                    <div class="flex-none w-64 mx-2">
+                        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-blue-500 rounded-full"></div>
+                            <h3 class="text-lg font-semibold">Event Update</h3>
+                            <p class="text-sm text-gray-600 mt-2">Annual General Meeting</p>
+                        </div>
+                    </div>
+
+                    <div class="flex-none w-64 mx-2">
+                        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-green-500 rounded-full"></div>
+                            <h3 class="text-lg font-semibold">Community News</h3>
+                            <p class="text-sm text-gray-600 mt-2">Annual General Meeting</p>
+                        </div>
+                    </div>
+
+                    <div class="flex-none w-64 mx-2">
+                        <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                            <div class="w-24 h-24 mx-auto mb-4 bg-red-500 rounded-full"></div>
+                            <h3 class="text-lg font-semibold">Upcoming Events</h3>
+                            <p class="text-sm text-gray-600 mt-2">Annual General Meeting</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-red-600 text-white py-4 px-6 rounded-lg">
+                <p class="text-xl font-semibold text-center">Stay informed with our latest updates!</p>
+            </div>
+        </div>
+
+        <script>
+            const scrollContainer = document.getElementById('scrollingAnnouncements');
+            let scrollAmount = 0;
+            const scrollSpeed = 1;
+
+            function autoScroll() {
+                scrollContainer.scrollLeft += scrollSpeed;
+                if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
+                    scrollContainer.scrollLeft = 0;
+                }
+                requestAnimationFrame(autoScroll);
+            }
+
+            autoScroll();
+        </script>
+    </section>
+
+
+    <section class="w-full">
+        <img src="{{ asset('/images/ad1.png') }}" alt="Advertisement" class="w-full h-auto max-h-60 object-cover">
+    </section>
+
+
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-6 bg-red-600 text-white p-2">Featured Entertainment News</h2>
+
+        <div class="flex flex-wrap gap-2 mb-6">
+            @foreach (['Gold Market', 'Nigeria\'s Inflation Rate Eases to 33.40%', 'Adekunle Gold', 'Nigeria and Guinea Strengthen Ties', 'Nigeria\'s Economic Activity Declines Again'] as $tag)
+                <span class="bg-purple-200 text-purple-800 text-xs px-2 py-1 rounded">{{ $tag }}</span>
+            @endforeach
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2">
+                <img src="/images/news-image.jpeg" alt="Nigerian Soldiers" class="w-full h-64 object-cover mb-4">
+                <h3 class="text-xl font-semibold mb-2">Nigerian Senators' Monthly Pay Exceeds N2 Billion:
+                    Controversy Over Legislative Salaries and Allowances</h3>
+                <p class="text-gray-600">Emerging reports indicate that the total monthly remuneration of 99
+                    non-principal officers of the Nigerian Senate surpasses N2 billion. This revelation follows a...
+                </p>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Music News</h4>
+                @for ($i = 0; $i < 3; $i++)
+                    <div class="mb-4">
+                        <img src="/images/news-image.jpeg" alt="Music News {{ $i + 1 }}"
+                            class="w-full h-32 object-cover mb-2">
+                        <h5 class="font-medium">Nicki Minaj Detained at Amsterdam Airport Over Suspected Drug
+                            Possession</h5>
+                    </div>
+                @endfor
+                <a href="#" class="text-blue-600 hover:underline">See more</a>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-6">Caveat</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            @foreach ([1, 2, 3, 4] as $index)
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <img src="/images/news-image.jpeg" alt="News Image {{ $index }}"
+                        class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">Nigerian Senators' Monthly Pay Exceeds N2 Billion:
+                            Controversy Over Legislative Salaries and Allowances</h3>
+                        <p class="text-sm text-gray-600 mb-4">Emerging reports indicate that the total monthly
+                            remuneration of 99 non-principal officers of the Nigerian Senate surpa...</p>
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span>By Shola Akinyele</span>
+                            <span>Category: Local</span>
+                        </div>
+                        <div class="mt-2 flex items-center">
+                            <svg class="w-4 h-4 text-blue-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                            <span class="text-sm text-gray-500">123</span>
+                            <span class="ml-2 text-sm text-gray-500">20 comments</span>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="text-center mt-6">
+            <a href="#"
+                class="bg-purple-600 text-white px-6 py-2 rounded-full inline-block hover:bg-purple-700 transition duration-300">See
+                more</a>
+        </div>
+    </section>
+
+
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Hot Local Gists Column -->
+            <div>
+                <h2 class="text-2xl font-bold mb-6">Hot Local Gists</h2>
+                @foreach (range(1, 5) as $index)
+                    <div class="flex mb-6">
+                        <img src="/images/news-image.jpeg" alt="Local News Image {{ $index }}"
+                            class="w-24 h-24 object-cover mr-4">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2">CBN To Re-Issue N2.2 Trillion In Treasury Bills
+                                For Q4 2024, Full Schedule Released</h3>
+                            <p class="text-sm text-gray-600">The Central Bank of Nigeria (CBN) has unveiled its
+                                schedule for the re-issuance of N2.2 trillion worth of maturing Nigerian...</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Hot International Gists Column -->
+            <div>
+                <h2 class="text-2xl font-bold mb-6">Hot International Gists</h2>
+                @foreach (range(1, 5) as $index)
+                    <div class="flex mb-6">
+                        <img src="/images/news-image.jpeg" alt="International News Image {{ $index }}"
+                            class="w-24 h-24 object-cover mr-4">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2">CBN To Re-Issue N2.2 Trillion In Treasury Bills
+                                For Q4 2024, Full Schedule Released</h3>
+                            <p class="text-sm text-gray-600">The Central Bank of Nigeria (CBN) has unveiled its
+                                schedule for the re-issuance of N2.2 trillion worth of maturing Nigerian...</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="#"
+                class="bg-blue-500 text-white px-6 py-2 rounded-full inline-block hover:bg-blue-600 transition duration-300">See
+                more</a>
+        </div>
+    </section>
+
+
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-6">Hot Gist</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Large item -->
+            <div class="md:col-span-2 relative">
+                <img src="/images/news-image.jpeg" alt="Naira Notes" class="w-full h-64 object-cover">
+                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                    <h3 class="text-lg font-semibold">Naira Hold Outside Banks Drops to 1% Rate in July Amid CBN's
+                        Reporting Measures</h3>
+                </div>
+            </div>
+
+            <!-- Regular items -->
+            <div class="relative">
+                <img src="/images/news-image.jpeg" alt="UEFA Champions League" class="w-full h-48 object-cover">
+                <div class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 text-sm">NEW FORMAT EXPLAINED
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                    <h3 class="text-sm font-semibold">UEFA Champions League 2024/25: New Format Explained—What Fans
+                        Need to Know</h3>
+                </div>
+            </div>
+
+            <div class="relative">
+                <img src="/images/news-image.jpeg" alt="NBA President" class="w-full h-48 object-cover">
+                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                    <h3 class="text-sm font-semibold">New NBA President Adegboyega Awomolo to Hold Government
+                        Accountable, Landmark Inaugural Speech</h3>
+                </div>
+                <div class="absolute top-2 right-2 flex items-center space-x-2">
+                    <span class="flex items-center text-white"><svg class="w-4 h-4 mr-1" fill="currentColor"
+                            viewBox="0 0 20 20">
+                            <path
+                                d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                            </path>
+                        </svg>123</span>
+                    <span class="flex items-center text-white"><svg class="w-4 h-4 mr-1" fill="currentColor"
+                            viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                                clip-rule="evenodd"></path>
+                        </svg>20</span>
+                </div>
+            </div>
+
+            <div class="relative">
+                <img src="/images/news-image.jpeg" alt="Cassells" class="w-full h-48 object-cover">
+                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                    <h3 class="text-sm font-semibold">Cassells Faces Charges in Latest Guilty Plea amid House of
+                        Rory Fall for Prosecution Over Genocide Remarks</h3>
+                </div>
+                <div class="absolute top-2 right-2 flex items-center space-x-2">
+                    <span class="flex items-center text-white"><svg class="w-4 h-4 mr-1" fill="currentColor"
+                            viewBox="0 0 20 20">
+                            <path
+                                d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                            </path>
+                        </svg>123</span>
+                    <span class="flex items-center text-white"><svg class="w-4 h-4 mr-1" fill="currentColor"
+                            viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                                clip-rule="evenodd"></path>
+                        </svg>20</span>
+                </div>
+            </div>
+
+            <div class="relative">
+                <img src="/images/news-image.jpeg" alt="Johnny Carson" class="w-full h-48 object-cover">
+                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                    <h3 class="text-sm font-semibold">Johnny Carson: Surrogate Asian American in Africa's Dominant
+                        Powers 2024</h3>
+                </div>
+            </div>
+
+            <div class="relative">
+                <img src="/images/news-image.jpeg" alt="NNPC Uncovers" class="w-full h-48 object-cover">
+                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                    <h3 class="text-sm font-semibold">NNPC Uncovers 22 Illegal Crude Oil Refineries in Major
+                        Crackdown Across Rivers, Delta, and Abia</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-green-500 p-2 mb-4">
+            <h2 class="text-2xl font-bold text-white">Lost but Found</h2>
+        </div>
+
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+            <p class="text-sm">Disclaimer: You would be proved to confirm your ownership of this item. So for your
+                best interest, please come with a prove of ownership</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            @foreach (range(1, 4) as $index)
+                <div class="bg-gray-200 p-2 rounded">
+                    <img src="/images/news-image.jpeg" alt="Rolex wristwatch" class="w-full h-40 object-cover mb-2">
+                    <p class="text-sm font-semibold bg-black bg-opacity-50 text-white p-1">Name of Item: Rolex
+                        wristwatch</p>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="text-center">
+            <a href="#"
+                class="bg-purple-600 text-white px-6 py-2 rounded-full inline-block hover:bg-purple-700 transition duration-300">See
+                more</a>
+        </div>
+    </section>
+
+
+    <section class="w-full">
+        <img src="{{ asset('/images/ad2.png') }}" alt="Advertisement" class="w-full h-auto max-h-60 object-cover">
+    </section>
+
+
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        <div class="flex items-center mb-4">
+            <h2 class="text-2xl font-bold mr-2">Events</h2>
+            <div class="flex-grow h-1 bg-gradient-to-r from-red-500 to-blue-500"></div>
+        </div>
+
+        <div class="overflow-x-auto pb-4">
+            <div class="flex space-x-4 min-w-max">
+                @foreach (range(1, 4) as $index)
+                    <div class="w-64 flex-shrink-0">
+                        <img src="/images/news-image.jpeg" alt="Event Image"
+                            class="w-full h-40 object-cover mb-2 rounded">
+                        <h3 class="text-sm font-semibold">Sheriffa Mustapha holds public giveaway in honor of her
+                            late husband</h3>
+                        <div class="flex items-center text-gray-500 text-xs mt-1">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                            <span>20 Dec 2023/2024</span>
+                        </div>
+                        <div class="flex items-center text-gray-500 text-xs mt-1">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            <span>By Shola Akinyele</span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="#"
+                class="bg-purple-600 text-white px-6 py-2 rounded-full inline-block hover:bg-purple-700 transition duration-300">See
+                more</a>
+        </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-gray-200 p-2 mb-4">
+            <h2 class="text-2xl font-bold">Loss of Document</h2>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-4">
+            @foreach (range(1, 5) as $index)
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <img src="/images/news-image.jpeg" alt="Lost Document {{ $index }}"
+                        class="w-full h-32 object-cover">
+                    <div class="p-3">
+                        <p class="text-sm font-semibold mb-2">I John Obiama humbly seek your help incase for the
+                            misplace of one of my document : DRIVER LICENCE</p>
+                        <p class="text-xs text-gray-600">If found, please contact</p>
+                        <p class="text-sm font-bold text-blue-600">08035674857{{ $index }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="text-center">
+            <a href="#"
+                class="bg-purple-600 text-white px-6 py-2 rounded-full inline-block hover:bg-purple-700 transition duration-300">See
+                more</a>
+        </div>
+    </section>
+
+    <section class="w-full">
+        <img src="{{ asset('/images/ad3.jpg') }}" alt="Advertisement" class="w-full h-auto max-h-60 object-cover">
+    </section>
+
+
+
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-gray-200 p-2 mb-4">
+            <h2 class="text-2xl font-bold">Topics</h2>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-6 overflow-x-auto whitespace-nowrap">
+            @foreach (['Gold Market', 'Nigeria\'s Inflation Rate Eases to 33.40%', 'Adekunle Gold', 'Nigeria and Guinea Strengthen Ties', 'Nigeria\'s Economic Activity Declines Again'] as $topic)
+                <span class="bg-purple-200 text-purple-800 text-xs px-3 py-1 rounded-full">{{ $topic }}</span>
+            @endforeach
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2">
+                <div class="bg-black aspect-w-16 aspect-h-9 relative">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="text-white bg-red-600 p-2 rounded-full">
+                            <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8 5v10l7-5-7-5z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="absolute top-4 right-4 bg-white text-black px-2 py-1 text-sm rounded">
+                        No live event at the moment
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="bg-red-600 p-4 text-white text-center font-bold">
+                    ADVERTISE HERE!
+                </div>
+                <div class="bg-gray-200 p-4 text-center">
+                    <p class="font-semibold">ADVERTISE HERE !!</p>
+                </div>
+                <div class="bg-blue-600 p-4 text-white text-center">
+                    <p class="font-bold">ADVERTIZE YOUR BUSINESS HERE!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-gray-200 p-2 mb-4">
+            <h2 class="text-2xl font-bold">Missing Person</h2>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            @foreach (range(1, 4) as $index)
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <img src="/images/news-image.jpeg" alt="Missing Person {{ $index }}"
+                        class="w-full h-48 object-cover">
+                    <div class="p-3">
+                        <table class="w-full text-sm">
+                            <tr>
+                                <td class="font-semibold">Name:</td>
+                                <td>JOHN OBIAMA</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Sex:</td>
+                                <td>M</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Age:</td>
+                                <td>26</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Height:</td>
+                                <td>6.02"</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Tone:</td>
+                                <td>Black</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Call:</td>
+                                <td>08025384758</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="text-center">
+            <a href="#"
+                class="bg-purple-600 text-white px-6 py-2 rounded-full inline-block hover:bg-purple-700 transition duration-300">See
+                more</a>
+        </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-white p-4">
+            <h1 class="text-3xl font-bold mb-4">Wanted Person</h1>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                @for ($i = 0; $i < 4; $i++)
+                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <div class="relative">
+                            <img src="/images/news-image.jpeg" alt="Bridge" class="w-full h-40 object-cover">
+                            <span
+                                class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">DANGEROUS</span>
+                        </div>
+                        <div class="p-4">
+                            <h2 class="font-bold mb-2">Name: JOHN OBIAMA</h2>
+                            <p class="text-sm mb-1">Sex: M &nbsp;&nbsp;&nbsp; Age: 26</p>
+                            <p class="text-sm mb-1">Height: 6.02' &nbsp;&nbsp;&nbsp; Tone: Black</p>
+                            <p class="text-sm mb-1">Bounty: ${{ number_format(450000 + $i * 250000, 0) }}</p>
+                            <p class="text-sm mb-2">More info:</p>
+                            <p class="text-xs mb-4">This is a master of disguise and can be really unpredictable
+                                and very dangerous person! Beware!</p>
+                            <div class="bg-red-500 text-white text-center py-2 font-bold">
+                                DON'T RELATE WITH, CALL 911 IMMEDIATELY
+                            </div>
+                        </div>
+                    </div>
+                @endfor
+            </div>
+            <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">See more</button>
+        </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-white p-4">
+            <h2 class="text-2xl font-bold mb-4 text-center">Top News Category</h2>
+
+            <div class="relative w-full h-6 bg-gray-200 rounded-full mb-6">
+                <div class="absolute left-0 top-0 h-full w-1/4 bg-red-500 rounded-full"></div>
+                <div class="absolute right-0 top-0 text-xs font-semibold text-red-500 mr-2">Live</div>
+            </div>
+
+            <form class="mb-6">
+                <div class="relative">
+                    <input type="text" placeholder="Search categories..."
+                        class="w-full p-2 pl-10 pr-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </form>
+
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2">
+                @php
+                    $categories = [
+                        'Politics',
+                        'Art & Entertainment',
+                        'Business',
+                        'Communication',
+                        'Automobile',
+                        'Agriculture & Farming',
+                        'Travel',
+                        'Government',
+                        'Health & Medicine',
+                        'Home & Estate',
+                        'IT & Computers',
+                        'Legal Services',
+                        'Business Service',
+                        'Engineering',
+                        'Finance Technology',
+                        'Energy & Utilities',
+                        'Education & Learning',
+                        'Car Dealer',
+                        'Insurance - General',
+                        'Security & Emergency',
+                        'Pet Supply',
+                        'Schools',
+                        'Sports',
+                        'Online Influencers',
+                        'Personal Care',
+                        'Tourism & Hospitality',
+                        'Fashion & Clothing',
+                        'Food & Restaurant',
+                        'Companies',
+                        'Phone/Laptop',
+                        'Religion & Spirituality',
+                        'Shopping',
+                        'Transportation',
+                        'Non-Profit Organization',
+                        'Online Courses',
+                    ];
+                @endphp
+
+                @foreach ($categories as $category)
+                    <div class="bg-gray-100 p-2 rounded flex flex-col items-center justify-center text-center h-20">
+                        <svg class="w-6 h-6 text-red-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                        </svg>
+                        <a href="#">
+                            <span class="text-xs">{{ $category }}</span>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <section class="w-full">
+        <img src="{{ asset('/images/ad4.jpg') }}" alt="Advertisement" class="w-full h-auto max-h-60 object-cover">
+    </section>
+
+    <section>
+
+
+        <section class="container mx-auto px-4 py-8">
+            <h2 class="text-3xl font-bold mb-6 text-gray-800">Obituary</h2>
+            <h3 class="text-xl font-semibold mb-4 text-gray-700">In Loving Memory</h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Obituary 1 -->
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <img src="/images/news-image.jpeg" alt="John Obiama" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="font-semibold text-lg mb-2">JOHN OBIAMA</h4>
+                        <div class="text-sm text-gray-600">
+                            <p>Sex: M</p>
+                            <p>Age: 26</p>
+                            <p>DOB: 12-09-95</p>
+                            <p>DOD: 31-12-23</p>
+                        </div>
+                        <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                            Send Condolence
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Obituary 2 -->
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <img src="/images/news-image.jpeg" alt="John Obiama" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="font-semibold text-lg mb-2">JOHN OBIAMA</h4>
+                        <div class="text-sm text-gray-600">
+                            <p>Sex: M</p>
+                            <p>Age: 26</p>
+                            <p>DOB: 12-09-95</p>
+                            <p>DOD: 31-12-23</p>
+                        </div>
+                        <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                            Send Condolence
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Obituary 3 -->
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <img src="/images/news-image.jpeg" alt="John Obiama" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="font-semibold text-lg mb-2">JOHN OBIAMA</h4>
+                        <div class="text-sm text-gray-600">
+                            <p>Sex: M</p>
+                            <p>Age: 26</p>
+                            <p>DOB: 12-09-95</p>
+                            <p>DOD: 31-12-23</p>
+                        </div>
+                        <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                            Send Condolence
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Obituary 4 -->
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <img src="/images/news-image.jpeg" alt="John Obiama" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="font-semibold text-lg mb-2">JOHN OBIAMA</h4>
+                        <div class="text-sm text-gray-600">
+                            <p>Sex: M</p>
+                            <p>Age: 26</p>
+                            <p>DOB: 12-09-95</p>
+                            <p>DOD: 31-12-23</p>
+                        </div>
+                        <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                            Send Condolence
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-8">
+                <button class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-6 rounded-full">
+                    See more
+                </button>
+            </div>
+        </section>
+    </section>
+
+
+
+    <section class="container mx-auto px-4 py-8 bg-no-repeat bg-cover"
+        style="background-image: url('/images/gradient.jpeg');">
+        <div class="bg-gradient rounded-lg shadow-lg overflow-hidden">
+            <div class="flex flex-col md:flex-row items-center p-6 relative">
+                <img src="/images/avatatar.jpeg" alt="Loved one"
+                    class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md mb-4 md:mb-0 md:mr-6">
+                <div class="text-black text-center md:text-left flex-grow">
+                    <h2 class="font-['Courgette'] text-2xl mb-2 italic">In loving memory</h2>
+                    <h1 class="text-3xl font-bold mb-2">Post remembrance in honoring memory of loved ones</h1>
+                    <p class="mb-4">Post remembrance with ease so the public can see and memories would not
+                        be lost in time</p>
+                    <button
+                        class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                        Go to Templates
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="bg-white p-4">
+        <h2 class="text-2xl font-bold mb-4 bg-gray-200 p-2">Remembrance</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            @for ($i = 0; $i < 4; $i++)
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <div class="relative">
+                        <img src="/images/news-image.jpeg" alt="Remembrance Image" class="w-full h-48 object-cover">
+                        <span class="absolute top-2 right-2 bg-white rounded-full p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="p-4">
+                        <p class="font-semibold">Name: MR AND MRS AMAO ADAMS</p>
+                        <p>Date: 12-Mar</p>
+                        <p>Address:</p>
+                        <p>Year: 2nd year</p>
+                        <button class="mt-2 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition">
+                            {{ $i % 2 == 0 ? 'Extend Regards' : 'Send Regards' }}
+                        </button>
+                    </div>
+                </div>
+            @endfor
+        </div>
+
+        <div class="mt-6 text-center">
+            <button class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 transition">
+                See more
+            </button>
+        </div>
+    </section>
+
+
+    <section class="bg-white p-4">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-2xl font-bold mb-2">Do you know this person</h2>
+            <div class="bg-red-500 h-1 w-full mb-4"></div>
+            <p class="text-gray-600 mb-4">Send in your condolences</p>
+
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="md:w-1/2">
+                    <img src="/images/missing-person.jpg" alt="Mr. Stephen Kamboe"
+                        class="w-full h-auto rounded-lg shadow-lg">
+                </div>
+
+                <div class="md:w-1/2">
+                    <form class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Name"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="phone1" class="block text-sm font-medium text-gray-700">Phone
+                                    no.</label>
+                                <input type="tel" id="phone1" name="phone1" placeholder="Phone no."
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            </div>
+                            <div>
+                                <label for="phone2" class="block text-sm font-medium text-gray-700">Phone
+                                    no.</label>
+                                <input type="tel" id="phone2" name="phone2" placeholder="Phone no."
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="condolence" class="block text-sm font-medium text-gray-700">Condolence</label>
+                            <textarea id="condolence" name="condolence" rows="4" placeholder="Type in your message"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
+                        </div>
+
+                        <div>
+                            <button type="submit"
+                                class="w-full bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
+                                Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="bg-white p-4">
+        <h2 class="text-2xl font-bold mb-4 bg-gray-200 p-2">Change of Name</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            @for ($i = 0; $i < 5; $i++)
+                <div class="border border-gray-300 p-4 rounded-lg">
+                    <p class="font-semibold mb-2">Name: JOHN OBIAMA</p>
+                    <p class="text-sm">I, formally John Marvin Kane, now JOHN OBIAMA. All former documents remains
+                        valid. Authority and general public take note</p>
+                </div>
+            @endfor
+        </div>
+
+        <div class="mt-6 text-center">
+            <button class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 transition">
+                See more
+            </button>
+        </div>
+    </section>
+
+    <section class="bg-green-100 p-4">
+        <h2 class="text-2xl font-bold mb-4 text-center text-green-800">PRIDE OF NIGERIA</h2>
+
+        <!-- Top News Items -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            @foreach (['Osadebe: President Tinubu To Hold Consultation Session', 'Dismay Marathon Winners Wait In Center Of Abuja', 'Lagos State Governor Introduces New Initiative To Boost Productivity Levels', 'Nigerian Army Promises Ongoing Engagement To Maintain Security', 'Nigeria On Track Says IMF, World Bank, But By Cryptos Trade, Ease Trade'] as $index => $title)
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="/images/news-image.jpeg" alt="News Image" class="w-full h-40 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold text-sm mb-2">{{ $title }}</h3>
+                        <p class="text-xs text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <!-- Pride of Nigeria Banner -->
+        <div class="bg-green-700 text-white text-center py-2 mb-8">
+            <h3 class="text-xl font-bold">Pride of Nigeria</h3>
+        </div>
+
+        <!-- Lifestyle Interview Section -->
+        <h3 class="text-xl font-semibold mb-4 text-center">11 Lifestyle interview with successful People</h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            @for ($i = 0; $i < 4; $i++)
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="/images/news-image.jpeg" alt="Interview Image" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <p class="font-semibold mb-2">Topic: LIVING IN THE EYES OF TODAY'S MEDIA SPACE OF TODAY</p>
+                        <p>Guest: John Stones</p>
+                        <p>Date: 12-Mar</p>
+                        <p>By: John James</p>
+                    </div>
+                </div>
+            @endfor
+        </div>
+
+        <div class="text-center">
+            <button class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 transition">
+                See more
+            </button>
+        </div>
+    </section>
+
+    <section class="bg-white p-4">
+        <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+            <!-- Left side - Image -->
+            <div class="w-full md:w-1/2 relative">
+                <img src="/images/event.jpg" alt="Event background" class="w-full h-auto rounded-lg shadow-lg">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="bg-black bg-opacity-60 rounded-full p-8">
+                        <h2 class="text-white text-3xl font-bold text-center">EVENT<br>TICKETS</h2>
+                    </div>
+                </div>
+                <div class="absolute top-4 left-4 bg-white rounded-full px-3 py-1 text-sm">
+                    Send e-party
+                </div>
+                <div class="absolute bottom-4 right-4 bg-white rounded-full px-3 py-1 text-sm">
+                    Start a party
+                </div>
+            </div>
+
+            <!-- Right side - Text content -->
+            <div class="w-full md:w-1/2">
+                <p class="mb-4">Experience effortless event scheduling and management with Evenup. Whether it's a
+                    corporate conference, wedding, or community gathering, our intuitive platform simplifies every
+                    step.</p>
+
+                <ul class="space-y-2">
+                    <li class="flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                        Schedule events effortlessly
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                        Coordinate with attendees seamlessly
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                        Send invitations and manage RSVPs
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                        Track event progress in real-time
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                        Customizable event templates
+                    </li>
+                </ul>
+
+                <button class="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative h-screen bg-gray-900 text-white">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center">
+            <h1 class="mb-6 text-4xl font-bold tracking-tight">
+                SEE WHO IS TAKEN?
+            </h1>
+            <p class="mb-8 text-lg max-w-2xl">
+                Connect with your family story on Ancestry and discover the what, where, and who of how it all leads
+                to you.
+            </p>
+            <div class="flex space-x-4">
+                <a href="#"
+                    class="px-6 py-2 bg-white text-black font-semibold rounded hover:bg-gray-200 transition-colors">
+                    View Registry
+                </a>
+                <a href="#"
+                    class="px-6 py-2 border border-white font-semibold rounded hover:bg-white hover:text-black transition-colors">
+                    Court Statement
+                </a>
+                <a href="#"
+                    class="px-6 py-2 border border-white font-semibold rounded hover:bg-white hover:text-black transition-colors">
+                    Birth Certificate
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold mb-6">Book A Hotel Before Leaving</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div class="relative">
+                <img src="{{ asset('/images/hotel_image1.jpeg') }}" alt="Luxury hotel room"
+                    class="w-full h-64 object-cover rounded-lg">
+                <div class="absolute bottom-4 left-4 bg-white px-3 py-1 rounded">
+                    <p class="text-sm font-semibold">Hundreds of 5-star reviews</p>
+                </div>
+                <button
+                    class="absolute bottom-4 right-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">Book
+                    Now</button>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-semibold mb-4 text-red-600">You will be amazed by what we have prepared
+                    for you</h3>
+                <p class="mb-4">Prepare to be enchanted by our warm hospitality and personalized service, crafted
+                    to exceed your expectations. Whether you're here for business or leisure, our dedicated team is
+                    committed to making your stay a memorable one.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <img src="{{ asset('/images/hotel_image2.jpeg') }}" alt="Hotel sign"
+                    class="w-full h-48 object-cover rounded-lg">
+            </div>
+            <div>
+                <img src="{{ asset('/images/hotel_image3.jpeg') }}" alt="Hotel exterior"
+                    class="w-full h-48 object-cover rounded-lg">
+            </div>
+            <div>
+                <img src="{{ asset('/images/hotel_image4.jpeg') }}" alt="Hotel entrance"
+                    class="w-full h-48 object-cover rounded-lg">
+            </div>
+        </div>
+    </section>
+
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-4 text-center">Explore Our Templates</h2>
+        <div class="overflow-x-auto whitespace-nowrap">
+            <div class="inline-block p-4">
+                <div class="bg-white rounded-lg shadow-lg p-6 w-64">
+                    <img src="/images/template1.jpeg" alt="Template 1" class="w-full rounded-md mb-4">
+                    <h3 class="font-bold text-lg">Template 1</h3>
+                    <p>A beautiful way to remember your loved ones.</p>
+                </div>
+            </div>
+            <div class="inline-block p-4">
+                <div class="bg-white rounded-lg shadow-lg p-6 w-64">
+                    <img src="/images/template2.jpeg" alt="Template 2" class="w-full rounded-md mb-4">
+                    <h3 class="font-bold text-lg">Template 2</h3>
+                    <p>Elegant design for heartfelt messages.</p>
+                </div>
+            </div>
+            <div class="inline-block p-4">
+                <div class="bg-white rounded-lg shadow-lg p-6 w-64">
+                    <img src="/images/template3.jpeg" alt="Template 3" class="w-full rounded-md mb-4">
+                    <h3 class="font-bold text-lg">Template 3</h3>
+                    <p>Classic style for timeless memories.</p>
+                </div>
+            </div>
+            <!-- Add more templates as needed -->
+        </div>
+    </section>
+
+
+    <section class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">Groups You May Like</h2>
+            <a href="#" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Join
+                The Topic Discussions</a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach ([
+            [
+                'title' => 'Current Affairs',
+                'description' => 'Stay informed with the latest developments in the world. Discuss current events, analyze their impact, and engage in meaningful debates about the issues that shape our lives.',
+                'action' => 'Join!',
+            ],
+            [
+                'title' => 'Diverse Perspectives',
+                'description' => 'Join a diverse community of thinkers and share your unique viewpoints, challenging thoughts, and innovative ideas. Expand your worldview by engaging with different perspectives in this vibrant forum.',
+                'action' => 'Join!',
+            ],
+            [
+                'title' => 'Voice Your Opinions',
+                'description' => 'Have your say on the topics that matter to you. Share your insights, views, and solutions to global challenges that help shape public opinion. Our community values every voice that can make a real difference.',
+                'action' => 'Join!',
+            ],
+            [
+                'title' => 'Connect with Like-Minded Individuals',
+                'description' => 'Connect with others who share your interests and passions. Engage in stimulating conversations where you can find like-minded individuals to connect with, learn from, and build relationships with.',
+                'action' => 'Join!',
+            ],
+            [
+                'title' => 'Access Expert Analysis',
+                'description' => 'Gain access to in-depth analysis and commentary on leading issues from experts in various fields. Engage in discussions with professionals and experts to enhance your understanding and broaden your knowledge.',
+                'action' => 'Join!',
+            ],
+            [
+                'title' => 'Stay Civically Engaged',
+                'description' => 'Being part of our discussion groups is not just about debating ideas, it\'s about actively participating in civil discourse and contributing to a more informed and engaged society. Join us in fostering constructive dialogue and civic engagement.',
+                'action' => 'Join!',
+            ],
+        ] as $group)
+                <div class="bg-gray-100 p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold mb-3">{{ $group['title'] }}</h3>
+                    <p class="mb-4">{{ $group['description'] }}</p>
+                    <a href="#"
+                        class="inline-block bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition">{{ $group['action'] }}</a>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="mt-12 bg-gray-900 text-white p-6 rounded-lg flex flex-col md:flex-row items-center justify-between">
+            <div class="mb-4 md:mb-0">
+                <h3 class="text-xl font-semibold mb-2">Subscribe To Our Newsletter</h3>
+                <p>Don't miss out on latest updates and information</p>
+            </div>
+            <form class="flex w-full md:w-auto">
+                <input type="email" placeholder="Enter your email"
+                    class="px-4 py-2 rounded-l text-gray-900 w-full md:w-64">
+                <button type="submit"
+                    class="bg-red-500 text-white px-4 py-2 rounded-r hover:bg-red-600 transition">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="container mx-auto px-4 py-8">
+        <div class="bg-gray-200 p-4 mb-6">
+            <h2 class="text-2xl font-bold">Birthday celebration</h2>
+        </div>
+
+        <h3 class="text-center italic text-2xl mb-6">Happy Birthday to these wonderful people!</h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            @foreach ([1, 2, 3, 4] as $index)
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <img src="{{ asset('/images/birthday.jpg') }}" alt="Birthday person {{ $index }}"
+                        class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="font-bold">Name: MRS JANETH OBAMA</h4>
+                        <p>Sex: F</p>
+                        <p>Age: 28</p>
+                        <p>DOB: 12-Mar</p>
+                        <p class="truncate">Address: 24 junta street off dispatch city osogbo osun state
+                            secretariat</p>
+                        <p>Time: 05:04AM</p>
+                        <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Send
+                            Wishes</button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="text-center mb-12">
+            <button class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 transition">See
+                more</button>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-8 items-center">
+            <div class="md:w-1/2">
+                <h2 class="text-3xl font-bold mb-4">Want to Advertise an Obituary?</h2>
+                <h3 class="text-xl mb-4">Choose a template</h3>
+                <p class="mb-4">Choose from our vast collection of obituary templates and advertise with ease</p>
+                <button class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition">Select
+                    Template</button>
+            </div>
+            <div class="md:w-1/2 flex justify-end">
+                <div class="relative w-64 h-64">
+                    <div class="absolute right-0 bottom-0 w-32 h-32 bg-red-800"></div>
+                    <div class="absolute right-8 bottom-8 w-32 h-32 bg-red-600"></div>
+                    <div class="absolute right-16 bottom-16 w-32 h-32 bg-blue-400"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="container mx-auto px-4 py-8">
+        <div class="bg-blue-600 text-white p-4 mb-6">
+            <h2 class="text-2xl font-bold">Stolen items and vehicles</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            @php
+                $items = [
+                    [
+                        'image' => 'car.jpg',
+                        'name' => 'BMW 572 JR',
+                        'date' => '12-05-24',
+                        'color' => 'Black',
+                        'value' => '950,000',
+                        'description' => 'Car stolen BMW 572 JR vehicle at the parking lot of NNPC towers.',
+                    ],
+                    [
+                        'image' => 'plane.jpg',
+                        'name' => 'BMW 572 JR',
+                        'date' => '12-05-24',
+                        'color' => 'Black',
+                        'value' => '950,000',
+                        'description' => 'Car stolen BMW 572 JR vehicle at the parking lot of NNPC towers.',
+                    ],
+                    [
+                        'image' => 'gold.jpg',
+                        'name' => 'BMW 572 JR',
+                        'date' => '12-05-24',
+                        'color' => 'Black',
+                        'value' => '950,000',
+                        'description' => 'Car stolen BMW 572 JR vehicle at the parking lot of NNPC towers.',
+                    ],
+                    [
+                        'image' => 'plane.jpg',
+                        'name' => 'BMW 572 JR',
+                        'date' => '12-05-24',
+                        'color' => 'Black',
+                        'value' => '950,000',
+                        'description' => 'Car stolen BMW 572 JR vehicle at the parking lot of NNPC towers.',
+                    ],
+                ];
+            @endphp
+
+            @foreach ($items as $item)
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    {{-- <img src="{{ asset('images/' . $item['image']) }}" alt="{{ $item['name'] }}"
+                                class="w-full h-48 object-cover"> --}}
+                    <img src="/images/vehicle.jpg" alt="Stolen Vehicle">
+                    <div class="p-4">
+                        <h4 class="font-bold">Item: {{ $item['name'] }}</h4>
+                        <p>Date of Loss: {{ $item['date'] }}</p>
+                        <p>Color: {{ $item['color'] }}</p>
+                        <p>Value: ${{ $item['value'] }}</p>
+                        <p class="text-sm mt-2">Description:</p>
+                        <p class="text-sm">{{ $item['description'] }}</p>
+                        <p class="mt-2">Call: 08023364726</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="text-center">
+            <button class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">See more</button>
+        </div>
+    </section>
+
+
+    <section class="container mx-auto px-4 py-8">
+        <div class="bg-gray-200 p-4 mb-6">
+            <h2 class="text-2xl font-bold">Wedding Celebration</h2>
+        </div>
+
+        <h3 class="text-center italic text-2xl mb-6">Hearty Congratulations!</h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            @php
+                $couples = [
+                    [
+                        'names' => 'MR AND MRS JAMO ADAMS',
+                        'husband' => 'Tolu Aman Adebayo',
+                        'wife' => 'Shade Esther John',
+                        'address' => '24 junta street off dispatch city osogbo osun state secretariat',
+                        'time' => '05:04AM',
+                    ],
+                    [
+                        'names' => 'MR AND MRS JAMO ADAMS',
+                        'husband' => 'Tolu Aman Adebayo',
+                        'wife' => 'Shade Esther John',
+                        'address' => '24 junta street off dispatch city osogbo osun state secretariat',
+                        'time' => '05:04AM',
+                    ],
+                    [
+                        'names' => 'MR AND MRS JAMO ADAMS',
+                        'husband' => 'Tolu Aman Adebayo',
+                        'wife' => 'Shade Esther John',
+                        'address' => '24 junta street off dispatch city osogbo osun state secretariat',
+                        'time' => '05:04AM',
+                    ],
+                    [
+                        'names' => 'MR AND MRS JAMO ADAMS',
+                        'husband' => 'Tolu Aman Adebayo',
+                        'wife' => 'Shade Esther John',
+                        'address' => '24 junta street off dispatch city osogbo osun state secretariat',
+                        'time' => '05:04AM',
+                    ],
+                ];
+            @endphp
+
+            @foreach ($couples as $couple)
+                <div class="bg-red-400 rounded-lg overflow-hidden relative">
+                    <div class="absolute top-2 right-2 bg-white rounded-full p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-400" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </div>
+                    <div class="p-4 text-white">
+                        <h4 class="font-bold">Couple: {{ $couple['names'] }}</h4>
+                        <p>Husband: {{ $couple['husband'] }}</p>
+                        <p>Wife: {{ $couple['wife'] }}</p>
+                        <p class="text-sm mt-2">Address:</p>
+                        <p class="text-sm">{{ $couple['address'] }}</p>
+                        <p class="mt-2">Time: {{ $couple['time'] }}</p>
+                        <button class="mt-4 bg-white text-red-400 px-4 py-2 rounded hover:bg-gray-100 transition">Send
+                            Wishes</button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="text-center">
+            <button class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 transition">See
+                more</button>
+        </div>
+    </section>
+
+    <section class="container mx-auto px-4 py-8">
+        <div class="bg-blue-600 text-white p-4 mb-6">
+            <h2 class="text-2xl font-bold">Naming Ceremony/Child Dedication</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            @php
+                $ceremonies = [
+                    [
+                        'parents' => 'MR AND MRS JAMO ADAMS',
+                        'date' => '12-Mar',
+                        'address' => '24 junta street off dispatch city osogbo osun state secretariat',
+                        'time' => '05:04AM',
+                    ],
+                    [
+                        'parents' => 'MR AND MRS JAMO ADAMS',
+                        'date' => '12-Mar',
+                        'address' => '24 junta street off dispatch city osogbo osun state secretariat',
+                        'time' => '05:04AM',
+                    ],
+                    [
+                        'parents' => 'MR AND MRS JAMO ADAMS',
+                        'date' => '12-Mar',
+                        'address' => '24 junta street off dispatch city osogbo osun state secretariat',
+                        'time' => '05:04AM',
+                    ],
+                    [
+                        'parents' => 'MR AND MRS JAMO ADAMS',
+                        'date' => '12-Mar',
+                        'address' => '24 junta street off dispatch city osogbo osun state secretariat',
+                        'time' => '05:04AM',
+                    ],
+                ];
+            @endphp
+
+            @foreach ($ceremonies as $ceremony)
+                <div class="bg-blue-600 rounded-lg overflow-hidden relative">
+                    <div class="h-32 bg-gray-300"></div>
+                    <div class="absolute top-2 right-2 bg-white rounded-full p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </div>
+                    <div class="p-4 text-white">
+                        <h4 class="font-bold">Parents: {{ $ceremony['parents'] }}</h4>
+                        <p>Date: {{ $ceremony['date'] }}</p>
+                        <p class="text-sm mt-2">Address:</p>
+                        <p class="text-sm">{{ $ceremony['address'] }}</p>
+                        <p class="mt-2">Time: {{ $ceremony['time'] }}</p>
+                        <button class="mt-4 bg-white text-blue-600 px-4 py-2 rounded hover:bg-gray-100 transition">Send
+                            Regards</button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="text-center">
+            <button class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 transition">See
+                more</button>
+        </div>
+    </section>
+
+
+
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-6">Product/Business Launch</h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- Launch Item 1 -->
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <img src="/images/product-launch.jpg" alt="Launch Image" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <p class="font-semibold">Name: DARMA</p>
+                    <p>Date: 12 Mar</p>
+                    <p>By: Karma Ways Group</p>
+                </div>
+            </div>
+
+            <!-- Launch Item 2 -->
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <img src="/images/product-launch.jpg" alt="Launch Image" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <p class="font-semibold">Name: DARMA</p>
+                    <p>Date: 12 Mar</p>
+                    <p>By: Karma Ways Group</p>
+                </div>
+            </div>
+
+            <!-- Launch Item 3 -->
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <img src="/images/product-launch.jpg" alt="Launch Image" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <p class="font-semibold">Name: DARMA</p>
+                    <p>Date: 12 Mar</p>
+                    <p>By: Karma Ways Group</p>
+                </div>
+            </div>
+
+            <!-- Launch Item 4 -->
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <img src="/images/product-launch.jpg" alt="Launch Image" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <p class="font-semibold">Name: DARMA</p>
+                    <p>Date: 12 Mar</p>
+                    <p>By: Karma Ways Group</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-6">
+            <button
+                class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-6 rounded-full transition duration-300">
+                See more
+            </button>
+        </div>
+    </section>
+
+
+    <div class="container mx-auto px-4">
+        <!-- Product Showcase Section -->
+        <div class="mb-8">
+            <h2 class="text-xl font-bold mb-4 border-b pb-2">Nigeria's Decide and Choice of Product/ Items</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                @for ($i = 0; $i < 4; $i++)
+                    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                        <img src="/images/product-image.jpg" alt="Product Image" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="font-semibold mb-2">Product: INDOMIE</h3>
+                            <p class="text-sm text-gray-600">By: John James</p>
+                        </div>
+                    </div>
+                @endfor
+            </div>
+            <div class="text-center mt-4">
+                <a href="#" class="bg-indigo-600 text-white px-4 py-2 rounded-md inline-block">See more</a>
+            </div>
+        </div>
+
+        <!-- Top News Section -->
+        <div>
+            <h2 class="text-xl font-bold mb-4 border-b pb-2">Top Topics</h2>
+            <div class="space-y-4">
+                <div class="flex items-start space-x-4">
+                    <img src="/images/news-image.jpeg" alt="News Image" class="w-24 h-24 object-cover rounded-md">
+                    <div>
+                        <h3 class="font-semibold mb-2">UEFA Champions League 2024/25: Major Format Overhaul
+                            Explained – What Fans Need to Know</h3>
+                        <p class="text-sm text-gray-600">The UEFA Executive Board has approved a new format for the
+                            2024/25 UEFA Champions League which will see major changes to the competition's format
+                            for...</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <img src="/images/news-image.jpeg" alt="News Image" class="w-24 h-24 object-cover rounded-md">
+                    <div>
+                        <h3 class="font-semibold mb-2">CBN to Redeem N2.2 Trillion in Treasury Bills for Q2 2024;
+                            Full Schedule Released</h3>
+                        <p class="text-sm text-gray-600">The Central Bank of Nigeria (CBN) has revealed its
+                            schedule for the redemption of N2.2 trillion worth of maturing Nigerian Treasury Bills
+                            (NTBs) during the...</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <img src="/images/news-image.jpeg" alt="News Image" class="w-24 h-24 object-cover rounded-md">
+                    <div>
+                        <h3 class="font-semibold mb-2">Dangote's Wealth Soars with 80% Stake in Cement Giant,
+                            Secures Spot Among Africa's Richest</h3>
+                        <p class="text-sm text-gray-600">Africa's richest man, Aliko Dangote, has seen his wealth
+                            surge as he retains an 80% stake in Dangote Cement. This substantial holding, coupled...
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <img src="/images/news-image.jpeg" alt="News Image" class="w-24 h-24 object-cover rounded-md">
+                    <div>
+                        <h3 class="font-semibold mb-2">Transport Fare Analysis for July 2024: City Bus, Intercity,
+                            Air Travel, and More Show Mixed Trends</h3>
+                        <p class="text-sm text-gray-600">The National Bureau of Statistics (NBS) has released its
+                            latest report on transportation costs across Nigeria, revealing a mixed bag of increases
+                            and...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </main>
+
+@endsection

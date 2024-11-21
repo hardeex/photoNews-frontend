@@ -5,73 +5,27 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Cloudinary\Cloudinary;
 
 class NewsPostController extends Controller
 {
 
-    // public function createPost()
-    // {
+    protected $cloudinary;
 
-    //     $jwtToken = session('api_token');
-    //     if (empty($jwtToken)) {
-    //         return redirect()->route('user.login')->with('error', 'Please log in first');
-    //     }
-
-    //     // Original endpoint to get categories for creation (keep existing variable name)
-    //     $apiUrl = config('api.base_url') . '/get-categories';
-    //     try {
-    //         $response = Http::withHeaders([
-    //             'Authorization' => 'Bearer ' . $jwtToken,
-    //         ])->get($apiUrl);
-
-    //         if ($response->successful()) {
-    //             $categories = $response->json()['data'] ?? [];  // Use 'categories' as before
-    //             Log::info('Fetched categories for creation: ' . json_encode($categories));
-    //         } else {
-    //             $categories = [];
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching categories for creation: ' . $e->getMessage());
-    //         $categories = [];
-    //     }
-
-    //     $jwtToken = session('api_token');
-    //     if (empty($jwtToken)) {
-    //         return redirect()->route('user.login')->with('error', 'Please log in first');
-    //     }
-
-    //     // Original endpoint to get tags for creation
-    //     $apiUrl = config('api.base_url') . '/get-tags'; // Adjust the endpoint if necessary
-    //     Log::info('Attempting to fetch tags for creation', [
-    //         'api_url' => $apiUrl,
-    //     ]);
-
-    //     try {
-    //         $response = Http::withHeaders([
-    //             'Authorization' => 'Bearer ' . $jwtToken,
-    //         ])->get($apiUrl);
-
-    //         // Log the response from the API
-    //         Log::info('API response for fetching tags', [
-    //             'status_code' => $response->status(),
-    //             'response_body' => $response->body(),
-    //         ]);
-
-    //         if ($response->successful()) {
-    //             $tags = $response->json()['data'] ?? [];  // Use 'tags' as before
-    //             Log::info('Fetched tags for creation: ' . json_encode($tags));
-    //         } else {
-    //             $tags = [];
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching tags for creation: ' . $e->getMessage());
-    //         $tags = [];
-    //     }
-
-
-    //     return view('news.create-post', compact('categories', 'tags'));
-    // }
-
+    public function __construct()
+    {
+        // Configure Cloudinary
+        $this->cloudinary = new Cloudinary([
+            'cloud' => [
+                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                'api_key' => env('CLOUDINARY_API_KEY'),
+                'api_secret' => env('CLOUDINARY_API_SECRET'),
+            ],
+            'url' => [
+                'secure' => true
+            ]
+        ]);
+    }
 
     public function createPost()
     {
@@ -118,10 +72,7 @@ class NewsPostController extends Controller
         return view('news.show');
     }
 
-    public function newDetails()
-    {
-        return view('news.details');
-    }
+
 
 
     // categories method
@@ -425,100 +376,7 @@ class NewsPostController extends Controller
 
     // news method
 
-    public function submitPost33(Request $request)
-    {
-        Log::info('Submit post to the endpoint method is called...', [
-            'request_data' => $request->all(),
-        ]);
 
-        // Validate the incoming form data
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:news_posts,slug',
-            'content' => 'required',
-            'categories' => 'required|array',
-            'categories.*' => 'exists:categories,id',
-            'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id',
-            'featured_image' => 'nullable|image|max:2048',
-            'is_featured' => 'boolean',
-            'is_breaking' => 'boolean',
-            'hot_gist' => 'boolean',
-            'event' => 'boolean',
-            'top_topic' => 'boolean',
-            'is_draft' => 'boolean',
-            'is_scheduled' => 'boolean',
-            'scheduled_time' => 'nullable|date_format:Y-m-d\TH:i',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:155',
-        ]);
-
-        // Log the validated data
-        Log::info('Validated post data', $validated);
-
-        // Get the JWT token from session
-        $jwtToken = session('api_token');
-
-        // Check JWT token
-        if (empty($jwtToken)) {
-            Log::warning('JWT token missing or expired');
-            return redirect()->route('user.login')->with('error', 'Please log in first');
-        }
-
-        // API URL for post submission
-        $apiUrl = config('api.base_url') . '/submit-post';
-        Log::info('Connecting to API URL for post creation', ['api_url' => $apiUrl]);
-
-        // Prepare the data to be sent to the API
-        $data = $validated;
-
-        // Handle file upload for featured image
-        if ($request->hasFile('featured_image')) {
-            $data['featured_image'] = base64_encode(file_get_contents($request->file('featured_image')));
-        }
-
-        // Log the data that is about to be sent to the external API
-        Log::info('Sending data to external API', ['data' => array_merge($data, ['featured_image' => $data['featured_image'] ? '[BASE64 ENCODED IMAGE]' : 'No image'])]);
-
-        // Make the POST request to the external API
-        try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $jwtToken,
-            ])->post($apiUrl, $data);
-
-            // Log the response from the external API
-            if ($response->successful()) {
-                Log::info('Post successfully created through external API', [
-                    'response_data' => $response->json(),
-                ]);
-
-                // Handle successful response
-                return redirect()->route('posts.index')->with('success', 'Post created successfully!');
-            } else {
-                // If the token has expired or is invalid
-                if ($response->status() === 401) {
-                    Log::warning('Expired or invalid token detected');
-                    return redirect()->route('user.login')->with('error', 'Session expired. Please log in again.');
-                }
-
-                // Log the error response from the API
-                Log::error('Error returned from external API', [
-                    'status_code' => $response->status(),
-                    'error_message' => $response->json()['message'] ?? 'An error occurred.',
-                ]);
-
-                return back()->withInput()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
-            }
-        } catch (\Exception $e) {
-            // Log the exception error with stack trace
-            Log::error('API request failed with exception', [
-                'exception_message' => $e->getMessage(),
-                'exception_trace' => $e->getTraceAsString(),
-            ]);
-
-            return back()->withInput()->withErrors(['error' => 'An error occurred while submitting the post.']);
-        }
-    }
 
 
     public function submitPost(Request $request)
@@ -638,6 +496,184 @@ class NewsPostController extends Controller
             return back()->withErrors(['error' => 'An error occurred while submitting the post.']);
         }
     }
+
+
+
+
+    public function showPostDetails(Request $request, $slug)
+    {
+        $apiUrl = config('api.base_url') . '/post/' . $slug;  // API endpoint for single post
+
+        try {
+            // Make the API call to fetch post details by slug
+            $response = Http::get($apiUrl);
+
+            if ($response->successful()) {
+                // Get post data from the API response
+                $data = $response->json();
+                $post = $data['data'] ?? null;  // The 'post' data from the API response
+            } else {
+                $post = null;
+            }
+        } catch (\Exception $e) {
+            // Log error and handle failure
+            Log::error('Error fetching post details: ' . $e->getMessage());
+            $post = null;
+        }
+
+        // Return the view with the post data
+        return view('posts.show', compact('post'));
+    }
+
+
+
+    public function submitPostTEST(Request $request)
+    {
+        Log::info('Post submission method is called...', [
+            'request_data' => $request->all(), // Log all incoming request data
+        ]);
+
+        // Validate the incoming form data
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|max:255 ',
+            'content' => 'required',
+            'featured_image' => 'nullable|image|max:2048',
+            'categories' => 'required|array',
+            'categories.*' => 'nullable',
+            'tags' => 'nullable|array',
+            'tags.*' => 'nullable',
+            'is_featured' => 'boolean',
+            'is_breaking' => 'boolean',
+            'hot_gist' => 'boolean',
+            'event' => 'boolean',
+            'top_topic' => 'boolean',
+            'is_draft' => 'boolean',
+            'is_scheduled' => 'boolean',
+            'scheduled_time' => 'nullable|date_format:Y-m-d\TH:i',
+            'allow_comments' => 'nullable|boolean',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:155',
+            'review_feedback' => 'nullable|string',
+        ]);
+
+        // Log the validated data before proceeding
+        Log::info('Validated post data', [
+            'title' => $validated['title'],
+            'slug' => $validated['slug'],
+            'content' => $validated['content'],
+            //'is_featured' => $validated['is_featured'],
+            // Include other relevant fields
+        ]);
+
+        // Get the JWT token from session (after login)
+        $jwtToken = session('api_token');
+
+        // If the JWT token is missing or expired, redirect to the login page
+        if (empty($jwtToken)) {
+            Log::warning('JWT token missing or expired');
+            return redirect()->route('user.login')->with('error', 'Please log in first');
+        }
+
+        // API URL for post submission
+        $apiUrl = config('api.base_url') . '/submit-post';
+        Log::info('Connecting to API URL for post creation', [
+            'api_url' => $apiUrl,
+        ]);
+
+        // Prepare the data to be sent to the API
+        $data = [
+            'title' => $validated['title'],
+            'slug' => $validated['slug'],
+            'content' => $validated['content'],
+            'categories' => $validated['categories'],
+            'tags' => $validated['tags'] ?? [],
+            //'featured_image' => $validated['featured_image'],
+            'is_featured' => $validated['is_featured'] ?? false,
+            'is_breaking' => $validated['is_breaking'] ?? false,
+            'hot_gist' => $validated['hot_gist'] ?? false,
+            'event' => $validated['event'] ?? false,
+            'top_topic' => $validated['top_topic'] ?? false,
+            'is_draft' => $validated['is_draft'] ?? false,
+            'is_scheduled' => $validated['is_scheduled'] ?? false,
+            'scheduled_time' => $validated['scheduled_time'] ?? null,
+            'allow_comments' => $validated['allow_comments'] ?? true,
+            'meta_title' => $validated['meta_title'] ?? null,
+            'meta_description' => $validated['meta_description'] ?? null,
+            'review_feedback' => $validated['review_feedback'] ?? null,
+        ];
+
+        // Handle file upload
+        if ($request->hasFile('featured_image')) {
+            $file = $request->file('featured_image');
+
+            // Log file details for debugging
+            Log::info('Featured image uploaded', [
+                'original_name' => $file->getClientOriginalName(),
+                'mime_type' => $file->getMimeType(),
+                'size' => $file->getSize(),
+            ]);
+
+            // Add file to data for multipart/form-data request
+            $data['featured_image'] = new \CURLFile(
+                $file->getPathname(),
+                $file->getMimeType(),
+                $file->getClientOriginalName()
+            );
+        }
+
+
+        // Log the data that is about to be sent to the external API
+        Log::info('Sending data to external API', [
+            'data' => $data,
+        ]);
+
+        // Make the POST request to the external API
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $jwtToken,
+                'Content-Type' => 'multipart/form-data',
+            ])->attach(
+                'featured_image',
+                file_get_contents($file->getPathname()),
+                $file->getClientOriginalName()
+            )->post($apiUrl, $data);
+
+            // Log the response from the external API
+            if ($response->successful()) {
+                Log::info('Post successfully created through external API', [
+                    'response_data' => $response->json(),
+                ]);
+
+                // Handle successful response
+                return redirect()->back()->with('success', 'Post created successfully!');
+            } else {
+                // If the token has expired or is invalid, we need to catch that
+                if ($response->status() === 401) {
+                    Log::warning('Expired or invalid token detected');
+                    return redirect()->route('user.login')->with('error', 'Session expired. Please log in again.');
+                }
+
+                // Log the error response from the API
+                Log::error('Error returned from external API', [
+                    'status_code' => $response->status(),
+                    'error_message' => $response->json()['message'] ?? 'An error occurred.',
+                ]);
+                return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
+            }
+        } catch (\Exception $e) {
+            // Log the exception error with stack trace
+            Log::error('API request failed with exception', [
+                'exception_message' => $e->getMessage(),
+                'exception_trace' => $e->getTraceAsString(),
+            ]);
+            return back()->withErrors(['error' => 'An error occurred while submitting the post.']);
+        }
+    }
+
+
+
+
 
 
     // End of the class

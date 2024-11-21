@@ -22,8 +22,11 @@ Route::get('/dashboard', [UserController::class, 'dashboard'])->name('user.dashb
 Route::get('/create-post', [NewsPostController::class, 'createPost'])->name('news.create-post');
 Route::post('submit-post', [NewsPostController::class, 'submitPost'])->name('posts.submit');
 Route::get('/news', [NewsPostController::class, 'newsCategoryList'])->name('news');
-Route::get('/news/details', [NewsPostController::class, 'newDetails'])->name('news-details');
+//Route::get('/news/details', [NewsPostController::class, 'newDetails'])->name('news-details');
 
+// posts routes
+Route::get('/pending-posts', [UserController::class, 'listPendingPosts'])->name('posts.pending-posts');
+Route::get('/post/{slug}', [NewsPostController::class, 'showPostDetails'])->name('post.details');
 
 // ctaegory and tag routes
 Route::get('/create-category', [NewsPostController::class, 'createCategory'])->name('create-category');

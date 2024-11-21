@@ -100,7 +100,7 @@
 
 
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <form action="{{route('posts.submit')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('posts.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
 
@@ -132,7 +132,7 @@
 
                         <select id="categories" name="categories[]" class="w-full select2"
                             onchange="handleCategoryChange(this)" required>
-                            <option value="">Select a category</option>                           
+                            <option value="">Select a category</option>
                             @forelse ($categories as $category)
                                 <option value="{{ $category['id'] }}"
                                     {{ old('parent_id') == $category['id'] ? 'selected' : '' }}>
@@ -140,8 +140,8 @@
                                 </option>
                             @empty
                                 <option disabled>No categories available</option>
-                            @endforelse                          
-                        </select>                       
+                            @endforelse
+                        </select>
                     </div>
                 </div>
 
@@ -191,7 +191,7 @@
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             oninput="filterTags()">
 
-                        <select id="tags" name="tags[]" class="w-full select2" multiple>                           
+                        <select id="tags" name="tags[]" class="w-full select2" multiple>
 
                             @forelse ($tags as $tag)
                                 <option value="{{ $tag['id'] }}"
@@ -202,7 +202,7 @@
                                 <option disabled>No tags available</option>
                             @endforelse
                         </select>
-                       
+
                     </div>
                 </div>
 
@@ -272,6 +272,8 @@
                             </div>
 
 
+
+
                             <div class="flex items-center mr-4">
                                 <input type="checkbox" id="allow_comments" name="allow_comments" value="1"
                                     class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
@@ -281,14 +283,7 @@
 
                         </div>
 
-                        <div id="schedule_date" class="mb-6"
-                            style="display: {{ old('is_scheduled', $post->is_scheduled ?? false) ? 'block' : 'none' }};">
-                            <label for="scheduled_time" class="block text-sm font-medium text-gray-700 mb-2">Scheduled
-                                Date & Time</label>
-                            <input type="datetime-local" id="scheduled_time" name="scheduled_time"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                value="{{ old('scheduled_time', $post->scheduled_time ?? '') }}">
-                        </div>
+
                     </div>
                 </div>
 
@@ -617,7 +612,7 @@
         </script>
 
 
-      
+
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const scheduledCheckbox = document.getElementById('is_scheduled');

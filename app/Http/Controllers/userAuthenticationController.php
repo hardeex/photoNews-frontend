@@ -92,7 +92,7 @@ class userAuthenticationController extends Controller
         ];
 
         // Build the full API URL dynamically using the config
-        $apiUrl = config('api.base_url') . '/login'; 
+        $apiUrl = config('api.base_url') . '/login';
         Log::info('Connecting to API URL: ' . $apiUrl);
 
         try {
@@ -113,12 +113,18 @@ class userAuthenticationController extends Controller
                         'api_token' => $responseData['data']['authorization']['token'],
                         'user' => $responseData['data']['user'],
                     ]);
+
+                    // Check if the user is an admin
+                    if ($responseData['data']['user']['role'] == 'admin') {
+                        // Redirect to the admin dashboard if the user is an admin
+                        return redirect()->route('admin.dashboard')->with('success', 'Login successful! Welcome back, Admin.');
+                    }
                 } else {
                     // If no token returned, handle accordingly
                     return back()->withErrors(['login_error' => 'Authentication failed.']);
                 }
 
-                // Redirect to the dashboard with a success message
+                // Redirect to the user dashboard if the user is not an admin
                 return redirect()->route('user.dashboard')->with('success', 'Login successful! Welcome back.');
             } else {
                 // If API login failed, show the error message
@@ -130,4 +136,58 @@ class userAuthenticationController extends Controller
             return back()->withErrors(['login_error' => 'An error occurred while communicating with the login service: ' . $e->getMessage()]);
         }
     }
+
+    public function userLogout(Request $request)
+    {
+        // Get the token from the session
+        $token = $request->session()->get('api_token');
+
+        if ($token) {
+            // Prepare the data to send to the API
+            $data = [
+                'token' => $token,  // You may need to send the token or any other data as required by your API
+            ];
+
+            // Build the full API URL dynamically using the config
+            $apiUrl = config('api.base_url') . '/logout';
+            Log::info('Connecting to API URL: ' . $apiUrl);
+
+            try {
+                // Send the POST request to the external API to log out
+                $response = Http::withToken($token)->post($apiUrl, $data);
+
+                // Log the response for debugging purposes
+                Log::info('API Response Status: ' . $response->status());
+                Log::info('API Response Body: ' . $response->body());
+
+                // Check if the API request was successful
+                if ($response->successful()) {
+                    // Clear the session data
+                    $request->session()->forget(['api_token', 'user']);
+                    $request->session()->flush();
+
+                    // Redirect to the login page or homepage
+                    return redirect()->route('login')->with('success', 'You have successfully logged out.');
+                } else {
+                    // If the API logout failed, show an error message
+                    return back()->withErrors(['logout_error' => 'Error logging out from the API.']);
+                }
+            } catch (\Exception $e) {
+                // Handle any exceptions that occur during the API request
+                Log::error('Exception occurred during API logout: ' . $e->getMessage());
+                return back()->withErrors(['logout_error' => 'An error occurred while communicating with the logout service: ' . $e->getMessage()]);
+            }
+        } else {
+            // If no token is found, the user is already logged out
+            return redirect()->route('user.login')->with('info', 'You are already logged out.');
+        }
+    }
+
+
+    public function adminDashboard()
+    {
+        return view('admin.dashboard');
+    }
+
+    // End of the class
 }

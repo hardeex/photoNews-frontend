@@ -672,6 +672,178 @@ class NewsPostController extends Controller
     }
 
 
+    public function listPendingPosts()
+    {
+        $jwtToken = session('api_token'); // Retrieve the JWT token from the session
+        Log::info('JWT Token:', ['token' => $jwtToken]); // Log the token
+
+        if (empty($jwtToken)) {
+            return redirect()->route('user.login')->with('error', 'Please log in first');
+        }
+
+        // Define the API endpoint to fetch pending posts
+        $apiUrl = config('api.base_url') . '/pending/posts';
+        Log::info('API URL:', ['url' => $apiUrl]); // Log the API URL
+
+        try {
+            // Make an API call to the /pending/posts endpoint to fetch the posts
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $jwtToken,
+            ])->post($apiUrl, [
+                'page' => 1,  // Default to the first page
+                'per_page' => 100,  // Default to 10 posts per page
+            ]);
+
+
+            // Log full response for debugging
+            // Log::info('Full API Response:', [
+            //     'status' => $response->status(),
+            // ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                // Extract posts and pagination data from the response
+                $responseData = $response->json();
+
+                // Log detailed response data structure
+                Log::info('Response Data Structure:', [
+                    'keys' => array_keys($responseData),
+                    'data_keys' => isset($responseData['data']) ? array_keys($responseData['data']) : 'No data key'
+                ]);
+
+                // Extract posts data and pagination info
+                $postsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                // Log the processed posts data
+                Log::info('Processed Posts Data:', [
+                    'posts_count' => count($postsData),
+                    'pagination' => $pagination
+                ]);
+            } else {
+                // If the response failed, handle the error
+                if ($response->status() == 403) {
+                    return redirect()->route('user.login')->with('error', 'Access denied. Admins only.');
+                }
+                $postsData = [];
+                $pagination = [];
+            }
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the request
+            Log::error('Error fetching pending posts: ' . $e->getMessage());
+            $postsData = [];
+            $pagination = [];
+        }
+
+        // Pass response data to the view
+        return view('admin.pending-post', [
+            'postsData' => $postsData,
+            'pagination' => $pagination,
+            'rawResponseData' => $responseData ?? null, // Pass raw response for debugging
+        ]);
+    }
+
+
+
+    public function approvePost($slug)
+    {
+        $jwtToken = session('api_token'); // Retrieve the JWT token from the session
+        Log::info('JWT Token:', ['token' => $jwtToken]); // Log the token
+
+        if (empty($jwtToken)) {
+            return redirect()->route('user.login')->with('error', 'Please log in first');
+        }
+
+        // Define the API endpoint to approve the post
+        $apiUrl = config('api.base_url') . '/posts/' . $slug . '/approve';
+        Log::info('API URL:', ['url' => $apiUrl]); // Log the API URL
+
+        try {
+            // Make an API call to the /approve/post/{slug} endpoint to approve the post
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $jwtToken,
+            ])->post($apiUrl);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Check if the post was approved successfully
+                if ($responseData['status'] == 'success') {
+                    Log::info('Post approved successfully.', ['slug' => $slug]);
+
+                    // Optionally, you could display a success message to the user or reload the posts list
+                    return redirect()->route('admin.dashboard')->with('success', 'Post approved successfully.');
+                } else {
+                    Log::error('Failed to approve post.', ['slug' => $slug, 'message' => $responseData['message']]);
+                    return back()->with('error', 'Failed to approve the post.');
+                }
+            } else {
+                // Handle failure (e.g., unauthorized or bad request)
+                if ($response->status() == 403) {
+                    return redirect()->route('user.login')->with('error', 'Access denied. Admins only.');
+                }
+                Log::error('API call failed', ['status' => $response->status(), 'response' => $response->json()]);
+                return back()->with('error', 'An error occurred while approving the post.');
+            }
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the request
+            Log::error('Error approving post: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while approving the post.');
+        }
+    }
+
+
+    public function deletePost($slug)
+    {
+        $jwtToken = session('api_token'); // Retrieve the JWT token from the session
+        Log::info('JWT Token:', ['token' => $jwtToken]); // Log the token
+
+        // If there's no JWT token, prompt the user to log in
+        if (empty($jwtToken)) {
+            return redirect()->route('user.login')->with('error', 'Please log in first');
+        }
+
+        // Define the API endpoint to delete the post
+        $apiUrl = config('api.base_url') . '/posts/' . $slug . '/delete';
+        Log::info('API URL:', ['url' => $apiUrl]); // Log the API URL
+
+        try {
+            // Make an API call to the /delete/post/{slug} endpoint to delete the post
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $jwtToken,
+            ])->delete($apiUrl);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Check if the post was deleted successfully
+                if ($responseData['status'] == 'success') {
+                    Log::info('Post deleted successfully.', ['slug' => $slug]);
+
+                    // Redirect back to the admin dashboard with a success message
+                    return redirect()->route('admin.dashboard')->with('success', 'Post deleted successfully.');
+                } else {
+                    Log::error('Failed to delete post.', ['slug' => $slug, 'message' => $responseData['message']]);
+                    return back()->with('error', 'Failed to delete the post.');
+                }
+            } else {
+                // Handle failure (e.g., unauthorized or bad request)
+                if ($response->status() == 403) {
+                    return redirect()->route('user.login')->with('error', 'Access denied. Admins only.');
+                }
+                Log::error('API call failed', ['status' => $response->status(), 'response' => $response->json()]);
+                return back()->with('error', 'An error occurred while deleting the post.');
+            }
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the request
+            Log::error('Error deleting post: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while deleting the post.');
+        }
+    }
+
+
 
 
 

@@ -19,41 +19,6 @@ class UserController extends Controller
     }
 
 
-    // public function index()
-    // {
-    //     //$this->listPendingPosts();
-    //     return view('welcome',);
-    // }
-
-    // public function listPendingPosts(Request $request)
-    // {
-    //     $apiUrl = config('api.base_url') . '/pending/posts';
-
-    //     try {
-    //         // Make the API call
-    //         $response = Http::get($apiUrl, [
-    //             'page' => $request->get('page', 1),
-    //             'per_page' => 10,
-    //         ]);
-
-    //         if ($response->successful()) {
-    //             $data = $response->json();
-    //             $postsData = $data['data'] ?? []; 
-    //             $pagination = $data['pagination'] ?? [];
-    //         } else {
-    //             $postsData = [];
-    //             $pagination = [];
-    //         }
-    //     } catch (\Exception $e) {
-    //         // Handle error
-    //         Log::error('Error fetching pending posts: ' . $e->getMessage());
-    //         $postsData = [];
-    //         $pagination = [];
-    //     }
-
-    //     // Return the view with the data
-    //     return view('welcome', compact('postsData', 'pagination'));
-    // }
 
     public function indexOPTION1(Request $request)
     {
@@ -134,12 +99,13 @@ class UserController extends Controller
     public function index(Request $request)
     {
         // Call listPendingPosts to get posts data and pagination
-        $data = $this->listPendingPosts($request);
+        //$data = $this->listPendingPosts($request);
 
-        return view('welcome', $data);
+        //return view('welcome', $data);
+        return view('welcome');
     }
 
-    public function listPendingPosts(Request $request)
+    public function listPendingPostsJSON(Request $request)
     {
         $apiUrl = config('api.base_url') . '/pending/posts';
 
@@ -174,47 +140,74 @@ class UserController extends Controller
 
 
 
-    // public function listPendingPosts()
-    // {
-    //     $jwtToken = session('api_token'); // Retrieve the JWT token from the session
-    //     if (empty($jwtToken)) {
-    //         return redirect()->route('user.login')->with('error', 'Please log in first');
-    //     }
+    public function listPendingPosts()
+    {
+        $jwtToken = session('api_token'); // Retrieve the JWT token from the session
+        Log::info('JWT Token:', ['token' => $jwtToken]); // Log the token
 
-    //     // Define the API endpoint to fetch pending posts
-    //     $apiUrl = config('api.base_url') . '/pending/posts';
+        if (empty($jwtToken)) {
+            return redirect()->route('user.login')->with('error', 'Please log in first');
+        }
 
-    //     try {
-    //         // Make an API call to the /pending/posts endpoint to fetch the posts
-    //         $response = Http::withHeaders([
-    //             'Authorization' => 'Bearer ' . $jwtToken, // Include the JWT token in the request header
-    //         ])->get($apiUrl, [
-    //             'page' => 1, // Default to the first page
-    //             'per_page' => 10, // Default to 10 posts per page
-    //         ]);
+        // Define the API endpoint to fetch pending posts
+        $apiUrl = config('api.base_url') . '/pending/posts';
+        Log::info('API URL:', ['url' => $apiUrl]); // Log the API URL
 
-    //         // Check if the response was successful
-    //         if ($response->successful()) {
-    //             $postsData = $response->json()['data'] ?? []; // Posts data from the API response
-    //             $pagination = $response->json()['pagination'] ?? []; // Pagination info
+        try {
+            // Make an API call to the /pending/posts endpoint to fetch the posts
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $jwtToken, // Include the JWT token in the request header
+            ])->get($apiUrl, [
+                'page' => 1, // Default to the first page
+                'per_page' => 10, // Default to 10 posts per page
+            ]);
 
-    //             Log::info('Fetched pending posts: ', ['posts_count' => count($postsData), 'pagination' => $pagination]);
-    //         } else {
-    //             // If the response failed, handle the error
-    //             $postsData = [];
-    //             $pagination = [];
-    //         }
-    //     } catch (\Exception $e) {
-    //         // Handle any errors that occur during the request
-    //         Log::error('Error fetching pending posts: ' . $e->getMessage());
-    //         $postsData = [];
-    //         $pagination = [];
-    //     }
+            // Log full response for debugging
+            Log::info('Full API Response:', [
+                'status' => $response->status(),
+                'body' => $response->body()
+            ]);
 
-    //     // Return the data to the Blade view
-    //     return view('posts.pending-posts', compact('postsData', 'pagination'));
-    // }
+            // Check if the response was successful
+            if ($response->successful()) {
+                // Extract posts and pagination data from the response
+                $responseData = $response->json();
 
+                // More detailed logging
+                Log::info('Response Data Structure:', [
+                    'keys' => array_keys($responseData),
+                    'data_keys' => isset($responseData['data']) ? array_keys($responseData['data']) : 'No data key'
+                ]);
+
+                $postsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                Log::info('Processed Posts Data:', [
+                    'posts_count' => count($postsData),
+                    'pagination' => $pagination
+                ]);
+            } else {
+                // If the response failed, handle the error (e.g., unauthorized or forbidden)
+                if ($response->status() == 403) {
+                    return redirect()->route('user.login')->with('error', 'Access denied. Admins only.');
+                }
+                $postsData = [];
+                $pagination = [];
+            }
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the request
+            Log::error('Error fetching pending posts: ' . $e->getMessage());
+            $postsData = [];
+            $pagination = [];
+        }
+
+        // Debugging in the view
+        return view('posts.pending-posts', [
+            'postsData' => $postsData,
+            'pagination' => $pagination,
+            'rawResponseData' => $responseData ?? null // Pass raw response for debugging
+        ]);
+    }
 
 
 

@@ -39,11 +39,15 @@
                 <i class="fas fa-chevron-down text-xs"></i>
             </a>
             <div class="submenu pl-4 bg-green-700">
-                <a href="{{ route('news.create-post') }}"
-                    class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create Post</a>
-                <a href="{{ route('create-category') }}"
-                    class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create Category</a>
-                <a href="{{ route('create-tag') }}" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create
+                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">All News</a>
+                <form action="{{ route('admin-pending-posts') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">
+                        Pending News
+                    </button>
+                </form>
+
+                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create
                     Tag</a>
             </div>
         </div>

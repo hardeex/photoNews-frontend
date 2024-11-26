@@ -42,9 +42,13 @@
                                 </a>
                             </h2>
 
+                            {{-- <p class="text-gray-600 text-sm md:text-base mb-2">
+                                {{ Str::limit{!! $post['content'] !!} ?? 'Emerging reports indicate that the total monthly remuneration of 68 non-principal officers of the Nigerian Senate surpasses N2 billion...', 150) }}
+                            </p> --}}
                             <p class="text-gray-600 text-sm md:text-base mb-2">
-                                {{ Str::limit($post['excerpt'] ?? 'Emerging reports indicate that the total monthly remuneration of 68 non-principal officers of the Nigerian Senate surpasses N2 billion...', 150) }}
+                                {!! Str::limit($post['content'], 150) !!}
                             </p>
+
                             <p class="text-gray-500 text-xs">
                                 <span>{{ ucfirst($post['status']) }}</span> |
                                 <span>{{ \Carbon\Carbon::parse($post['created_at'])->format('d M Y H:i') }}</span> |

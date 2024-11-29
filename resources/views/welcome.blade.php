@@ -23,74 +23,33 @@
             </section>
 
             <!--- START OF TEST CONTAINER--->
+            <h1>Published Posts</h1>
 
-            <section class="mb-8">
-                @if (count($postsData['posts']) > 0)
-                    @foreach ($postsData['posts'] as $post)
-                        <article class="mb-6">
-                            @if ($post['featured_image'])
-                                <img src="{{ $post['featured_image'] }}" alt="{{ ucwords(strtolower($post['title'])) }}"
-                                    class="w-full h-48 md:h-64 object-cover rounded-lg mb-4">
-                            @else
-                                <img src="{{ asset('/images/news-image.jpeg') }}" alt="News image"
-                                    class="w-full h-48 md:h-64 object-cover rounded-lg mb-4">
-                            @endif
-                            <h2 class="text-xl md:text-2xl font-bold mb-2">
-                                <a href="{{ route('post.details', $post['slug']) }}"
-                                    class="text-xl md:text-2xl font-bold mb-2">
-                                    {{ \Illuminate\Support\Str::title($post['title']) }}
-                                </a>
-                            </h2>
-
-                            {{-- <p class="text-gray-600 text-sm md:text-base mb-2">
-                                {{ Str::limit{!! $post['content'] !!} ?? 'Emerging reports indicate that the total monthly remuneration of 68 non-principal officers of the Nigerian Senate surpasses N2 billion...', 150) }}
-                            </p> --}}
-                            <p class="text-gray-600 text-sm md:text-base mb-2">
-                                {!! Str::limit($post['content'], 150) !!}
-                            </p>
-
-                            <p class="text-gray-500 text-xs">
-                                <span>{{ ucfirst($post['status']) }}</span> |
-                                <span>{{ \Carbon\Carbon::parse($post['created_at'])->format('d M Y H:i') }}</span> |
-                                <span>{{ $post['scheduled_time'] ? \Carbon\Carbon::parse($post['scheduled_time'])->format('d M Y H:i') : 'N/A' }}</span>
-                            </p>
-                        </article>
+            @if (count($postsData) > 0)
+                <ul>
+                    @foreach ($postsData as $post)
+                        <li>
+                            <h2>{{ $post['title'] }}</h2>
+                            <p>{{ $post['content'] }}</p>
+                            <!-- Directly display the category names (as they are a comma-separated string) -->
+                            <p><strong>Categories:</strong> {{ $post['category_names'] }}</p>
+                            <!-- Directly display the tag names (as they are a comma-separated string) -->
+                            <p><strong>Tags:</strong> {{ $post['tag_names'] }}</p>
+                            <p><strong>Scheduled Time:</strong> {{ $post['scheduled_time'] }}</p>
+                        </li>
                     @endforeach
+                </ul>
 
-                    <!-- Pagination -->
-                    <div class="pagination mt-4">
-                        @if (isset($pagination['total']) &&
-                                $pagination['total'] > 0 &&
-                                isset($pagination['last_page']) &&
-                                $pagination['last_page'] > 1)
-                            <ul class="pagination flex space-x-2">
-                                @if (isset($pagination['prev_page_url']) && $pagination['prev_page_url'])
-                                    <li class="page-item">
-                                        <a class="page-link text-blue-600 hover:underline"
-                                            href="{{ $pagination['prev_page_url'] }}">Previous</a>
-                                    </li>
-                                @endif
-
-                                @for ($i = 1; $i <= $pagination['last_page']; $i++)
-                                    <li class="page-item {{ $i == $pagination['current_page'] ? 'bg-blue-100' : '' }}">
-                                        <a class="page-link text-blue-600 hover:underline"
-                                            href="{{ route('news.pending_posts', ['page' => $i]) }}">{{ $i }}</a>
-                                    </li>
-                                @endfor
-
-                                @if (isset($pagination['next_page_url']) && $pagination['next_page_url'])
-                                    <li class="page-item">
-                                        <a class="page-link text-blue-600 hover:underline"
-                                            href="{{ $pagination['next_page_url'] }}">Next</a>
-                                    </li>
-                                @endif
-                            </ul>
-                        @endif
+                <!-- Pagination Links (if needed) -->
+                @if ($pagination && isset($pagination['total_pages']))
+                    <div class="pagination">
+                        <p>Page {{ $pagination['current_page'] }} of {{ $pagination['total_pages'] }}</p>
+                        <a href="?page={{ $pagination['next_page'] }}">Next</a>
                     </div>
-                @else
-                    <p>No pending posts found.</p>
                 @endif
-            </section>
+            @else
+                <p>No published posts available.</p>
+            @endif
 
 
             <!--- END OF TEST CONTAINER-->
@@ -117,83 +76,220 @@
                 @endforeach
             </section>
 
-
-
-
             <div class="bg-gray-100 p-4">
-                <h2 class="text-2xl font-bold mb-4 bg-gray-300 p-2">Photo News</h2>
+                <h2 class="text-2xl font-bold mb-4 bg-gray-300 p-2">Latest News</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    @for ($i = 0; $i < 8; $i++)
-                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                            <div class="relative">
-                                <img src="/images/news-image.jpeg" alt="News Image" class="w-full h-48 object-cover">
-                                <span
-                                    class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
-                                    LIVE
-                                </span>
+                    @if (count($postsData) > 0)
+                        @foreach ($postsData as $post)
+                            <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
+                                class="hover:text-blue-600 transition-colors truncate w-full">
+                                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                                    <div class="relative">
+                                        @if ($post['featured_image'])
+                                            <img src="{{ $post['featured_image'] }}"
+                                                alt="{{ ucwords(strtolower($post['title'])) }}"
+                                                class="w-full h-48 object-cover">
+                                        @else
+                                            <img src="https://picsum.photos/seed/news/1200/600"
+                                                alt="{{ ucwords(strtolower($post['title'])) }}"
+                                                class="w-full h-48 object-cover">
+                                        @endif
+
+                                        <span
+                                            class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+                                            {{ isset($category) ? ucwords(strtolower($post['category_names'])) : 'Not available' }}
+                                        </span>
+                                    </div>
+
+                                    <div class="p-4">
+                                        <h3 class="text-lg font-semibold mb-2">
+                                            {{ \Illuminate\Support\Str::title(\Illuminate\Support\Str::words($post['title'] ?? 'Untitled', 4, '...')) }}
+                                        </h3>
+
+                                        {{-- <h3 class="text-lg font-semibold mb-2 break-words">
+                                            {{ $post['title'] ?? 'Untitled' }}
+                                        </h3> --}}
+
+
+                                        <p class="text-sm text-gray-600 mb-4">
+                                            {{ \Illuminate\Support\Str::limit(strip_tags($post['content']), 50, '...') }}
+                                        </p>
+
+
+                                        <!-- Author and Category -->
+                                        <div class="mb-3">
+                                            <p class="text-sm text-gray-600 mb-1">
+                                                By <span class="font-medium">{{ $post['created_by'] }}</span>
+                                            </p>
+                                            <span class="inline-block text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                                {{ isset($category) ? ucwords(strtolower($post['category_names'])) : 'Not available' }}
+                                            </span>
+                                        </div>
+
+                                        <!-- Display Tags -->
+                                        <div class="mb-3">
+                                            <p class="text-sm text-gray-600 mb-1">Tags:</p>
+                                            <div class="flex flex-wrap space-x-2">
+                                                @foreach ($post['tags'] as $tag)
+                                                    <span
+                                                        class="inline-block text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                                                        {{ $tag['name'] }} <!-- Assuming tags have a 'name' attribute -->
+                                                    </span>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
+                                        <!-- Engagement Metrics -->
+                                        <div class="flex items-center space-x-6 text-sm text-gray-500 pt-3 border-t">
+                                            <!-- Likes -->
+                                            <div class="flex items-center space-x-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
+                                                    viewBox="0 0 20 20" fill="currentColor">
+                                                    <path
+                                                        d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                                </svg>
+                                                <span>123</span>
+                                            </div>
+
+                                            <!-- Comments -->
+                                            <div class="flex items-center space-x-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
+                                                    viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd"
+                                                        d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                                <span>20</span>
+                                            </div>
+
+                                            <!-- Views -->
+                                            <div class="flex items-center space-x-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
+                                                    viewBox="0 0 20 20" fill="currentColor">
+                                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                                    <path fill-rule="evenodd"
+                                                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                                <span>1.2k views</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        @endforeach
+                        </a>
+                        <!-- Pagination Links (if needed) -->
+                        @if ($pagination && isset($pagination['total_pages']))
+                            <div class="pagination">
+                                <p>Page {{ $pagination['current_page'] }} of {{ $pagination['total_pages'] }}</p>
+                                <a href="?page={{ $pagination['next_page'] }}">Next</a>
                             </div>
+                        @endif
+                    @else
+                        <p>No published posts available.</p>
+                    @endif
+                </div>
+            </div>
 
-                            <div class="p-4">
-                                <h3 class="text-lg font-semibold mb-2">
-                                    Nigerian Senators' Monthly Pay Exceeds N2 Billion: Controversy Over Legislative Salaries
-                                    and Allowances
-                                </h3>
 
-                                <p class="text-sm text-gray-600 mb-4">
-                                    Emerging reports indicate that the total monthly remuneration of 68 non-principal
-                                    officers of the Nigerian Senate surpa...
-                                </p>
+            {{-- 
+            <div class="bg-gray-100 p-4">
+                <h2 class="text-2xl font-bold mb-4 bg-gray-300 p-2">Latest News</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    @if (count($postsData) > 0)
+                        @foreach ($postsData as $post)
+                            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                                <div class="relative">
+                                    @if ($post['featured_image'])
+                                        <img src="{{ $post['featured_image'] }}"
+                                            alt="{{ ucwords(strtolower($post['title'])) }}"
+                                            class="w-full h-48 object-cover">
+                                    @else
+                                        <img src="https://picsum.photos/seed/news/1200/600"
+                                            alt="{{ ucwords(strtolower($post['title'])) }}"
+                                            class="w-full h-48 object-cover">
+                                    @endif
 
-                                <!-- Author and Category -->
-                                <div class="mb-3">
-                                    <p class="text-sm text-gray-600 mb-1">
-                                        By <span class="font-medium">Shola Akinyele</span>
-                                    </p>
-                                    <span class="inline-block text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                                        Local News
+                                    <span
+                                        class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+                                        {{ isset($category) ? ucwords(strtolower($post['category_names'])) : 'Not available' }}
+
                                     </span>
                                 </div>
 
-                                <!-- Engagement Metrics -->
-                                <div class="flex items-center space-x-6 text-sm text-gray-500 pt-3 border-t">
-                                    <!-- Likes -->
-                                    <div class="flex items-center space-x-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
-                                            viewBox="0 0 20 20" fill="currentColor">
-                                            <path
-                                                d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                                        </svg>
-                                        <span>123</span>
+                                <div class="p-4">
+                                    <h3 class="text-lg font-semibold mb-2">
+                                        {{ $post['title'] }}
+                                    </h3>
+
+                                    <p class="text-sm text-gray-600 mb-4">
+                                        {{ strip_tags($post['content']) }}
+
+                                    </p>
+
+                                    <!-- Author and Category -->
+                                    <div class="mb-3">
+                                        <p class="text-sm text-gray-600 mb-1">
+                                            By <span class="font-medium">{{ $post['created_by'] }}</span>
+                                        </p>
+                                        <span class="inline-block text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                            {{ isset($category) ? ucwords(strtolower($post['category_names'])) : 'Not available' }}
+
+                                        </span>
                                     </div>
 
-                                    <!-- Comments -->
-                                    <div class="flex items-center space-x-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
-                                            viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd"
-                                                d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                        <span>20</span>
-                                    </div>
+                                    <!-- Engagement Metrics -->
+                                    <div class="flex items-center space-x-6 text-sm text-gray-500 pt-3 border-t">
+                                        <!-- Likes -->
+                                        <div class="flex items-center space-x-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
+                                                viewBox="0 0 20 20" fill="currentColor">
+                                                <path
+                                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                            </svg>
+                                            <span>123</span>
+                                        </div>
 
-                                    <!-- Views -->
-                                    <div class="flex items-center space-x-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
-                                            viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                            <path fill-rule="evenodd"
-                                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                        <span>1.2k views</span>
+                                        <!-- Comments -->
+                                        <div class="flex items-center space-x-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
+                                                viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd"
+                                                    d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span>20</span>
+                                        </div>
+
+                                        <!-- Views -->
+                                        <div class="flex items-center space-x-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
+                                                viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                                <path fill-rule="evenodd"
+                                                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span>1.2k views</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endfor
+                        @endforeach
+
+                        <!-- Pagination Links (if needed) -->
+                        @if ($pagination && isset($pagination['total_pages']))
+                            <div class="pagination">
+                                <p>Page {{ $pagination['current_page'] }} of {{ $pagination['total_pages'] }}</p>
+                                <a href="?page={{ $pagination['next_page'] }}">Next</a>
+                            </div>
+                        @endif
+                    @else
+                        <p>No published posts available.</p>
+                    @endif
                 </div>
-            </div>
+            </div> --}}
+
             <!--- End of the news higlight-->
     </div>
 
@@ -380,24 +476,95 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- start of the breaking news-->
+            {{-- <div class="md:col-span-2">
+                @if (count($postsData) > 0)
+                    @foreach ($postsData as $post)
+                        <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
+                            class="hover:text-blue-600 transition-colors w-full">
+                            @if ($post['featured_image'])
+                                <img src="{{ $post['featured_image'] }}" alt="{{ ucwords(strtolower($post['title'])) }}"
+                                    class="w-full h-64 object-cover mb-4">
+                            @else
+                                <img src="https://picsum.photos/seed/news/1200/600"
+                                    alt="{{ ucwords(strtolower($post['title'])) }}"
+                                    class="w-full h-64 object-cover mb-4">
+                            @endif
+
+
+                            <h3 class="text-xl font-semibold mb-2 break-words">
+                                {{ $post['title'] ?? 'Untitled' }}
+                            </h3>
+                            <p class="text-gray-600">
+                                {{ \Illuminate\Support\Str::limit(strip_tags($post['content']), 100, '...') }}
+                            </p>
+                        </a>
+                    @endforeach
+                @endif
+            </div> --}}
+            <!--- end of the breaking news-->
+
+            <!-- start of another test-->
+
+            <!-- start of the breaking news section -->
             <div class="md:col-span-2">
-                <img src="/images/news-image.jpeg" alt="Nigerian Soldiers" class="w-full h-64 object-cover mb-4">
-                <h3 class="text-xl font-semibold mb-2">Nigerian Senators' Monthly Pay Exceeds N2 Billion:
-                    Controversy Over Legislative Salaries and Allowances</h3>
-                <p class="text-gray-600">Emerging reports indicate that the total monthly remuneration of 99
-                    non-principal officers of the Nigerian Senate surpasses N2 billion. This revelation follows a...
-                </p>
+                @if (count($breakingPostsData) > 0)
+                    <h2 class="text-2xl font-bold mb-4">Breaking News</h2>
+                    @foreach ($breakingPostsData as $post)
+                        <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
+                            class="hover:text-blue-600 transition-colors w-full">
+                            @if ($post['featured_image'])
+                                <img src="{{ $post['featured_image'] }}" alt="{{ ucwords(strtolower($post['title'])) }}"
+                                    class="w-full h-64 object-cover mb-4">
+                            @else
+                                <img src="https://picsum.photos/seed/news/1200/600"
+                                    alt="{{ ucwords(strtolower($post['title'])) }}"
+                                    class="w-full h-64 object-cover mb-4">
+                            @endif
+                            <h3 class="text-xl font-semibold mb-2 break-words">
+                                {{ $post['title'] ?? 'Untitled' }}
+                            </h3>
+                            <p class="text-gray-600">
+                                {{ \Illuminate\Support\Str::limit(strip_tags($post['content']), 100, '...') }}
+                            </p>
+                        </a>
+                    @endforeach
+                @else
+                    <p>No breaking news available.</p>
+                @endif
             </div>
+            <!-- end of the breaking news section -->
+
+
+
+            <!--- End of another test-->
             <div>
                 <h4 class="text-lg font-semibold mb-4">Music News</h4>
-                @for ($i = 0; $i < 3; $i++)
+                {{-- @for ($i = 0; $i < 3; $i++)
                     <div class="mb-4">
                         <img src="/images/news-image.jpeg" alt="Music News {{ $i + 1 }}"
                             class="w-full h-32 object-cover mb-2">
                         <h5 class="font-medium">Nicki Minaj Detained at Amsterdam Airport Over Suspected Drug
                             Possession</h5>
                     </div>
-                @endfor
+                @endfor --}}
+
+                @if (count($musicPostsData) > 0)
+                    @foreach ($musicPostsData as $index => $post)
+                        <div class="mb-4">
+                            @if ($post['featured_image'])
+                                <img src="{{ $post['featured_image'] }}" alt="Music News {{ $index + 1 }}"
+                                    class="w-full h-32 object-cover mb-2">
+                            @else
+                                <img src="/images/news-image.jpeg" alt="Music News {{ $index + 1 }}"
+                                    class="w-full h-32 object-cover mb-2">
+                            @endif
+                            <h5 class="font-medium">{{ $post['title'] ?? 'Untitled' }}</h5>
+                        </div>
+                    @endforeach
+                @else
+                    <p class="text-gray-500">No music news available at the moment. Please check back later.</p>
+                @endif
                 <a href="#" class="text-blue-600 hover:underline">See more</a>
             </div>
         </div>

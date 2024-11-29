@@ -745,6 +745,72 @@ class NewsPostController extends Controller
 
 
 
+    public function listPublishedPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching published posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/published';
+        Log::info('API URL for published posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to the /published/posts endpoint to fetch the posts
+            $response = Http::get($apiUrl, [
+                'per_page' => 100,
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                // Extract posts and pagination data from the response
+                $responseData = $response->json();
+
+                // Log the structure of the response for debugging
+                Log::info('Response Data Structure:', [
+                    'keys' => array_keys($responseData),
+                    'data_keys' => isset($responseData['data']) ? array_keys($responseData['data']) : 'No data key'
+                ]);
+
+                // Extract posts data and pagination info
+                $postsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                // Log the processed posts data
+                Log::info('Processed Posts Data:', [
+                    'posts_count' => count($postsData),
+                    'pagination' => $pagination
+                ]);
+
+                // Directly print the data for debugging
+                print_r($postsData);
+                print_r($pagination);
+
+                // Exit to prevent further execution and avoid the response return
+                exit();
+            } else {
+                // If the response failed, handle the error
+                Log::error('Error fetching published posts: ' . $response->status());
+                $postsData = [];
+                $pagination = [];
+            }
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the request
+            Log::error('Error fetching published posts: ' . $e->getMessage());
+            $postsData = [];
+            $pagination = [];
+        }
+
+        // Comment out or remove this line to prevent returning the JSON response:
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => 'Published posts fetched successfully',
+        //     'data' => [
+        //         'posts' => $postsData,
+        //         'pagination' => $pagination
+        //     ]
+        // ]);
+    }
+
+
     public function approvePost($slug)
     {
         $jwtToken = session('api_token'); // Retrieve the JWT token from the session
@@ -772,7 +838,7 @@ class NewsPostController extends Controller
                 if ($responseData['status'] == 'success') {
                     Log::info('Post approved successfully.', ['slug' => $slug]);
 
-                    // Optionally, you could display a success message to the user or reload the posts list
+                    // Redirect the user to the dashboard with a success message
                     return redirect()->route('admin.dashboard')->with('success', 'Post approved successfully.');
                 } else {
                     Log::error('Failed to approve post.', ['slug' => $slug, 'message' => $responseData['message']]);

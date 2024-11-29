@@ -14,7 +14,7 @@
         }
     </style>
     <a href="{{ route('welcome') }}" class="inline-block px-4">
-        <div class="flex items-center justify-center w-32 h-12 bg-green-700 rounded-lg overflow-hidden shadow-lg">
+        <div class="flex items-center justify-center w-32 h-12 bg-gray-700 rounded-lg overflow-hidden shadow-lg">
             <span class="text-2xl font-bold" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
                 <span class="text-white">E-</span>
                 <span class="text-green-900">News</span>

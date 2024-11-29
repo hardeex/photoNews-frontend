@@ -96,14 +96,174 @@ class UserController extends Controller
     }
 
 
+    //     public function index(Request $request)
+    // {
+    //     // Fetch the existing published posts
+    //     $response = $this->listPublishedPosts();
+
+    //     // Extract posts data and pagination
+    //     $postsData = $response['postsData'] ?? [];
+    //     $pagination = $response['pagination'] ?? [];
+
+    //     // Fetch the posts that are approved and is_breaking is true
+    //     $breakingPostsData = $this->listBreakingPosts();
+
+    //     // Pass both sets of posts data to the view
+    //     return view('welcome', compact('postsData', 'pagination', 'breakingPostsData'));
+    // }
+
+
     public function index(Request $request)
     {
-        // Call listPendingPosts to get posts data and pagination
-        //$data = $this->listPendingPosts($request);
+        // Fetch the existing published posts
+        $response = $this->listPublishedPosts();
 
-        //return view('welcome', $data);
-        return view('welcome');
+        // Extract posts data and pagination
+        $postsData = $response['postsData'] ?? [];
+        $pagination = $response['pagination'] ?? [];
+
+        // Fetch the posts that are approved and is_breaking is true
+        $breakingPostsData = $this->listBreakingPosts();
+
+        // Fetch the approved music posts
+        $musicPostsData = $this->listApprovedMusicPosts();
+
+        // Pass both sets of posts data to the view
+        return view('welcome', compact('postsData', 'pagination', 'musicPostsData', 'breakingPostsData'));
     }
+
+    private function listApprovedMusicPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching approved music posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/approved'; // Assuming the endpoint supports filtering by status
+        Log::info('API URL for approved music posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch approved posts with 'category' = 'music'
+            $response = Http::get($apiUrl, [
+                'per_page' => 3,    // Limit the result to 3 posts
+                'status' => 'approved',
+                'category' => 'music', // Assuming the API allows category filtering
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract music posts data
+                $musicPostsData = $responseData['data']['posts'] ?? [];
+
+                // Return the data
+                return $musicPostsData;
+            } else {
+                Log::error('Error fetching approved music posts: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching approved music posts: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+
+    private function listBreakingPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching breaking approved posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/approved'; // Assuming the endpoint supports filtering by status
+        Log::info('API URL for approved breaking posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch the approved posts with 'is_breaking' = true
+            $response = Http::get($apiUrl, [
+                'per_page' => 100,
+                'is_breaking' => true, // Assuming the API allows such filters
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract posts data and pagination info
+                $breakingPostsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                // Return the data
+                return $breakingPostsData;
+            } else {
+                Log::error('Error fetching approved breaking posts: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching approved breaking posts: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+
+    //     public function index(Request $request)
+    //     {
+
+    //         $response = $this->listPublishedPosts();
+
+    //         // Extract posts data and pagination\
+    //         $postsData = $response['postsData'] ?? [];
+    //         $pagination = $response['pagination'] ?? [];
+
+    //         // Pass the posts data to the view
+    //         return view('welcome', compact('postsData', 'pagination'));
+    //     }
+
+
+    private function listPublishedPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching published posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/published';
+        Log::info('API URL for published posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to the /published/posts endpoint to fetch the posts
+            $response = Http::get($apiUrl, [
+                'per_page' => 100,
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                // Extract posts and pagination data from the response
+                $responseData = $response->json();
+
+                // Extract posts data and pagination info
+                $postsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                // Return the data
+                return [
+                    'postsData' => $postsData,
+                    'pagination' => $pagination
+                ];
+            } else {
+                // If the response failed, handle the error
+                Log::error('Error fetching published posts: ' . $response->status());
+                return [
+                    'postsData' => [],
+                    'pagination' => []
+                ];
+            }
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the request
+            Log::error('Error fetching published posts: ' . $e->getMessage());
+            return [
+                'postsData' => [],
+                'pagination' => []
+            ];
+        }
+    }
+
 
     public function listPendingPostsJSON(Request $request)
     {

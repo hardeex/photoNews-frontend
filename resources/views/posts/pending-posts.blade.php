@@ -61,12 +61,22 @@
                             data-tags="{{ strtolower($post['tag_names'] ?? '') }}">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $post['id'] ?? 'N/A' }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{-- <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
                                     class="hover:text-blue-600 transition-colors">
                                     {{ $post['title'] ?? 'Untitled' }}
                                 </a>
+                            </td> --}}
+
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
+                                    class="hover:text-blue-600 transition-colors truncate w-full">
+                                    {{ \Illuminate\Support\Str::words($post['title'] ?? 'Untitled', 3, '...') }}
+                                </a>
                             </td>
+
+
+
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $post['category_names'] ?? 'N/A' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

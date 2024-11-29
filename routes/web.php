@@ -32,6 +32,7 @@ Route::post('/pending/posts', [NewsPostController::class, 'listPendingPosts'])->
 Route::get('/post/{slug}', [NewsPostController::class, 'showPostDetails'])->name('post.details');
 Route::post('/approve/post/{slug}', [NewsPostController::class, 'approvePost'])->name('admin.approve-post');
 Route::delete('/delete/post/{slug}', [NewsPostController::class, 'deletePost'])->name('admin.delete-post');
+Route::get('/published/posts', [NewsPostController::class, 'listPublishedPosts'])->name('posts.published');
 
 
 // ctaegory and tag routes

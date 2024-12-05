@@ -56,7 +56,8 @@
                 <i class="fas fa-chevron-down text-xs"></i>
             </a>
             <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
+                <a href="{{ route('public-notice.create') }}"
+                    class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
                 <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
             </div>
         </div>

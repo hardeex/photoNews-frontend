@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\NewsPostController;
+use App\Http\Controllers\PublicNoticeController;
 use App\Http\Controllers\userAuthenticationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,12 @@ Route::get('/post/{slug}', [NewsPostController::class, 'showPostDetails'])->name
 Route::post('/approve/post/{slug}', [NewsPostController::class, 'approvePost'])->name('admin.approve-post');
 Route::delete('/delete/post/{slug}', [NewsPostController::class, 'deletePost'])->name('admin.delete-post');
 Route::get('/published/posts', [NewsPostController::class, 'listPublishedPosts'])->name('posts.published');
+Route::get('/fetch-categories', [NewsPostController::class, 'listCategoriesFromAPI']);
+
+// public notice routes
+Route::get('/create/public-notice', [PublicNoticeController::class, 'createPost'])->name('public-notice.create');
+Route::post('/submit/public-notice', [PublicNoticeController::class, 'submitPost'])->name('public-notice.submit');
+
 
 
 // ctaegory and tag routes

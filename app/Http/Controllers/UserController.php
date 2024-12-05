@@ -125,11 +125,43 @@ class UserController extends Controller
         // Fetch the posts that are approved and is_breaking is true
         $breakingPostsData = $this->listBreakingPosts();
 
+        // Fetch the posts that are approved and hot_gist is true
+        $hotGistsPostsData = $this->listHotGistsPosts();
+
+
+        // Fetch the posts that are approved and event is true
+        $eventsPostsData = $this->listEventsPosts();
+
+
         // Fetch the approved music posts
         $musicPostsData = $this->listApprovedMusicPosts();
 
+        // Fetch the approved local posts
+        $localPostsData = $this->listApprovedLocalPosts();
+
+        // Fetch the approved local posts
+        $internationalPostsData = $this->listApprovedInternationalPosts();
+
+        // Fetch the posts that are approved and event is true
+        $topTopicPostsData = $this->listTopTopicPosts();
+
+
+        // fetch the categories
+        $categories = $this->listCategories($request);
+
         // Pass both sets of posts data to the view
-        return view('welcome', compact('postsData', 'pagination', 'musicPostsData', 'breakingPostsData'));
+        return view('welcome', compact(
+            'postsData',
+            'pagination',
+            'musicPostsData',
+            'breakingPostsData',
+            'localPostsData',
+            'internationalPostsData',
+            'hotGistsPostsData',
+            'eventsPostsData',
+            'categories',
+            'topTopicPostsData',
+        ));
     }
 
     private function listApprovedMusicPosts()
@@ -137,7 +169,7 @@ class UserController extends Controller
         // Log for debugging
         Log::info('Fetching approved music posts...');
 
-        $apiUrl = config('api.base_url') . '/posts/approved'; // Assuming the endpoint supports filtering by status
+        $apiUrl = config('api.base_url') . '/posts/music'; // Assuming the endpoint supports filtering by status
         Log::info('API URL for approved music posts:', ['url' => $apiUrl]);
 
         try {
@@ -168,12 +200,87 @@ class UserController extends Controller
     }
 
 
+    private function listApprovedLocalPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching approved local posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/local';
+        Log::info('API URL for approved local posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch approved posts with 'category' = 'music'
+            $response = Http::get($apiUrl, [
+                'per_page' => 3,    // Limit the result to 3 posts
+                'status' => 'approved',
+                'category' => 'local', // Assuming the API allows category filtering
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract music posts data
+                $localPostsData = $responseData['data']['posts'] ?? [];
+                // print_r($localPostsData);
+                // exit();
+
+                // Return the data
+                return $localPostsData;
+            } else {
+                Log::error('Error fetching approved local posts: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching approved local posts: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+
+    private function  listApprovedInternationalPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching approved international posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/international';
+        Log::info('API URL for approved international posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch approved posts with 'category' = 'international'
+            $response = Http::get($apiUrl, [
+                'per_page' => 3,    // Limit the result to 3 posts
+                'status' => 'approved',
+                'category' => 'international', // Assuming the API allows category filtering
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract music posts data
+                $internationalPostsData = $responseData['data']['posts'] ?? [];
+                // print_r($localPostsData);
+                // exit();
+
+                // Return the data
+                return $internationalPostsData;
+            } else {
+                Log::error('Error fetching approved local posts: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching approved local posts: ' . $e->getMessage());
+            return [];
+        }
+    }
+
     private function listBreakingPosts()
     {
         // Log for debugging
         Log::info('Fetching breaking approved posts...');
 
-        $apiUrl = config('api.base_url') . '/posts/approved'; // Assuming the endpoint supports filtering by status
+        $apiUrl = config('api.base_url') . '/posts/breaking'; // Assuming the endpoint supports filtering by status
         Log::info('API URL for approved breaking posts:', ['url' => $apiUrl]);
 
         try {
@@ -191,6 +298,8 @@ class UserController extends Controller
                 $breakingPostsData = $responseData['data']['posts'] ?? [];
                 $pagination = $responseData['data']['pagination'] ?? [];
 
+                // print_r($breakingPostsData);
+                // exit();
                 // Return the data
                 return $breakingPostsData;
             } else {
@@ -202,6 +311,125 @@ class UserController extends Controller
             return [];
         }
     }
+
+
+    private function listHotGistsPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching Hot Gists approved posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/hot-gists';
+        Log::info('API URL for approved hot gists posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch the approved posts with 'hot_gist' = true
+            $response = Http::get($apiUrl, [
+                'per_page' => 100,
+                'hot_gist' => true,
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract posts data and pagination info
+                $hotGistsPostsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                // print_r($hotGistsPostsData);
+                // exit();
+                //Return the data
+                return $hotGistsPostsData;
+            } else {
+                Log::error('Error fetching approved hot gists posts: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching approved hot gists posts: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+
+    private function listEventsPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching Events approved posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/events';
+        Log::info('API URL for approved Events posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch the approved posts with 'hot_gist' = true
+            $response = Http::get($apiUrl, [
+                'per_page' => 100,
+                'event' => true,
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract posts data and pagination info
+                $eventsPostsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                // print_r($eventsPostsData);
+                // exit();
+                //Return the data
+                return $eventsPostsData;
+            } else {
+                Log::error('Error fetching approved Events posts: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching approved Events posts: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+
+    private function listTopTopicPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching top topic approved posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/top-topic';
+        Log::info('API URL for approved Events posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch the approved posts with 'top_topic' = true
+            $response = Http::get($apiUrl, [
+                'per_page' => 100,
+                'event' => true,
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract posts data and pagination info
+                $topTopicPostsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                // print_r($topTopicPostsData);
+                // exit();
+                //Return the data
+                return $topTopicPostsData;
+            } else {
+                Log::error('Error fetching approved top topic posts: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching approved top topic posts: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+
+
+
+
 
 
     //     public function index(Request $request)
@@ -371,8 +599,118 @@ class UserController extends Controller
 
 
 
+    private function listCategories(Request $request)
+    {
+        Log::info('Fetching categories from external API...');
 
+        // API URL for category listing
+        $apiUrl = config('api.base_url') . '/categories/public';
+        Log::info('Connecting to API URL for category listing', [
+            'api_url' => $apiUrl,
+        ]);
 
+        // Prepare any query parameters (e.g., for sorting)
+        $params = [
+            'sort_by' => $request->get('sort_by', 'name'),
+            'sort_order' => $request->get('sort_order', 'asc'),
+        ];
+
+        // Log the query parameters being sent
+        Log::info('Sending query parameters', [
+            'params' => $params,
+        ]);
+
+        // Make the GET request to the external API
+        try {
+            $response = Http::get($apiUrl, $params);
+
+            // Log the response from the external API
+            if ($response->successful()) {
+                Log::info('Categories successfully fetched from external API', [
+                    'response_data' => $response->json(),
+                ]);
+
+                // Extract categories from response (use 'data' key)
+                return $response->json()['data'];
+            } else {
+                // Log the error response from the API
+                Log::error('Error fetching categories from external API', [
+                    'status_code' => $response->status(),
+                    'error_message' => $response->json()['message'] ?? 'An error occurred.',
+                ]);
+
+                return [];  // Return an empty array if API call fails
+            }
+        } catch (\Exception $e) {
+            // Log the exception error with stack trace
+            Log::error('API request failed with exception', [
+                'exception_message' => $e->getMessage(),
+                'exception_trace' => $e->getTraceAsString(),
+            ]);
+
+            return [];  // Return an empty array if there's an exception
+        }
+    }
+
+    private function listCategories22(Request $request)
+    {
+        Log::info('Fetching categories from external API...');
+
+        // API URL for category listing
+        $apiUrl = config('api.base_url') . '/categories/public';
+        Log::info('Connecting to API URL for category listing', [
+            'api_url' => $apiUrl,
+        ]);
+
+        // Prepare any query parameters (e.g., for sorting)
+        $params = [
+            'sort_by' => $request->get('sort_by', 'name'),
+            'sort_order' => $request->get('sort_order', 'asc'),
+        ];
+
+        // Log the query parameters being sent
+        Log::info('Sending query parameters', [
+            'params' => $params,
+        ]);
+
+        // Make the GET request to the external API
+        try {
+            $response = Http::get($apiUrl, $params);
+
+            // Log the response from the external API
+            if ($response->successful()) {
+                Log::info('Categories successfully fetched from external API', [
+                    'response_data' => $response->json(),
+                ]);
+
+                // Extract categories from response
+                $categories = $response->json()['data'] ?? [];
+
+                // print_r($categories);
+                // exit();
+                // Return categories directly
+                return $categories;
+            } else {
+                // Log the error response from the API
+                Log::error('Error fetching categories from external API', [
+                    'status_code' => $response->status(),
+                    'error_message' => $response->json()['message'] ?? 'An error occurred.',
+                ]);
+
+                // Handle the error by returning an empty array or null
+                return null;
+            }
+        } catch (\Exception $e) {
+            // Log the exception error with stack trace
+            Log::error('API request failed with exception', [
+                'exception_message' => $e->getMessage(),
+                'exception_trace' => $e->getTraceAsString(),
+            ]);
+
+            // Handle the error by returning an empty array or null
+            return null;
+        }
+    }
 
 
     // public function listPendingPosts()

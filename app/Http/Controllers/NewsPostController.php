@@ -216,6 +216,69 @@ class NewsPostController extends Controller
     }
 
 
+    // public function listCategoriesFromAPI(Request $request)
+    // {
+    //     Log::info('Fetching categories from external API...');
+
+    //     // API URL for category listing
+    //     $apiUrl = config('api.base_url') . '/categories/public';
+    //     Log::info('Connecting to API URL for category listing', [
+    //         'api_url' => $apiUrl,
+    //     ]);
+
+    //     // Optional: Prepare any query parameters (e.g., for sorting)
+    //     $params = [
+    //         'sort_by' => $request->get('sort_by', 'name'),
+    //         'sort_order' => $request->get('sort_order', 'asc'),
+    //     ];
+
+    //     // Log the query parameters being sent
+    //     Log::info('Sending query parameters', [
+    //         'params' => $params,
+    //     ]);
+
+    //     // Make the GET request to the external API
+    //     try {
+    //         $response = Http::get($apiUrl, $params);
+
+    //         // Log the response from the external API
+    //         if ($response->successful()) {
+    //             Log::info('Categories successfully fetched from external API', [
+    //                 'response_data' => $response->json(),
+    //             ]);
+
+    //             // Handle successful response
+    //             $categories = $response->json()['data'];  // Extract categories from response
+
+    //             // print_r($categories);
+    //             // exit();
+
+    //             // Return the categories to the view or frontend
+    //             return response()->json([
+    //                 'status' => 'success',
+    //                 'message' => 'Categories fetched successfully!',
+    //                 'data' => $categories,
+    //             ], 200);
+    //         } else {
+    //             // Log the error response from the API
+    //             Log::error('Error fetching categories from external API', [
+    //                 'status_code' => $response->status(),
+    //                 'error_message' => $response->json()['message'] ?? 'An error occurred.',
+    //             ]);
+
+    //             return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
+    //         }
+    //     } catch (\Exception $e) {
+    //         // Log the exception error with stack trace
+    //         Log::error('API request failed with exception', [
+    //             'exception_message' => $e->getMessage(),
+    //             'exception_trace' => $e->getTraceAsString(),
+    //         ]);
+
+    //         return back()->withErrors(['error' => 'An error occurred while fetching categories.']);
+    //     }
+    // }
+
     // tags methods
 
     public function createTag()
@@ -378,7 +441,6 @@ class NewsPostController extends Controller
 
 
 
-
     public function submitPost(Request $request)
     {
         Log::info('Post submission method is called...', [
@@ -463,7 +525,15 @@ class NewsPostController extends Controller
         try {
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $jwtToken,
-            ])->post($apiUrl, $data);
+            ])->attach(
+                'featured_image',
+                $request->hasFile('featured_image') ?
+                    file_get_contents($request->file('featured_image')->getRealPath()) :
+                    null,
+                $request->hasFile('featured_image') ?
+                    $request->file('featured_image')->getClientOriginalName() :
+                    null
+            )->post($apiUrl, $data);
 
             // Log the response from the external API
             if ($response->successful()) {
@@ -471,16 +541,9 @@ class NewsPostController extends Controller
                     'response_data' => $response->json(),
                 ]);
 
-                // Handle successful response
                 return redirect()->back()->with('success', 'Post created successfully!');
             } else {
-                // If the token has expired or is invalid, we need to catch that
-                if ($response->status() === 401) {
-                    Log::warning('Expired or invalid token detected');
-                    return redirect()->route('user.login')->with('error', 'Session expired. Please log in again.');
-                }
-
-                // Log the error response from the API
+                // Handle API errors
                 Log::error('Error returned from external API', [
                     'status_code' => $response->status(),
                     'error_message' => $response->json()['message'] ?? 'An error occurred.',
@@ -488,16 +551,14 @@ class NewsPostController extends Controller
                 return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
             }
         } catch (\Exception $e) {
-            // Log the exception error with stack trace
-            Log::error('API request failed with exception', [
+            // Log any exceptions during the API call
+            Log::error('API request failed', [
                 'exception_message' => $e->getMessage(),
                 'exception_trace' => $e->getTraceAsString(),
             ]);
             return back()->withErrors(['error' => 'An error occurred while submitting the post.']);
         }
     }
-
-
 
 
     public function showPostDetails(Request $request, $slug)

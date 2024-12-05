@@ -23,34 +23,6 @@
             </section>
 
             <!--- START OF TEST CONTAINER--->
-            <h1>Published Posts</h1>
-
-            @if (count($postsData) > 0)
-                <ul>
-                    @foreach ($postsData as $post)
-                        <li>
-                            <h2>{{ $post['title'] }}</h2>
-                            <p>{{ $post['content'] }}</p>
-                            <!-- Directly display the category names (as they are a comma-separated string) -->
-                            <p><strong>Categories:</strong> {{ $post['category_names'] }}</p>
-                            <!-- Directly display the tag names (as they are a comma-separated string) -->
-                            <p><strong>Tags:</strong> {{ $post['tag_names'] }}</p>
-                            <p><strong>Scheduled Time:</strong> {{ $post['scheduled_time'] }}</p>
-                        </li>
-                    @endforeach
-                </ul>
-
-                <!-- Pagination Links (if needed) -->
-                @if ($pagination && isset($pagination['total_pages']))
-                    <div class="pagination">
-                        <p>Page {{ $pagination['current_page'] }} of {{ $pagination['total_pages'] }}</p>
-                        <a href="?page={{ $pagination['next_page'] }}">Next</a>
-                    </div>
-                @endif
-            @else
-                <p>No published posts available.</p>
-            @endif
-
 
             <!--- END OF TEST CONTAINER-->
 
@@ -551,16 +523,18 @@
 
                 @if (count($musicPostsData) > 0)
                     @foreach ($musicPostsData as $index => $post)
-                        <div class="mb-4">
-                            @if ($post['featured_image'])
-                                <img src="{{ $post['featured_image'] }}" alt="Music News {{ $index + 1 }}"
-                                    class="w-full h-32 object-cover mb-2">
-                            @else
-                                <img src="/images/news-image.jpeg" alt="Music News {{ $index + 1 }}"
-                                    class="w-full h-32 object-cover mb-2">
-                            @endif
-                            <h5 class="font-medium">{{ $post['title'] ?? 'Untitled' }}</h5>
-                        </div>
+                        <a href="{{ route('post.details', $post['slug'] ?? '#') }}">
+                            <div class="mb-4">
+                                @if ($post['featured_image'])
+                                    <img src="{{ $post['featured_image'] }}" alt="Music News {{ $index + 1 }}"
+                                        class="w-full h-32 object-cover mb-2">
+                                @else
+                                    <img src="/images/news-image.jpeg" alt="Music News {{ $index + 1 }}"
+                                        class="w-full h-32 object-cover mb-2">
+                                @endif
+                                <h5 class="font-medium">{{ $post['title'] ?? 'Untitled' }}</h5>
+                            </div>
+                        </a>
                     @endforeach
                 @else
                     <p class="text-gray-500">No music news available at the moment. Please check back later.</p>
@@ -615,35 +589,64 @@
             <!-- Hot Local Gists Column -->
             <div>
                 <h2 class="text-2xl font-bold mb-6">Hot Local Gists</h2>
-                @foreach (range(1, 5) as $index)
-                    <div class="flex mb-6">
-                        <img src="/images/news-image.jpeg" alt="Local News Image {{ $index }}"
-                            class="w-24 h-24 object-cover mr-4">
-                        <div>
-                            <h3 class="text-lg font-semibold mb-2">CBN To Re-Issue N2.2 Trillion In Treasury Bills
-                                For Q4 2024, Full Schedule Released</h3>
-                            <p class="text-sm text-gray-600">The Central Bank of Nigeria (CBN) has unveiled its
-                                schedule for the re-issuance of N2.2 trillion worth of maturing Nigerian...</p>
-                        </div>
-                    </div>
-                @endforeach
+                @if (count($localPostsData) > 0)
+                    @foreach ($localPostsData as $index => $post)
+                        <a href="{{ route('post.details', $post['slug'] ?? '#') }}" class="flex mb-6">
+                            <div class="flex mb-6">
+                                @if ($post['featured_image'])
+                                    <img src="{{ $post['featured_image'] }}" alt="Music News {{ $index + 1 }}"
+                                        class="w-24 h-24 object-cover mr-4">
+                                @else
+                                    <img src="/images/news-image.jpeg" alt="Music News {{ $index + 1 }}"
+                                        class="w-24 h-24 object-cover mr-4">
+                                @endif
+
+                                <div>
+                                    <h3 class="text-lg font-semibold mb-2">
+                                        {{ $post['title'] ?? 'Untitled' }}
+                                    </h3>
+                                    <p class="text-sm text-gray-600">
+                                        {{ \Illuminate\Support\Str::limit(strip_tags($post['content']), 100, '...') }}
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    @endforeach
+                @else
+                    <p class="text-gray-500">No local news available at the moment. Please check back later.</p>
+                @endif
             </div>
 
             <!-- Hot International Gists Column -->
             <div>
                 <h2 class="text-2xl font-bold mb-6">Hot International Gists</h2>
-                @foreach (range(1, 5) as $index)
-                    <div class="flex mb-6">
-                        <img src="/images/news-image.jpeg" alt="International News Image {{ $index }}"
-                            class="w-24 h-24 object-cover mr-4">
-                        <div>
-                            <h3 class="text-lg font-semibold mb-2">CBN To Re-Issue N2.2 Trillion In Treasury Bills
-                                For Q4 2024, Full Schedule Released</h3>
-                            <p class="text-sm text-gray-600">The Central Bank of Nigeria (CBN) has unveiled its
-                                schedule for the re-issuance of N2.2 trillion worth of maturing Nigerian...</p>
-                        </div>
-                    </div>
-                @endforeach
+                @if (count($internationalPostsData) > 0)
+                    @foreach ($internationalPostsData as $index => $post)
+                        <a href="{{ route('post.details', $post['slug'] ?? '#') }}" class="flex mb-6">
+                            <div class="flex mb-6">
+
+
+                                @if ($post['featured_image'])
+                                    <img src="{{ $post['featured_image'] }}" alt="Music News {{ $index + 1 }}"
+                                        class="w-24 h-24 object-cover mr-4">
+                                @else
+                                    <img src="/images/news-image.jpeg" alt="Music News {{ $index + 1 }}"
+                                        class="w-24 h-24 object-cover mr-4">
+                                @endif
+
+                                <div>
+                                    <h3 class="text-lg font-semibold mb-2">
+                                        {{ $post['title'] ?? 'Untitled' }}
+                                    </h3>
+                                    <p class="text-sm text-gray-600">
+                                        {{ \Illuminate\Support\Str::limit(strip_tags($post['content']), 100, '...') }}
+                                    </p>
+                                </div>
+                            </div>
+                    @endforeach
+                @else
+                    <p class="text-gray-500">No international news available at the moment. Please check back later.</p>
+                @endif
             </div>
         </div>
 
@@ -655,91 +658,104 @@
     </section>
 
 
+
+
     <section class="max-w-6xl mx-auto px-4 py-8">
         <h2 class="text-2xl font-bold mb-6">Hot Gist</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <!-- Large item -->
             <div class="md:col-span-2 relative">
-                <img src="/images/news-image.jpeg" alt="Naira Notes" class="w-full h-64 object-cover">
-                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
-                    <h3 class="text-lg font-semibold">Naira Hold Outside Banks Drops to 1% Rate in July Amid CBN's
-                        Reporting Measures</h3>
-                </div>
+                <a href="{{ route('post.details', $hotGistsPostsData[0]['slug'] ?? '#') }}"
+                    class="hover:text-blue-600 transition-colors w-full">
+                    {{-- @if ($hotGistsPostsData[0]['featured_image'])
+                        <img src="{{ $hotGistsPostsData[0]['featured_image'] }}"
+                            alt="{{ ucwords(strtolower($hotGistsPostsData[0]['title'])) }}"
+                            class="w-full h-64 object-cover">
+                    @else
+                        <img src="https://picsum.photos/seed/news/1200/600"
+                            alt="{{ ucwords(strtolower($hotGistsPostsData[0]['title'])) }}"
+                            class="w-full h-64 object-cover">
+                    @endif --}}
+                    <div class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 text-sm">
+
+                        @if (isset($post['categories']) && count($post['categories']) > 0)
+                            {{ implode(', ',array_map(function ($category) {return ucwords(strtolower($category['name']));}, $post['categories'])) }}
+                        @else
+                            'Not available'
+                        @endif
+
+
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                        <h3 class="text-lg font-semibold">{{ $hotGistsPostsData[0]['title'] ?? 'Untitled' }}</h3>
+                    </div>
+                    <div class="absolute top-2 right-2 flex items-center space-x-2">
+                        <span class="flex items-center text-white">
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>123
+                        </span>
+                        <span class="flex items-center text-white">
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                                    clip-rule="evenodd"></path>
+                            </svg>20
+                        </span>
+                    </div>
+                </a>
             </div>
 
             <!-- Regular items -->
-            <div class="relative">
-                <img src="/images/news-image.jpeg" alt="UEFA Champions League" class="w-full h-48 object-cover">
-                <div class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 text-sm">NEW FORMAT EXPLAINED
+            @for ($i = 1; $i < count($hotGistsPostsData); $i++)
+                <div class="relative">
+                    <a href="{{ route('post.details', $hotGistsPostsData[$i]['slug'] ?? '#') }}"
+                        class="hover:text-blue-600 transition-colors w-full">
+                        @if ($hotGistsPostsData[$i]['featured_image'])
+                            <img src="{{ $hotGistsPostsData[$i]['featured_image'] }}"
+                                alt="{{ ucwords(strtolower($hotGistsPostsData[$i]['title'])) }}"
+                                class="w-full h-48 object-cover">
+                        @else
+                            <img src="https://picsum.photos/seed/news/1200/600"
+                                alt="{{ ucwords(strtolower($hotGistsPostsData[$i]['title'])) }}"
+                                class="w-full h-48 object-cover">
+                        @endif
+                        <div class="absolute top-0 left-0 bg-red-600 text-white px-2 py-1 text-sm">
+                            @if (isset($post['categories']) && count($post['categories']) > 0)
+                                {{ implode(', ',array_map(function ($category) {return ucwords(strtolower($category['name']));}, $post['categories'])) }}
+                            @else
+                                'Not available'
+                            @endif
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                            <h3 class="text-sm font-semibold">{{ $hotGistsPostsData[$i]['title'] ?? 'Untitled' }}</h3>
+                        </div>
+                        <div class="absolute top-2 right-2 flex items-center space-x-2">
+                            <span class="flex items-center text-white">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                    </path>
+                                </svg>123
+                            </span>
+                            <span class="flex items-center text-white">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                                        clip-rule="evenodd"></path>
+                                </svg>20
+                            </span>
+                        </div>
+                    </a>
                 </div>
-                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
-                    <h3 class="text-sm font-semibold">UEFA Champions League 2024/25: New Format Explained—What Fans
-                        Need to Know</h3>
-                </div>
-            </div>
-
-            <div class="relative">
-                <img src="/images/news-image.jpeg" alt="NBA President" class="w-full h-48 object-cover">
-                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
-                    <h3 class="text-sm font-semibold">New NBA President Adegboyega Awomolo to Hold Government
-                        Accountable, Landmark Inaugural Speech</h3>
-                </div>
-                <div class="absolute top-2 right-2 flex items-center space-x-2">
-                    <span class="flex items-center text-white"><svg class="w-4 h-4 mr-1" fill="currentColor"
-                            viewBox="0 0 20 20">
-                            <path
-                                d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
-                            </path>
-                        </svg>123</span>
-                    <span class="flex items-center text-white"><svg class="w-4 h-4 mr-1" fill="currentColor"
-                            viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-                                clip-rule="evenodd"></path>
-                        </svg>20</span>
-                </div>
-            </div>
-
-            <div class="relative">
-                <img src="/images/news-image.jpeg" alt="Cassells" class="w-full h-48 object-cover">
-                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
-                    <h3 class="text-sm font-semibold">Cassells Faces Charges in Latest Guilty Plea amid House of
-                        Rory Fall for Prosecution Over Genocide Remarks</h3>
-                </div>
-                <div class="absolute top-2 right-2 flex items-center space-x-2">
-                    <span class="flex items-center text-white"><svg class="w-4 h-4 mr-1" fill="currentColor"
-                            viewBox="0 0 20 20">
-                            <path
-                                d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
-                            </path>
-                        </svg>123</span>
-                    <span class="flex items-center text-white"><svg class="w-4 h-4 mr-1" fill="currentColor"
-                            viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-                                clip-rule="evenodd"></path>
-                        </svg>20</span>
-                </div>
-            </div>
-
-            <div class="relative">
-                <img src="/images/news-image.jpeg" alt="Johnny Carson" class="w-full h-48 object-cover">
-                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
-                    <h3 class="text-sm font-semibold">Johnny Carson: Surrogate Asian American in Africa's Dominant
-                        Powers 2024</h3>
-                </div>
-            </div>
-
-            <div class="relative">
-                <img src="/images/news-image.jpeg" alt="NNPC Uncovers" class="w-full h-48 object-cover">
-                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
-                    <h3 class="text-sm font-semibold">NNPC Uncovers 22 Illegal Crude Oil Refineries in Major
-                        Crackdown Across Rivers, Delta, and Abia</h3>
-                </div>
-            </div>
+            @endfor
         </div>
     </section>
+
+
 
 
     <section class="max-w-6xl mx-auto px-4 py-8">
@@ -783,31 +799,48 @@
 
         <div class="overflow-x-auto pb-4">
             <div class="flex space-x-4 min-w-max">
-                @foreach (range(1, 4) as $index)
-                    <div class="w-64 flex-shrink-0">
-                        <img src="/images/news-image.jpeg" alt="Event Image"
-                            class="w-full h-40 object-cover mb-2 rounded">
-                        <h3 class="text-sm font-semibold">Sheriffa Mustapha holds public giveaway in honor of her
-                            late husband</h3>
-                        <div class="flex items-center text-gray-500 text-xs mt-1">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                </path>
-                            </svg>
-                            <span>20 Dec 2023/2024</span>
-                        </div>
-                        <div class="flex items-center text-gray-500 text-xs mt-1">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                            </svg>
-                            <span>By Shola Akinyele</span>
-                        </div>
-                    </div>
-                @endforeach
+                @if (count($eventsPostsData) > 0)
+                    @foreach ($eventsPostsData as $post)
+                        <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
+                            class="hover:text-blue-600 transition-colors w-full">
+                            <div class="w-64 flex-shrink-0">
+                                {{-- <img src="/images/news-image.jpeg" alt="Event Image"
+                            class="w-full h-40 object-cover mb-2 rounded"> --}}
+                                @if ($post['featured_image'])
+                                    <img src="{{ $post['featured_image'] }}"
+                                        alt="{{ ucwords(strtolower($post['title'])) }}"
+                                        class="w-full h-40 object-cover mb-2 rounded">
+                                @else
+                                    <img src="https://picsum.photos/seed/news/1200/600"
+                                        alt="{{ ucwords(strtolower($post['title'])) }}"
+                                        class="w-full h-40 object-cover mb-2 rounded">
+                                @endif
+                                <h3 class="text-sm font-semibold">
+                                    {{ $post['title'] ?? 'Untitled' }}
+                                </h3>
+                                <div class="flex items-center text-gray-500 text-xs mt-1">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                        </path>
+                                    </svg>
+                                    <span>{{ \Carbon\Carbon::parse($post['created_at'])->diffForHumans() }}</span>
+
+                                </div>
+                                <div class="flex items-center text-gray-500 text-xs mt-1">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    <span>By {{ $post['created_by'] }}</span>
+                                </div>
+                            </div>
+                    @endforeach
+                @else
+                    <p>No Event news available.</p>
+                @endif
             </div>
         </div>
 
@@ -970,6 +1003,55 @@
             <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">See more</button>
         </div>
     </section>
+
+
+
+    {{-- <section class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-white p-4">
+            <h2 class="text-2xl font-bold mb-4 text-center">Top News Category</h2>
+
+            <div class="relative w-full h-6 bg-gray-200 rounded-full mb-6">
+                <div class="absolute left-0 top-0 h-full w-1/4 bg-red-500 rounded-full"></div>
+                <div class="absolute right-0 top-0 text-xs font-semibold text-red-500 mr-2">Live</div>
+            </div>
+
+            <form class="mb-6">
+                <div class="relative">
+                    <input type="text" placeholder="Search categories..."
+                        class="w-full p-2 pl-10 pr-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </form>
+
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2">
+                @if ($categories && count($categories) > 0)
+                    @foreach ($categories as $category)
+                        <div class="bg-gray-100 p-2 rounded flex flex-col items-center justify-center text-center h-20">
+                            <svg class="w-6 h-6 text-red-500 mb-1" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                            </svg>
+                            <a href="#">
+                                <span class="text-xs">{{ $category['name'] }}</span> <!-- Change here -->
+                            </a>
+                        </div>
+                    @endforeach
+                @else
+                    <p>No categories available.</p>
+                @endif
+            </div>
+        </div>
+    </section> --}}
+
+
+
 
     <section class="max-w-6xl mx-auto px-4 py-8">
         <div class="bg-white p-4">
@@ -1433,9 +1515,9 @@
                 <div class="absolute bottom-4 left-4 bg-white px-3 py-1 rounded">
                     <p class="text-sm font-semibold">Hundreds of 5-star reviews</p>
                 </div>
-                <button
+                <a href="http://ebnbhotel.com/"
                     class="absolute bottom-4 right-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">Book
-                    Now</button>
+                    Now</a>
             </div>
 
             <div>
@@ -1886,49 +1968,39 @@
         <!-- Top News Section -->
         <div>
             <h2 class="text-xl font-bold mb-4 border-b pb-2">Top Topics</h2>
-            <div class="space-y-4">
-                <div class="flex items-start space-x-4">
-                    <img src="/images/news-image.jpeg" alt="News Image" class="w-24 h-24 object-cover rounded-md">
-                    <div>
-                        <h3 class="font-semibold mb-2">UEFA Champions League 2024/25: Major Format Overhaul
-                            Explained – What Fans Need to Know</h3>
-                        <p class="text-sm text-gray-600">The UEFA Executive Board has approved a new format for the
-                            2024/25 UEFA Champions League which will see major changes to the competition's format
-                            for...</p>
-                    </div>
-                </div>
-                <div class="flex items-start space-x-4">
-                    <img src="/images/news-image.jpeg" alt="News Image" class="w-24 h-24 object-cover rounded-md">
-                    <div>
-                        <h3 class="font-semibold mb-2">CBN to Redeem N2.2 Trillion in Treasury Bills for Q2 2024;
-                            Full Schedule Released</h3>
-                        <p class="text-sm text-gray-600">The Central Bank of Nigeria (CBN) has revealed its
-                            schedule for the redemption of N2.2 trillion worth of maturing Nigerian Treasury Bills
-                            (NTBs) during the...</p>
-                    </div>
-                </div>
-                <div class="flex items-start space-x-4">
-                    <img src="/images/news-image.jpeg" alt="News Image" class="w-24 h-24 object-cover rounded-md">
-                    <div>
-                        <h3 class="font-semibold mb-2">Dangote's Wealth Soars with 80% Stake in Cement Giant,
-                            Secures Spot Among Africa's Richest</h3>
-                        <p class="text-sm text-gray-600">Africa's richest man, Aliko Dangote, has seen his wealth
-                            surge as he retains an 80% stake in Dangote Cement. This substantial holding, coupled...
-                        </p>
-                    </div>
-                </div>
-                <div class="flex items-start space-x-4">
-                    <img src="/images/news-image.jpeg" alt="News Image" class="w-24 h-24 object-cover rounded-md">
-                    <div>
-                        <h3 class="font-semibold mb-2">Transport Fare Analysis for July 2024: City Bus, Intercity,
-                            Air Travel, and More Show Mixed Trends</h3>
-                        <p class="text-sm text-gray-600">The National Bureau of Statistics (NBS) has released its
-                            latest report on transportation costs across Nigeria, revealing a mixed bag of increases
-                            and...</p>
-                    </div>
-                </div>
+            <div class="space-y-8">
+                @if (count($topTopicPostsData) > 0)
+                    @foreach ($topTopicPostsData as $post)
+                        <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
+                            class="hover:text-blue-600 transition-colors w-full flex items-start space-x-4">
+                            {{-- Image --}}
+                            @if ($post['featured_image'])
+                                <img src="{{ $post['featured_image'] }}" alt="{{ ucwords(strtolower($post['title'])) }}"
+                                    class="w-24 h-24 object-cover rounded-md">
+                            @else
+                                <img src="https://picsum.photos/seed/news/1200/600"
+                                    alt="{{ ucwords(strtolower($post['title'])) }}"
+                                    class="w-24 h-24 object-cover rounded-md">
+                            @endif
+
+                            {{-- Text Content --}}
+                            <div>
+                                <h3 class="font-semibold mb-2">
+                                    {{ $post['title'] ?? 'Untitled' }}
+                                </h3>
+                                <p class="text-sm text-gray-600">
+                                    {{ \Illuminate\Support\Str::limit(strip_tags($post['content']), 50, '...') }}
+                                </p>
+                            </div>
+                        </a>
+                    @endforeach
+                @else
+                    <p>No Top Topic news available.</p>
+                @endif
             </div>
         </div>
+
+
     </div>
     </main>
 

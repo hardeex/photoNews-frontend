@@ -349,6 +349,176 @@
                 </div>
             </div>
         </div>
+
+        <!---- VISITOR LOG START-->
+        <div class="container mx-auto px-4 py-8">
+            {{-- Password Protection Section --}}
+            <div id="password-section" class="flex justify-center items-center min-h-[calc(100vh-4rem)]">
+                <div class="w-full max-w-md">
+                    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold text-center mb-4">Please Enter the Password</h3>
+                            <div class="mb-4">
+                                <div class="flex">
+                                    <input type="password" id="passwordInput"
+                                        class="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        placeholder="Enter access key">
+                                    <button onclick="checkPassword()"
+                                        class="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 transition duration-300">
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="passwordError" class="text-red-500 text-center hidden">
+                                Incorrect password. Please try again.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Stats Section (Initially Hidden) --}}
+            <div id="stats-section" class="hidden">
+                <h1 class="text-3xl font-bold text-center mb-8">Visitor Statistics Dashboard</h1>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {{-- Total Visitors Card --}}
+                    <div class="bg-white shadow-md rounded-lg p-6 text-center">
+                        <div class="text-5xl mb-4 text-blue-500">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h5 class="text-xl font-semibold mb-2">Total Visitors</h5>
+                        <h2 id="totalVisitors" class="text-3xl text-blue-600">Loading...</h2>
+                    </div>
+
+                    {{-- New Visitors Card --}}
+                    <div class="bg-white shadow-md rounded-lg p-6 text-center">
+                        <div class="text-5xl mb-4 text-green-500">
+                            <i class="bi bi-person-plus"></i>
+                        </div>
+                        <h5 class="text-xl font-semibold mb-2">New Visitors</h5>
+                        <p class="text-sm text-gray-600 mb-2">A new visitor is someone who hasn't been tracked before.
+                        </p>
+                        <h2 id="newVisitors" class="text-3xl text-green-600">Loading...</h2>
+                    </div>
+
+                    {{-- Active Visitors Card --}}
+                    <div class="bg-white shadow-md rounded-lg p-6 text-center">
+                        <div class="text-5xl mb-4 text-indigo-500">
+                            <i class="bi bi-person-check"></i>
+                        </div>
+                        <h5 class="text-xl font-semibold mb-2">Active Visitors</h5>
+                        <p class="text-sm text-gray-600 mb-2">Active visitors are those who have visited the site
+                            recently.</p>
+                        <h2 id="activeVisitors" class="text-3xl text-indigo-600">Loading...</h2>
+                    </div>
+
+                    {{-- Returning Visitors Card --}}
+                    <div class="bg-white shadow-md rounded-lg p-6 text-center">
+                        <div class="text-5xl mb-4 text-yellow-500">
+                            <i class="bi bi-person-check"></i>
+                        </div>
+                        <h5 class="text-xl font-semibold mb-2">Returning Visitors</h5>
+                        <p class="text-sm text-gray-600 mb-2">A returning visitor is one who has previously visited the
+                            site, but is coming back.</p>
+                        <h2 id="returningVisitors" class="text-3xl text-yellow-600">Loading...</h2>
+                    </div>
+
+                    {{-- Daily Visitors Card --}}
+                    <div class="bg-white shadow-md rounded-lg p-6 text-center">
+                        <div class="text-5xl mb-4 text-gray-500">
+                            <i class="bi bi-person-check"></i>
+                        </div>
+                        <h5 class="text-xl font-semibold mb-2">Daily Visitors</h5>
+                        <p class="text-sm text-gray-600 mb-2">This counts unique visitors who visited the site today.
+                        </p>
+                        <h2 id="dailyVisitors" class="text-3xl text-gray-600">Loading...</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            // API URL from Laravel environment
+            const apiUrl = '{{ env('API_URL_VISITOR') }}';
+            const apiPassword = '{{ env('VISITOR_STATS_PASSWORD', 'Adewale') }}';
+
+            // Fetch the stats data from the API
+            function fetchVisitorStats() {
+                fetch(apiUrl, {
+                        method: 'POST', // Changed to POST as per the backend route
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // You might want to add CSRF token if needed
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Update the stats in the page with the data from the API
+                        document.getElementById('totalVisitors').innerText = data.totalVisitors;
+                        document.getElementById('newVisitors').innerText = data.newVisitors;
+                        document.getElementById('activeVisitors').innerText = data.activeVisitors;
+                        document.getElementById('returningVisitors').innerText = data.returningVisitors;
+                        document.getElementById('dailyVisitors').innerText = data.dailyVisitors;
+
+                        // Show the stats section after data is loaded
+                        document.getElementById('stats-section').classList.remove('hidden');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching visitor stats:', error);
+                        // Optional: Show an error message to the user
+                        document.getElementById('stats-section').innerHTML = `
+                <div class="text-center text-red-500">
+                    <p>Unable to load visitor statistics. Please try again later.</p>
+                </div>
+            `;
+                    });
+            }
+            // Password protection check
+            const correctPassword = 'Adewale';
+
+            function checkPassword() {
+                const passwordInput = document.getElementById('passwordInput');
+                const statsSection = document.getElementById('stats-section');
+                const passwordSection = document.getElementById('password-section');
+                const passwordError = document.getElementById('passwordError');
+
+                if (passwordInput.value === correctPassword) {
+                    statsSection.classList.remove('hidden');
+                    passwordSection.classList.add('hidden');
+                    passwordError.classList.add('hidden');
+
+                    // Store in session storage so it remains visible on page refresh
+                    sessionStorage.setItem('statsAuthenticated', 'true');
+
+                    // Fetch visitor stats after authentication
+                    fetchVisitorStats();
+                } else {
+                    passwordError.classList.remove('hidden');
+                    passwordInput.value = '';
+                }
+            }
+
+            // Check if already authenticated on page load
+            window.onload = function() {
+                if (sessionStorage.getItem('statsAuthenticated') === 'true') {
+                    document.getElementById('stats-section').classList.remove('hidden');
+                    document.getElementById('password-section').classList.add('hidden');
+
+                    // Fetch visitor stats after authentication
+                    fetchVisitorStats();
+                }
+            }
+        </script>
+
+
+
     </footer>
 
     <button id="scrollToTop"

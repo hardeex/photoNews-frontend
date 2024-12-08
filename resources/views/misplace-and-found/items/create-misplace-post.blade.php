@@ -50,7 +50,7 @@
     <div class="container mx-auto px-6 py-8">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="text-2xl font-semibold">Create New Post</h1>
+                <h1 class="text-2xl font-semibold">Create Misplaced &amp; Found Post</h1>
                 <p class="text-sm text-gray-600" id="saveStatus"></p>
             </div>
             <div class="flex gap-4">
@@ -100,7 +100,7 @@
 
 
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <form action="{{ route('posts.submit') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('public-notice.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
 
@@ -108,7 +108,8 @@
 
                 <!-- Title -->
                 <div class="mb-6">
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Name of the item/document
+                        *</label>
                     <input type="text" id="title" name="title"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         value="{{ old('title', $post->title ?? '') }}" required>
@@ -123,58 +124,10 @@
                 </div>
 
 
-                <div class="mb-6">
-                    <label for="categories" class="block text-sm font-medium text-gray-700 mb-2">Categories</label>
-                    <div class="relative">
-                        <input type="text" id="category_search" placeholder="Search categories..."
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            oninput="filterCategories()">
-
-                        <select id="categories" name="categories[]" class="w-full select2"
-                            onchange="handleCategoryChange(this)" required>
-                            <option value="">Select a category</option>
-                            @forelse ($categories as $category)
-                                <option value="{{ $category['id'] }}"
-                                    {{ old('parent_id') == $category['id'] ? 'selected' : '' }}>
-                                    {{ $category['name'] }}
-                                </option>
-                            @empty
-                                <option disabled>No categories available</option>
-                            @endforelse
-                        </select>
-                    </div>
-                </div>
-
-
-
-                <!-- Featured Image -->
-                {{-- <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Featured Image *</label>
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                        <div class="space-y-1 text-center">
-                            <div class="flex text-sm text-gray-600">
-                                <label for="featured_image"
-                                    class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
-                                    <span>Upload a file</span>
-                                    <input id="featured_image" name="featured_image" type="file" class="sr-only"
-                                        accept="image/*" {{ !isset($post) ?: '' }}>
-                                </label>
-                            </div>
-                            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
-                        </div>
-                    </div>
-                    <div id="image-preview" class="mt-2 {{ isset($post->featured_image) ? '' : 'hidden' }}">
-                        @if (isset($post->featured_image))
-                            <img src="{{ $post->featured_image }}" alt="Preview" class="max-h-48 rounded">
-                        @else
-                            <img src="" alt="Preview" class="max-h-48 rounded">
-                        @endif
-                    </div>
-                </div> --}}
 
                 <!-- Featured Image -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Featured Image *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">The image of the item/document *</label>
                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">
                             <div class="flex text-sm text-gray-600">
@@ -202,36 +155,25 @@
 
                 <!-- Content -->
                 <div class="mb-6">
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Content *</label>
+                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Information or details of the
+                        mispolaced item/document *</label>
                     <textarea id="editor" rows="10" name="content" class="w-full" required>{{ old('content', $post->content ?? '') }}</textarea>
 
                 </div>
 
 
-
-
-
+                <!-- Contact of the owner -->
                 <div class="mb-6">
-                    <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
-                    <div class="relative">
-                        <input type="text" id="tag_search" placeholder="Search tags..."
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            oninput="filterTags()">
-
-                        <select id="tags" name="tags[]" class="w-full select2" multiple>
-
-                            @forelse ($tags as $tag)
-                                <option value="{{ $tag['id'] }}"
-                                    {{ old('parent_id') == $tag['id'] ? 'selected' : '' }}>
-                                    {{ $tag['name'] }}
-                                </option>
-                            @empty
-                                <option disabled>No tags available</option>
-                            @endforelse
-                        </select>
-
-                    </div>
+                    <label for="phone-number" class="block text-sm font-medium text-gray-700 mb-2">Whom to contact when
+                        found? *</label>
+                    <input type="tel" id="phone-number" name="phone-number"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('phone-number', $post->phone_number ?? '') }}" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                        placeholder="123-456-7890">
                 </div>
+
+
+
 
                 <!-- Publishing Options (Admin Only) -->
                 <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
@@ -246,40 +188,9 @@
                             </div>
 
 
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="is_breaking" name="is_breaking"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('is_breaking') ? 'checked' : '' }}>
-                                <label for="is_breaking" class="ml-2 text-sm text-gray-700">Breaking News</label>
-                            </div>
 
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="hot_gist" name="hot_gist"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('hot_gist') ? 'checked' : '' }}>
-                                <label for="hot_gist" class="ml-2 text-sm text-gray-700">Hot Gist</label>
-                            </div>
 
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="event" name="event"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('event') ? 'checked' : '' }}>
-                                <label for="event" class="ml-2 text-sm text-gray-700">Event</label>
-                            </div>
 
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="top_topic" name="top_topic"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('top_topic') ? 'checked' : '' }}>
-                                <label for="top_topic" class="ml-2 text-sm text-gray-700">Top Topic</label>
-                            </div>
-
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="pride_of_nigeria" name="pride_of_nigeria"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('pride_of_nigeria') ? 'checked' : '' }}>
-                                <label for="pride_of_nigeria" class="ml-2 text-sm text-gray-700">Pride of Nigeria</label>
-                            </div>
 
                             <div class="flex items-center mr-4">
                                 <input type="checkbox" id="is_draft" name="is_draft"
@@ -320,15 +231,6 @@
 
                     </div>
                 </div>
-
-
-                {{-- 
-                <div class="mb-6">
-                    <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
-                    <input type="text" id="meta_title" name="meta_title"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        value="{{ old('meta_title', $post->meta_title ?? '') }}">
-                </div> --}}
 
                 <div class="mb-6">
                     <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
@@ -403,47 +305,6 @@
 
 
     <script>
-        // handling post image upload from the client side
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     const imageInput = document.getElementById('featured_image');
-        //     const imagePreview = document.getElementById('image-preview');
-
-        //     if (imageInput) {
-        //         imageInput.addEventListener('change', function() {
-        //             const file = this.files[0];
-
-        //             // Validate file size (2MB)
-        //             if (file.size > 2 * 1024 * 1024) {
-        //                 alert('File size must be less than 2MB');
-        //                 this.value = '';
-        //                 return;
-        //             }
-
-        //             // Validate file type
-        //             if (!file.type.match('image.*')) {
-        //                 alert('Please upload an image file');
-        //                 this.value = '';
-        //                 return;
-        //             }
-
-        //             if (file) {
-        //                 // Show the preview container
-        //                 imagePreview.classList.remove('hidden');
-
-        //                 const reader = new FileReader();
-        //                 reader.onload = function(event) {
-        //                     const previewImg = imagePreview.querySelector('img');
-        //                     if (previewImg) {
-        //                         previewImg.src = event.target.result;
-        //                     }
-        //                 };
-
-        //                 reader.readAsDataURL(file);
-        //             }
-        //         });
-        //     }
-        // });
-
         document.addEventListener('DOMContentLoaded', function() {
             const imageInput = document.getElementById('featured_image');
             const imagePreview = document.getElementById('image-preview');
@@ -598,133 +459,6 @@
         </script>
 
 
-        <script>
-            // Handling category creation and searching
-            function handleCategoryChange(selectElement) {
-                // Check if no category is selected
-                if (selectElement.value === '') {
-                    alert('Please select a category before submitting the form.');
-                    return false; // Prevent form submission
-                }
-
-                // Check if 'create_new' is selected
-                if (selectElement.value === 'create_new') {
-                    // Prevent form submission and ask for category creation
-                    alert('You must create a category before submitting.');
-                    window.location.href = "#"; // Redirect to category creation
-                    return false; // Prevent form submission
-                }
-
-                // Allow form submission
-                return true;
-            }
-
-            function filterCategories() {
-                const searchInput = document.getElementById('category_search').value.toLowerCase();
-                const dropdown = document.getElementById('category_dropdown');
-                const options = dropdown.getElementsByClassName('category-option');
-
-                let hasMatches = false;
-
-                for (let option of options) {
-                    const optionText = option.textContent.toLowerCase();
-                    if (optionText.includes(searchInput)) {
-                        option.style.display = '';
-                        hasMatches = true;
-                    } else {
-                        option.style.display = 'none';
-                    }
-                }
-
-                dropdown.style.display = hasMatches ? 'block' : 'none';
-            }
-
-            document.getElementById('category_dropdown').addEventListener('click', function(e) {
-                if (e.target.classList.contains('category-option')) {
-                    const selectedValue = e.target.getAttribute('data-value');
-                    if (selectedValue === 'create_new') {
-                        window.location.href = '#';
-                    } else {
-                        document.getElementById('category_search').value = e.target.textContent;
-                        document.getElementById('categories').value = selectedValue; // Set the select value
-                    }
-                    document.getElementById('category_dropdown').style.display =
-                        'none'; // Hide the dropdown after selection
-                }
-            });
-
-            document.addEventListener('click', function(e) {
-                const dropdown = document.getElementById('category_dropdown');
-                if (!dropdown.contains(e.target) && e.target.id !== 'category_search' && e.target.id !== 'categories') {
-                    dropdown.style.display = 'none';
-                }
-            });
-        </script>
-
-
-        <script>
-            // handling tag creation and search list
-            function handleTagChange(selectElement) {
-                if (selectElement.value === 'create_new') {
-                    window.location.href = "#";
-                }
-            }
-
-            function filterTags() {
-                const searchInput = document.getElementById('tag_search').value.toLowerCase();
-                const dropdown = document.getElementById('tag_dropdown');
-                const options = dropdown.getElementsByClassName('tag-option');
-
-                let hasMatches = false;
-
-                for (let option of options) {
-                    const optionText = option.textContent.toLowerCase();
-                    if (optionText.includes(searchInput)) {
-                        option.style.display = '';
-                        hasMatches = true;
-                    } else {
-                        option.style.display = 'none';
-                    }
-                }
-
-                dropdown.style.display = hasMatches ? 'block' : 'none';
-            }
-
-            document.getElementById('tag_dropdown').addEventListener('click', function(e) {
-                if (e.target.classList.contains('tag-option')) {
-                    const selectedValue = e.target.getAttribute('data-value');
-                    const selectElement = document.getElementById('tags');
-
-                    if (selectedValue === 'create_new') {
-                        window.location.href = '#';
-                    } else {
-                        // Check if the option is already selected
-                        const optionExists = Array.from(selectElement.options).some(option => option.value ===
-                            selectedValue);
-
-                        if (!optionExists) {
-                            const newOption = new Option(e.target.textContent, selectedValue, true, true);
-                            selectElement.add(newOption);
-                        } else {
-                            // Deselect the option if it's already selected
-                            for (let option of selectElement.options) {
-                                if (option.value === selectedValue) {
-                                    option.selected = false;
-                                }
-                            }
-                        }
-                    }
-                    document.getElementById('tag_dropdown').style.display = 'none'; // Hide the dropdown after selection
-                }
-            });
-
-            document.addEventListener('click', function(e) {
-                const dropdown = document.getElementById('tag_dropdown');
-                if (!dropdown.contains(e.target) && e.target.id !== 'tag_search' && e.target.id !== 'tags') {
-                    dropdown.style.display = 'none';
-                }
-            });
-        </script>
 
 
 

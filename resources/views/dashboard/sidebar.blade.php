@@ -70,12 +70,13 @@
                 <i class="fas fa-chevron-down text-xs"></i>
             </a>
             <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
+                <a href="{{ route('misplaced.create') }}"
+                    class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
                 <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
             </div>
         </div>
 
-        <!-- Loss of Documents -->
+        {{-- <!-- Loss of Documents -->
         <div class="menu-item">
             <a href="#"
                 class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
@@ -86,33 +87,23 @@
                 <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
                 <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Missing Person -->
         <div class="menu-item">
             <a href="#"
                 class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-user-missing mr-2"></i> Missing Person</span>
+                <span><i class="fas fa-user-missing mr-2"></i> Missing &amp; Wanted Person</span>
                 <i class="fas fa-chevron-down text-xs"></i>
             </a>
             <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
+                <a href="{{ route('missing.create') }}"
+                    class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
                 <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
             </div>
         </div>
 
-        <!-- Wanted Person -->
-        <div class="menu-item">
-            <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-exclamation-circle mr-2"></i> Wanted Person</span>
-                <i class="fas fa-chevron-down text-xs"></i>
-            </a>
-            <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
-            </div>
-        </div>
+
 
         <!-- Obituary -->
         <div class="menu-item">
@@ -122,7 +113,8 @@
                 <i class="fas fa-chevron-down text-xs"></i>
             </a>
             <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
+                <a href="{{ route('obituary.create') }}"
+                    class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
                 <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
             </div>
         </div>
@@ -135,7 +127,8 @@
                 <i class="fas fa-chevron-down text-xs"></i>
             </a>
             <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
+                <a href="{{ route('remembrance.create') }}"
+                    class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
                 <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
             </div>
         </div>
@@ -148,23 +141,13 @@
                 <i class="fas fa-chevron-down text-xs"></i>
             </a>
             <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
+                <a href="{{ route('change-of-name.create') }}"
+                    class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
                 <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
             </div>
         </div>
 
-        <!-- Pride of Nigeria -->
-        <div class="menu-item">
-            <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-globe-africa mr-2"></i> Pride of Nigeria</span>
-                <i class="fas fa-chevron-down text-xs"></i>
-            </a>
-            <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
-            </div>
-        </div>
+
 
         <!-- Profile Menu -->
         <div class="menu-item">
@@ -180,7 +163,7 @@
         </div>
 
         <!-- Settings Menu -->
-        <div class="menu-item">
+        {{-- <div class="menu-item">
             <a href="#"
                 class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
                 <span><i class="fas fa-cogs mr-2"></i> Settings</span>
@@ -191,7 +174,7 @@
                 <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Notifications</a>
                 <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Security</a>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Help -->
         <div class="menu-item">

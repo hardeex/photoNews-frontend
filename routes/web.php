@@ -3,8 +3,13 @@
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\PublicNoticeController;
 use App\Http\Controllers\userAuthenticationController;
+use App\Http\Controllers\MisplaceAndFoundController;
+use App\Http\Controllers\MissingPersonController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\obituaryController;
+use App\Http\Controllers\RemembranceController;
+use App\Http\Controllers\ChangeOfNameController;
 
 
 
@@ -39,6 +44,25 @@ Route::get('/fetch-categories', [NewsPostController::class, 'listCategoriesFromA
 // public notice routes
 Route::get('/create/public-notice', [PublicNoticeController::class, 'createPost'])->name('public-notice.create');
 Route::post('/submit/public-notice', [PublicNoticeController::class, 'submitPost'])->name('public-notice.submit');
+
+// misplaced and found routes
+Route::get('/create/misplaced-and-found', [MisplaceAndFoundController::class, 'createPost'])->name('misplaced.create');
+
+// missing person routes
+Route::get('/create/missing-person', [MissingPersonController::class, 'createPost'])->name('missing.create');
+
+// obituary routes
+Route::get('/create/obituary', [obituaryController::class, 'createPost'])->name('obituary.create');
+Route::post('/submit/obituary', [obituaryController::class, 'submitObituary'])->name('obituary.submit');
+
+// remebrance controller
+Route::get('/create/remembrance', [RemembranceController::class, 'createPost'])->name('remembrance.create');  
+
+
+// change of name routes
+Route::get('/create-change-of-name', [ChangeOfNameController::class, 'createPost'])->name('change-of-name.create');
+Route::post('/submit-change-of-name', [ChangeOfNameController::class, 'submitPost'])->name('change-of-name.submit');
+
 
 
 

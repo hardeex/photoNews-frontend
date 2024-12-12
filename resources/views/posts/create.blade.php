@@ -147,30 +147,6 @@
 
 
 
-                <!-- Featured Image -->
-                {{-- <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Featured Image *</label>
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                        <div class="space-y-1 text-center">
-                            <div class="flex text-sm text-gray-600">
-                                <label for="featured_image"
-                                    class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
-                                    <span>Upload a file</span>
-                                    <input id="featured_image" name="featured_image" type="file" class="sr-only"
-                                        accept="image/*" {{ !isset($post) ?: '' }}>
-                                </label>
-                            </div>
-                            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
-                        </div>
-                    </div>
-                    <div id="image-preview" class="mt-2 {{ isset($post->featured_image) ? '' : 'hidden' }}">
-                        @if (isset($post->featured_image))
-                            <img src="{{ $post->featured_image }}" alt="Preview" class="max-h-48 rounded">
-                        @else
-                            <img src="" alt="Preview" class="max-h-48 rounded">
-                        @endif
-                    </div>
-                </div> --}}
 
                 <!-- Featured Image -->
                 <div class="mb-6">
@@ -182,7 +158,7 @@
                                     class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
                                     <span>Upload a file</span>
                                     <input id="featured_image" name="featured_image" type="file" class="sr-only"
-                                        accept="image/*">
+                                        accept="image/*" required>
                                 </label>
                             </div>
                             <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
@@ -197,6 +173,8 @@
                         @endif
                     </div>
                 </div>
+
+
 
 
 
@@ -403,47 +381,6 @@
 
 
     <script>
-        // handling post image upload from the client side
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     const imageInput = document.getElementById('featured_image');
-        //     const imagePreview = document.getElementById('image-preview');
-
-        //     if (imageInput) {
-        //         imageInput.addEventListener('change', function() {
-        //             const file = this.files[0];
-
-        //             // Validate file size (2MB)
-        //             if (file.size > 2 * 1024 * 1024) {
-        //                 alert('File size must be less than 2MB');
-        //                 this.value = '';
-        //                 return;
-        //             }
-
-        //             // Validate file type
-        //             if (!file.type.match('image.*')) {
-        //                 alert('Please upload an image file');
-        //                 this.value = '';
-        //                 return;
-        //             }
-
-        //             if (file) {
-        //                 // Show the preview container
-        //                 imagePreview.classList.remove('hidden');
-
-        //                 const reader = new FileReader();
-        //                 reader.onload = function(event) {
-        //                     const previewImg = imagePreview.querySelector('img');
-        //                     if (previewImg) {
-        //                         previewImg.src = event.target.result;
-        //                     }
-        //                 };
-
-        //                 reader.readAsDataURL(file);
-        //             }
-        //         });
-        //     }
-        // });
-
         document.addEventListener('DOMContentLoaded', function() {
             const imageInput = document.getElementById('featured_image');
             const imagePreview = document.getElementById('image-preview');
@@ -489,7 +426,6 @@
             }
         });
     </script>
-
 
 
     <script>

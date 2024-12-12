@@ -441,27 +441,385 @@ class NewsPostController extends Controller
 
 
 
+
+    // public function submitPost(Request $request)
+    // {
+    //     Log::info('News Posts submission method is called...', [
+    //         'request_data' => $request->all(),
+    //     ]);
+
+    //     // Validate the incoming form data
+    //     try {
+    //         $validated = $request->validate([
+    //             'title' => 'required|string|max:255',
+    //             'slug' => 'required|string|max:255',
+    //             'content' => 'required',
+    //             'featured_image' => 'nullable|image|max:2048',
+    //             'categories' => 'required|array',
+    //             'categories.*' => 'nullable',
+    //             'tags' => 'nullable|array',
+    //             'tags.*' => 'nullable',
+    //             'is_featured' => 'boolean',
+    //             'is_breaking' => 'boolean',
+    //             'hot_gist' => 'boolean',
+    //             'event' => 'boolean',
+    //             'top_topic' => 'boolean',
+    //             'is_draft' => 'boolean',
+    //             'is_scheduled' => 'boolean',
+    //             'scheduled_time' => 'nullable|date_format:Y-m-d\TH:i',
+    //             'allow_comments' => 'nullable|boolean',
+    //             'meta_title' => 'nullable|string|max:255',
+    //             'meta_description' => 'nullable|string|max:155',
+    //             'review_feedback' => 'nullable|string',
+    //         ]);
+    //         Log::info('Validation passed successfully', ['validated_data' => $validated]);
+    //     } catch (\Illuminate\Validation\ValidationException $e) {
+    //         Log::error('Validation failed', [
+    //             'errors' => $e->errors(),
+    //             'request_data' => $request->all(),
+    //         ]);
+    //         return back()->withErrors($e->errors());
+    //     }
+
+    //     // Get the JWT token from session
+    //     $jwtToken = session('api_token');
+    //     if (empty($jwtToken)) {
+    //         Log::warning('JWT token missing or expired');
+    //         return redirect()->route('user.login')->with('error', 'Please log in first');
+    //     }
+
+    //     Log::info('JWT token retrieved from session', ['jwt_token' => $jwtToken]);
+
+    //     // Log content field in request (if available)
+    //     Log::info('Content field in request:', ['content' => $request->content]);
+
+    //     // API URL for post submission
+    //     $apiUrl = config('api.base_url') . '/submit-post';
+    //     Log::info('Connecting to API URL for post creation', ['api_url' => $apiUrl]);
+
+    //     // Prepare the form data
+    //     $formData = [
+    //         'title' => $validated['title'],
+    //         'slug' => $validated['slug'],
+    //         'content' => $validated['content'],
+    //         'categories' => $validated['categories'] ?? [],
+    //         'tags' => $validated['tags'] ?? [],
+    //         'is_featured' => $validated['is_featured'] ?? false,
+    //         'is_breaking' => $validated['is_breaking'] ?? false,
+    //         'hot_gist' => $validated['hot_gist'] ?? false,
+    //         'event' => $validated['event'] ?? false,
+    //         'top_topic' => $validated['top_topic'] ?? false,
+    //         'is_draft' => $validated['is_draft'] ?? false,
+    //         'is_scheduled' => $validated['is_scheduled'] ?? false,
+    //         'scheduled_time' => $validated['scheduled_time'] ?? null,
+    //         'allow_comments' => $validated['allow_comments'] ?? true,
+    //         'meta_title' => $validated['meta_title'] ?? null,
+    //         'meta_description' => $validated['meta_description'] ?? null,
+    //         'review_feedback' => $validated['review_feedback'] ?? null,
+    //     ];
+    //     Log::info('Form data prepared for API request', ['form_data' => $formData]);
+
+    //     try {
+    //         $http = Http::withHeaders(['Authorization' => 'Bearer ' . $jwtToken]);
+
+    //         // Log the file if attached
+    //         if ($request->hasFile('featured_image')) {
+    //             Log::info('Featured image file detected, attaching to API request', [
+    //                 'file_name' => $request->file('featured_image')->getClientOriginalName(),
+    //                 'file_size' => $request->file('featured_image')->getSize(),
+    //             ]);
+    //             $http = $http->attach(
+    //                 'featured_image',
+    //                 file_get_contents($request->file('featured_image')->getRealPath()),
+    //                 $request->file('featured_image')->getClientOriginalName()
+    //             );
+    //         } else {
+    //             Log::info('No featured image attached');
+    //         }
+
+    //         // Send POST request
+    //         $response = $http->post($apiUrl, $formData);
+
+    //         // Check API response
+    //         if ($response->successful()) {
+    //             Log::info('Post successfully created through external API', [
+    //                 'response_data' => $response->json(),
+    //             ]);
+    //             return redirect()->back()->with('success', 'Post created successfully!');
+    //         } else {
+    //             Log::error('Error returned from external API', [
+    //                 'status_code' => $response->status(),
+    //                 'error_message' => $response->json()['message'] ?? 'An error occurred.',
+    //                 'response_data' => $response->json(),
+    //             ]);
+    //             return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::error('API request failed', [
+    //             'exception_message' => $e->getMessage(),
+    //             'exception_trace' => $e->getTraceAsString(),
+    //         ]);
+    //         return back()->withErrors(['error' => 'An error occurred while submitting the post.']);
+    //     }
+    // }
+
+
+
+    public function submitPost333(Request $request)
+    {
+        Log::info('News Posts submission method is called...', [
+            'request_data' => $request->all(),
+        ]);
+
+        // Validate the incoming form data
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'slug' => 'required|string|max:255',
+                'content' => 'required|string',
+                'featured_image' => 'nullable|image|max:2048',
+                'categories' => 'required|array',
+                'categories.*' => 'nullable',
+                'tags' => 'nullable|array',
+                'tags.*' => 'nullable',
+                'is_featured' => 'boolean',
+                'is_breaking' => 'boolean',
+                'hot_gist' => 'boolean',
+                'event' => 'boolean',
+                'top_topic' => 'boolean',
+                'is_draft' => 'boolean',
+                'is_scheduled' => 'boolean',
+                'scheduled_time' => 'nullable|date_format:Y-m-d\TH:i',
+                'allow_comments' => 'nullable|boolean',
+                'meta_title' => 'nullable|string|max:255',
+                'meta_description' => 'nullable|string|max:155',
+                'review_feedback' => 'nullable|string',
+            ]);
+            Log::info('Validation passed successfully', ['validated_data' => $validated]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation failed', [
+                'errors' => $e->errors(),
+                'request_data' => $request->all(),
+            ]);
+            return back()->withErrors($e->errors());
+        }
+
+        // Get the JWT token from session
+        $jwtToken = session('api_token');
+        if (empty($jwtToken)) {
+            Log::warning('JWT token missing or expired');
+            return redirect()->route('user.login')->with('error', 'Please log in first');
+        }
+
+        Log::info('JWT token retrieved from session', ['jwt_token' => $jwtToken]);
+
+        // Log content field in request (if available)
+        Log::info('Content field in request:', ['content' => $request->content]);
+
+        // API URL for post submission
+        $apiUrl = config('api.base_url') . '/submit-post';
+        Log::info('Connecting to API URL for post creation', ['api_url' => $apiUrl]);
+
+        // Prepare the form data
+        $formData = [
+            'title' => $validated['title'],
+            'slug' => $validated['slug'],
+            'content' => $validated['content'],
+            'categories' => $validated['categories'] ?? [],
+            'tags' => $validated['tags'] ?? [],
+            'is_featured' => $validated['is_featured'] ?? false,
+            'is_breaking' => $validated['is_breaking'] ?? false,
+            'hot_gist' => $validated['hot_gist'] ?? false,
+            'event' => $validated['event'] ?? false,
+            'top_topic' => $validated['top_topic'] ?? false,
+            'is_draft' => $validated['is_draft'] ?? false,
+            'is_scheduled' => $validated['is_scheduled'] ?? false,
+            'scheduled_time' => $validated['scheduled_time'] ?? null,
+            'allow_comments' => $validated['allow_comments'] ?? true,
+            'meta_title' => $validated['meta_title'] ?? null,
+            'meta_description' => $validated['meta_description'] ?? null,
+            'review_feedback' => $validated['review_feedback'] ?? null,
+        ];
+
+        // Log the form data being sent
+        Log::info('Sending POST request to API', [
+            'api_url' => $apiUrl,
+            'form_data' => $formData,
+        ]);
+
+        // Initialize the HTTP client
+        $http = Http::withHeaders(['Authorization' => 'Bearer ' . $jwtToken]);
+
+        // Attach the image if it exists
+        if ($request->hasFile('featured_image')) {
+            Log::info('Featured image detected, attaching to API request', [
+                'file_name' => $request->file('featured_image')->getClientOriginalName(),
+                'file_size' => $request->file('featured_image')->getSize(),
+            ]);
+
+            // Attach the image to the request using 'multipart/form-data'
+            $http = $http->attach(
+                'featured_image', // The key the API expects for the image
+                file_get_contents($request->file('featured_image')->getRealPath()),
+                $request->file('featured_image')->getClientOriginalName()
+            );
+        } else {
+            Log::info('No featured image attached');
+        }
+
+        // Send the POST request
+        $response = $http->post($apiUrl, $formData);
+
+        // Handle the response
+        if ($response->successful()) {
+            Log::info('Post created successfully', ['response_data' => $response->json()]);
+            return redirect()->back()->with('success', 'Post created successfully!');
+        } else {
+            Log::error('API request failed', [
+                'status_code' => $response->status(),
+                'error_message' => $response->json()['message'] ?? 'An error occurred.',
+                'response_data' => $response->json(),
+            ]);
+            return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
+        }
+    }
+
+
+    public function submitPostWORKWITHOUTIMAGE(Request $request)
+    {
+        Log::info('News Posts submission method is called...', [
+            'request_data' => $request->all(),
+        ]);
+
+        // Validate the incoming form data
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'slug' => 'required|string|max:255',
+                'content' => 'required',
+                'featured_image' => 'nullable|image|max:2048',
+                'categories' => 'required|array',
+                'categories.*' => 'nullable',
+                'tags' => 'nullable|array',
+                'tags.*' => 'nullable',
+                'is_featured' => 'boolean',
+                'is_breaking' => 'boolean',
+                'hot_gist' => 'boolean',
+                'event' => 'boolean',
+                'top_topic' => 'boolean',
+                'is_draft' => 'boolean',
+                'is_scheduled' => 'boolean',
+                'scheduled_time' => 'nullable|date_format:Y-m-d\TH:i',
+                'allow_comments' => 'nullable|boolean',
+                'meta_title' => 'nullable|string|max:255',
+                'meta_description' => 'nullable|string|max:155',
+                'review_feedback' => 'nullable|string',
+            ]);
+            Log::info('Validation passed successfully', ['validated_data' => $validated]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation failed', [
+                'errors' => $e->errors(),
+                'request_data' => $request->all(),
+            ]);
+            return back()->withErrors($e->errors());
+        }
+
+        // Get the JWT token from session
+        $jwtToken = session('api_token');
+        if (empty($jwtToken)) {
+            Log::warning('JWT token missing or expired');
+            return redirect()->route('user.login')->with('error', 'Please log in first');
+        }
+
+        Log::info('JWT token retrieved from session', ['jwt_token' => $jwtToken]);
+
+        // Log content field in request (if available)
+        Log::info('Content field in request:', ['content' => $request->content]);
+
+        // API URL for post submission
+        $apiUrl = config('api.base_url') . '/submit-post';
+        Log::info('Connecting to API URL for post creation', ['api_url' => $apiUrl]);
+
+        // Prepare the form data
+        $formData = [
+            'title' => $validated['title'],
+            'slug' => $validated['slug'],
+            'content' => $validated['content'],
+            'categories' => $validated['categories'] ?? [],
+            'tags' => $validated['tags'] ?? [],
+            'is_featured' => $validated['is_featured'] ?? false,
+            'is_breaking' => $validated['is_breaking'] ?? false,
+            'hot_gist' => $validated['hot_gist'] ?? false,
+            'event' => $validated['event'] ?? false,
+            'top_topic' => $validated['top_topic'] ?? false,
+            'is_draft' => $validated['is_draft'] ?? false,
+            'is_scheduled' => $validated['is_scheduled'] ?? false,
+            'scheduled_time' => $validated['scheduled_time'] ?? null,
+            'allow_comments' => $validated['allow_comments'] ?? true,
+            'meta_title' => $validated['meta_title'] ?? null,
+            'meta_description' => $validated['meta_description'] ?? null,
+            'review_feedback' => $validated['review_feedback'] ?? null,
+        ];
+        Log::info('Form data prepared for API request', ['form_data' => $formData]);
+
+        try {
+            $http = Http::withHeaders(['Authorization' => 'Bearer ' . $jwtToken]);
+
+            // Log the file if attached
+            if ($request->hasFile('featured_image')) {
+                Log::info('Featured image file detected, attaching to API request', [
+                    'file_name' => $request->file('featured_image')->getClientOriginalName(),
+                    'file_size' => $request->file('featured_image')->getSize(),
+                ]);
+                $http = $http->attach(
+                    'featured_image',
+                    file_get_contents($request->file('featured_image')->getRealPath()),
+                    $request->file('featured_image')->getClientOriginalName()
+                );
+            } else {
+                Log::info('No featured image attached');
+            }
+
+            // Send POST request
+            $response = $http->post($apiUrl, $formData);
+
+            // Check API response
+            if ($response->successful()) {
+                Log::info('Post successfully created through external API', [
+                    'response_data' => $response->json(),
+                ]);
+                return redirect()->back()->with('success', 'Post created successfully!');
+            } else {
+                Log::error('Error returned from external API', [
+                    'status_code' => $response->status(),
+                    'error_message' => $response->json()['message'] ?? 'An error occurred.',
+                    'response_data' => $response->json(),
+                ]);
+                return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
+            }
+        } catch (\Exception $e) {
+            Log::error('API request failed', [
+                'exception_message' => $e->getMessage(),
+                'exception_trace' => $e->getTraceAsString(),
+            ]);
+            return back()->withErrors(['error' => 'An error occurred while submitting the post.']);
+        }
+    }
+
+
     public function submitPost(Request $request)
     {
-        Log::info('Post submission method is called...', [
-            'request_data' => $request->all(), // Log all incoming request data
+        Log::info('News Posr submission method is called...', [
+            'request_data' => $request->all(),
         ]);
 
         // Validate the incoming form data
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255 ',
+            'slug' => 'required|string|max:255',
             'content' => 'required',
             'featured_image' => 'nullable|image|max:2048',
-            'categories' => 'required|array',
-            'categories.*' => 'nullable',
-            'tags' => 'nullable|array',
-            'tags.*' => 'nullable',
             'is_featured' => 'boolean',
-            'is_breaking' => 'boolean',
-            'hot_gist' => 'boolean',
-            'event' => 'boolean',
-            'top_topic' => 'boolean',
             'is_draft' => 'boolean',
             'is_scheduled' => 'boolean',
             'scheduled_time' => 'nullable|date_format:Y-m-d\TH:i',
@@ -469,15 +827,17 @@ class NewsPostController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:155',
             'review_feedback' => 'nullable|string',
-        ]);
 
-        // Log the validated data before proceeding
-        Log::info('Validated post data', [
-            'title' => $validated['title'],
-            'slug' => $validated['slug'],
-            'content' => $validated['content'],
-            //'is_featured' => $validated['is_featured'],
-            // Include other relevant fields
+            // added fields
+            // 'categories' => 'required|array',
+            // 'categories.*' => 'nullable',
+            // 'tags' => 'nullable|array',
+            // 'tags.*' => 'nullable',
+
+            'is_breaking' => 'boolean',
+            'event' => 'nullable|boolean',
+            'top_topic' => 'nullable|boolean',
+            'hot_gist' => 'nullable|boolean',
         ]);
 
         // Get the JWT token from session (after login)
@@ -495,18 +855,12 @@ class NewsPostController extends Controller
             'api_url' => $apiUrl,
         ]);
 
-        // Prepare the data to be sent to the API
-        $data = [
+        // Prepare the form data
+        $formData = [
             'title' => $validated['title'],
             'slug' => $validated['slug'],
             'content' => $validated['content'],
-            'categories' => $validated['categories'],
-            'tags' => $validated['tags'] ?? [],
             'is_featured' => $validated['is_featured'] ?? false,
-            'is_breaking' => $validated['is_breaking'] ?? false,
-            'hot_gist' => $validated['hot_gist'] ?? false,
-            'event' => $validated['event'] ?? false,
-            'top_topic' => $validated['top_topic'] ?? false,
             'is_draft' => $validated['is_draft'] ?? false,
             'is_scheduled' => $validated['is_scheduled'] ?? false,
             'scheduled_time' => $validated['scheduled_time'] ?? null,
@@ -514,14 +868,20 @@ class NewsPostController extends Controller
             'meta_title' => $validated['meta_title'] ?? null,
             'meta_description' => $validated['meta_description'] ?? null,
             'review_feedback' => $validated['review_feedback'] ?? null,
+
+            // added fields
+            // 'categories' => $validated['categories'],
+            // 'tags' => $validated['tags'] ?? [],
+
+            'is_breaking' => $validated['is_breaking'] ?? false,
+            'event' => $validated['event'] ?? false,
+            'top_topic' => $validated['top_topic'] ?? false,
+            'hot_gist' => $validated['hot_gist'] ?? false,
         ];
 
-        // Log the data that is about to be sent to the external API
-        Log::info('Sending data to external API', [
-            'data' => $data,
-        ]);
+        $formData['contents'] = $validated['content'];
 
-        // Make the POST request to the external API
+        // Prepare file upload if image exists
         try {
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $jwtToken,
@@ -533,7 +893,7 @@ class NewsPostController extends Controller
                 $request->hasFile('featured_image') ?
                     $request->file('featured_image')->getClientOriginalName() :
                     null
-            )->post($apiUrl, $data);
+            )->post($apiUrl, $formData);
 
             // Log the response from the external API
             if ($response->successful()) {
@@ -559,7 +919,6 @@ class NewsPostController extends Controller
             return back()->withErrors(['error' => 'An error occurred while submitting the post.']);
         }
     }
-
 
     public function showPostDetails(Request $request, $slug)
     {

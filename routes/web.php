@@ -47,16 +47,20 @@ Route::post('/submit/public-notice', [PublicNoticeController::class, 'submitPost
 
 // misplaced and found routes
 Route::get('/create/misplaced-and-found', [MisplaceAndFoundController::class, 'createPost'])->name('misplaced.create');
+Route::post('/submit/misplaced-and-found', [MisplaceAndFoundController::class, 'submitPost'])->name('misplaced-and-found.submit');
+
 
 // missing person routes
 Route::get('/create/missing-person', [MissingPersonController::class, 'createPost'])->name('missing.create');
+Route::post('/submit/missing-and-wanted-person', [MissingPersonController::class, 'submitPost'])->name('missing-person.submit');
 
 // obituary routes
 Route::get('/create/obituary', [obituaryController::class, 'createPost'])->name('obituary.create');
-Route::post('/submit/obituary', [obituaryController::class, 'submitObituary'])->name('obituary.submit');
+Route::post('/submit/obituary', [obituaryController::class, 'submitPost'])->name('obituary.submit');
 
 // remebrance controller
-Route::get('/create/remembrance', [RemembranceController::class, 'createPost'])->name('remembrance.create');  
+Route::get('/create/remembrance', [RemembranceController::class, 'createPost'])->name('remembrance.create');
+Route::post('/submit/remembrance', [RemembranceController::class, 'submitPost'])->name('remembrance.submit');
 
 
 // change of name routes

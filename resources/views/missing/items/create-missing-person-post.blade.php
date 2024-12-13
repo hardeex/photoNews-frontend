@@ -50,7 +50,7 @@
     <div class="container mx-auto px-6 py-8">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="text-2xl font-semibold">Create Losts &amp; Found Post</h1>
+                <h1 class="text-2xl font-semibold">Create Missing &amp; Wanted Person(s) </h1>
                 <p class="text-sm text-gray-600" id="saveStatus"></p>
             </div>
             <div class="flex gap-4">
@@ -100,7 +100,7 @@
 
 
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <form action="{{ route('public-notice.submit') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('missing-person.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
 
@@ -213,10 +213,9 @@
                 <div class="mb-6">
                     <label for="phone-number" class="block text-sm font-medium text-gray-700 mb-2">Whom to contact when
                         found? *</label>
-                    <input type="tel" id="phone-number" name="phone-number"
+                    <input type="tel" id="phone-number" name="phone_number"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                        value="{{ old('phone-number', $post->phone_number ?? '') }}" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                        placeholder="123-456-7890">
+                        value="{{ old('phone-number', $post->phone_number ?? '') }}" placeholder="123-456-7890">
                 </div>
 
 

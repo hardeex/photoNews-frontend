@@ -100,18 +100,19 @@
 
 
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <form action="{{ route('public-notice.submit') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('change-of-name.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
 
                 <input type="hidden" name="post_id" id="post_id" value="{{ $post->id ?? '' }}">
 
-                <!-- Title -->
+                <!-- Old name -->
                 <div class="mb-6">
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
-                    <input type="text" id="title" name="title"
+                    <label for="old_name" class="block text-sm font-medium text-gray-700 mb-2">Initial Name <small>(The name
+                            you are changing from...) </small> </label>
+                    <input type="text" id="title" name="old_name"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                        value="{{ old('title', $post->title ?? '') }}" required>
+                        value="{{ old('old_name', $post->old_name ?? '') }}" required>
                 </div>
 
                 <!-- Slug -->
@@ -123,10 +124,20 @@
                 </div>
 
 
+                <!-- new name -->
+                <div class="mb-6">
+                    <label for="new_name" class="block text-sm font-medium text-gray-700 mb-2">New Name <small>(The name you
+                            are changing to...) </small> </label>
+                    <input type="text" id="title" name="new_name"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('new_name', $post->new_name ?? '') }}" required>
+                </div>
+
 
                 <!-- Featured Image -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Featured Image *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Your Image <small>(The image of the persom
+                            changing name) </small> </label>
                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">
                             <div class="flex text-sm text-gray-600">
@@ -154,7 +165,8 @@
 
                 <!-- Content -->
                 <div class="mb-6">
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Content *</label>
+                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Additional
+                        Information</label>
                     <textarea id="editor" rows="10" name="content" class="w-full" required>{{ old('content', $post->content ?? '') }}</textarea>
 
                 </div>

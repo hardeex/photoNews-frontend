@@ -158,7 +158,7 @@
                                     class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
                                     <span>Upload a file</span>
                                     <input id="featured_image" name="featured_image" type="file" class="sr-only"
-                                        accept="image/*" required>
+                                        accept="image/*">
                                 </label>
                             </div>
                             <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
@@ -662,6 +662,14 @@
             });
         </script>
 
+
+
+        <script>
+            document.querySelector('form').onsubmit = function(e) {
+                console.log('Categories:', document.querySelector('#categories').value);
+                console.log('Tags:', document.querySelector('#tags').value);
+            };
+        </script>
 
 
         <script>

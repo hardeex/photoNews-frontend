@@ -829,15 +829,24 @@ class NewsPostController extends Controller
             'review_feedback' => 'nullable|string',
 
             // added fields
-            // 'categories' => 'required|array',
-            // 'categories.*' => 'nullable',
-            // 'tags' => 'nullable|array',
-            // 'tags.*' => 'nullable',
+
 
             'is_breaking' => 'boolean',
             'event' => 'nullable|boolean',
             'top_topic' => 'nullable|boolean',
             'hot_gist' => 'nullable|boolean',
+
+
+            // Categories and Tags
+            // 'tags' => 'nullable|array',
+            // 'tags.*' => 'nullable|integer',
+            // 'categories' => 'required|array',
+            // 'categories.*' => 'nullable|integer',
+
+            // 'categories' => 'required|array',
+            // 'categories.*' => 'nullable',
+            // 'tags' => 'nullable|array',
+            // 'tags.*' => 'nullable',
         ]);
 
         // Get the JWT token from session (after login)
@@ -848,12 +857,6 @@ class NewsPostController extends Controller
             Log::warning('JWT token missing or expired');
             return redirect()->route('user.login')->with('error', 'Please log in first');
         }
-
-        // API URL for post submission
-        $apiUrl = config('api.base_url') . '/submit-post';
-        Log::info('Connecting to API URL for post creation', [
-            'api_url' => $apiUrl,
-        ]);
 
         // Prepare the form data
         $formData = [
@@ -870,16 +873,58 @@ class NewsPostController extends Controller
             'review_feedback' => $validated['review_feedback'] ?? null,
 
             // added fields
-            // 'categories' => $validated['categories'],
-            // 'tags' => $validated['tags'] ?? [],
+
 
             'is_breaking' => $validated['is_breaking'] ?? false,
             'event' => $validated['event'] ?? false,
             'top_topic' => $validated['top_topic'] ?? false,
             'hot_gist' => $validated['hot_gist'] ?? false,
+
+            // Categories and Tags
+            // 'tags' => $validated['tags'] ?? [],
+            // 'categories' => $validated['categories'] ?? [],
         ];
 
-        $formData['contents'] = $validated['content'];
+
+        print_r($formData);
+        // exit();
+
+        Log::info('Request Payload:', $validated);  // Before sending to the API
+
+        // API URL for post submission
+        $apiUrl = config('api.base_url') . '/submit-post';
+        Log::info('Connecting to API URL for post creation', [
+            'api_url' => $apiUrl,
+        ]);
+
+        // // Prepare the form data
+        // $formData = [
+        //     'title' => $validated['title'],
+        //     'slug' => $validated['slug'],
+        //     'content' => $validated['content'],
+        //     'is_featured' => $validated['is_featured'] ?? false,
+        //     'is_draft' => $validated['is_draft'] ?? false,
+        //     'is_scheduled' => $validated['is_scheduled'] ?? false,
+        //     'scheduled_time' => $validated['scheduled_time'] ?? null,
+        //     'allow_comments' => $validated['allow_comments'] ?? true,
+        //     'meta_title' => $validated['meta_title'] ?? null,
+        //     'meta_description' => $validated['meta_description'] ?? null,
+        //     'review_feedback' => $validated['review_feedback'] ?? null,
+
+        //     // added fields
+
+
+        //     'is_breaking' => $validated['is_breaking'] ?? false,
+        //     'event' => $validated['event'] ?? false,
+        //     'top_topic' => $validated['top_topic'] ?? false,
+        //     'hot_gist' => $validated['hot_gist'] ?? false,
+
+        //     // Categories and Tags
+        //     'tags' => $validated['tags'] ?? [],
+        //     'categories' => $validated['categories'] ?? [],
+        // ];
+
+
 
         // Prepare file upload if image exists
         try {

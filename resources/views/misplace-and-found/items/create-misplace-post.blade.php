@@ -100,7 +100,7 @@
 
 
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <form action="{{ route('public-notice.submit') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('misplaced-and-found.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
 
@@ -166,10 +166,9 @@
                 <div class="mb-6">
                     <label for="phone-number" class="block text-sm font-medium text-gray-700 mb-2">Whom to contact when
                         found? *</label>
-                    <input type="tel" id="phone-number" name="phone-number"
+                    <input type="tel" id="phone-number" name="phone_number"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                        value="{{ old('phone-number', $post->phone_number ?? '') }}" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                        placeholder="123-456-7890">
+                        value="{{ old('phone-number', $post->phone_number ?? '') }}" placeholder="123-456-7890">
                 </div>
 
 

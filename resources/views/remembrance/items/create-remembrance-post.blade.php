@@ -100,7 +100,7 @@
 
 
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <form action="{{ route('public-notice.submit') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('remembrance.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
 
@@ -108,7 +108,8 @@
 
                 <!-- Title -->
                 <div class="mb-6">
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">The Name of the Deceased
+                        *</label>
                     <input type="text" id="title" name="title"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         value="{{ old('title', $post->title ?? '') }}" required>
@@ -126,7 +127,7 @@
 
                 <!-- Featured Image -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Featured Image *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">The Image of the person *</label>
                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">
                             <div class="flex text-sm text-gray-600">
@@ -154,11 +155,37 @@
 
                 <!-- Content -->
                 <div class="mb-6">
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Content *</label>
+                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Achievement or Information to
+                        share about the person *</label>
                     <textarea id="editor" rows="10" name="content" class="w-full" required>{{ old('content', $post->content ?? '') }}</textarea>
 
                 </div>
 
+
+                <!-- Age -->
+                <div class="mb-6">
+                    <label for="age" class="block text-sm font-medium text-gray-900 mb-2">Aged *</label>
+                    <input type="number" id="age" name="age"
+                        class="w-full bg-white text-gray-900 border border-gray-300 rounded-md p-2"
+                        value="{{ old('age', $post->age ?? '') }}" required />
+                </div>
+
+                <!-- Date of Birth -->
+                <div class="mb-6">
+                    <label for="date_of_birth" class="block text-sm font-medium text-gray-900 mb-2">Date of Birth *</label>
+                    <input type="date" id="date_of_birth" name="date_of_birth"
+                        class="w-full bg-white text-gray-900 border border-gray-300 rounded-md p-2"
+                        value="{{ old('date_of_birth', $post->date_of_birth ?? '') }}" required />
+                </div>
+
+                <!-- Years of Remembrance -->
+                <div class="mb-6">
+                    <label for="year" class="block text-sm font-medium text-gray-900 mb-2">How many years
+                        remembrance?</label>
+                    <input type="number" id="year" name="year"
+                        class="w-full bg-white text-gray-900 border border-gray-300 rounded-md p-2"
+                        value="{{ old('year', $post->year ?? '') }}" required />
+                </div>
 
                 <!-- Publishing Options (Admin Only) -->
                 <div class="grid grid-cols-1 md:grid-cols-1 gap-6">

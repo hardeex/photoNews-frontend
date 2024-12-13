@@ -100,7 +100,7 @@
 
 
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <form action="{{ route('public-notice.submit') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('obituary.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
 
@@ -108,7 +108,7 @@
 
                 <!-- Title -->
                 <div class="mb-6">
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Name of the Missing Person
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Name of the Deceased
                         *</label>
                     <input type="text" id="title" name="title"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -155,7 +155,7 @@
 
                 <!-- Content -->
                 <div class="mb-6">
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">More Information or Details
+                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2"> Information or Details
                         *</label>
                     <textarea id="editor" rows="10" name="content" class="w-full" required>{{ old('content', $post->content ?? '') }}</textarea>
 
@@ -177,48 +177,19 @@
 
                 <!-- Age -->
                 <div class="mb-6">
-                    <label for="age" class="block text-sm font-medium text-gray-900 mb-2">Age *</label>
+                    <label for="age" class="block text-sm font-medium text-gray-900 mb-2">Aged *</label>
                     <input type="number" id="age" name="age"
                         class="w-full bg-white text-gray-900 border border-gray-300 rounded-md p-2"
                         value="{{ old('age', $post->age ?? '') }}" required />
                 </div>
 
-                <!-- Height -->
+                <!-- Date of Birth -->
                 <div class="mb-6">
-                    <label for="height" class="block text-sm font-medium text-gray-900 mb-2">Height *</label>
-                    <input type="text" id="height" name="height"
+                    <label for="date_of_birth" class="block text-sm font-medium text-gray-900 mb-2">Date of Birth *</label>
+                    <input type="date" id="date_of_birth" name="date_of_birth"
                         class="w-full bg-white text-gray-900 border border-gray-300 rounded-md p-2"
-                        value="{{ old('height', $post->height ?? '') }}" required />
+                        value="{{ old('date_of_birth', $post->date_of_birth ?? '') }}" required />
                 </div>
-
-                <!-- Skin Color -->
-                <div class="mb-6">
-                    <label for="skin_color" class="block text-sm font-medium text-gray-900 mb-2">Skin Color *</label>
-                    <select id="skin_color" name="skin_color"
-                        class="w-full bg-white text-gray-900 border border-gray-300 rounded-md p-2" required>
-                        <option value="light"
-                            {{ old('skin_color', $post->skin_color ?? '') == 'light' ? 'selected' : '' }}>Light</option>
-                        <option value="medium"
-                            {{ old('skin_color', $post->skin_color ?? '') == 'medium' ? 'selected' : '' }}>Medium</option>
-                        <option value="dark"
-                            {{ old('skin_color', $post->skin_color ?? '') == 'dark' ? 'selected' : '' }}>Dark</option>
-                        <option value="other"
-                            {{ old('skin_color', $post->skin_color ?? '') == 'other' ? 'selected' : '' }}>Other</option>
-                    </select>
-                </div>
-
-
-
-                <!-- Contact of the owner -->
-                <div class="mb-6">
-                    <label for="phone-number" class="block text-sm font-medium text-gray-700 mb-2">Whom to contact when
-                        found? *</label>
-                    <input type="tel" id="phone-number" name="phone-number"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                        value="{{ old('phone-number', $post->phone_number ?? '') }}" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                        placeholder="123-456-7890">
-                </div>
-
 
 
 

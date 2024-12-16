@@ -231,6 +231,14 @@
                                 <label for="is_breaking" class="ml-2 text-sm text-gray-700">Breaking News</label>
                             </div>
 
+
+                            <div class="flex items-center mr-4">
+                                <input type="checkbox" id="caveat" name="caveat"
+                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                    value="1" {{ old('caveat') ? 'checked' : '' }}>
+                                <label for="caveat" class="ml-2 text-sm text-gray-700">Caveat</label>
+                            </div>
+
                             <div class="flex items-center mr-4">
                                 <input type="checkbox" id="hot_gist" name="hot_gist"
                                     class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"

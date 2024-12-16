@@ -270,95 +270,39 @@
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold mb-6">Public Notice</h1>
 
+        <!-- Grid Container with Responsive Columns -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Notice 1 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="/images/news-image.jpeg" alt="Car for sale" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-xl font-semibold mb-2">Car for sale</h2>
-                    <p class="text-gray-600 mb-4">VOX 340 G4 for sale. White covet with shield properties and V6
-                        enabled...</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-500">Aug 25 2024</span>
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-1" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path
-                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                            </svg>
-                            <span class="text-sm text-gray-500">123</span>
+            <!-- Loop through each public notice and display them in a grid item -->
+            @foreach ($publicNotice as $notice)
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <!-- Notice Image -->
+                    <img src="{{ $notice['featured_image'] }}" alt="{{ $notice['title'] }}"
+                        class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <!-- Notice Title -->
+                        <h2 class="text-xl font-semibold mb-2">{{ $notice['title'] }}</h2>
+                        <!-- Notice Content (truncated to 150 characters) -->
+                        <p class="text-gray-600 mb-4">{{ \Illuminate\Support\Str::limit($notice['content'], 150) }}</p>
+                        <!-- Notice Meta Data (Created Date and Comments) -->
+                        <div class="flex items-center justify-between">
+                            <span
+                                class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($notice['created_at'])->format('M d, Y') }}</span>
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-1"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path
+                                        d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                </svg>
+                                <span
+                                    class="text-sm text-gray-500">{{ $notice['allow_comments'] ? 'Open' : 'Closed' }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Notice 2 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://via.placeholder.com/400x200?text=NUC+release+memo" alt="NUC release memo"
-                    class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-xl font-semibold mb-2">NUC release memo on strike</h2>
-                    <p class="text-gray-600 mb-4">VOX 340 G4 for sale. White covet with shield properties and V6
-                        enabled...</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-500">Aug 25 2024</span>
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-1"
-                                viewBox="0 0 20 20" fill="currentColor">
-                                <path
-                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                            </svg>
-                            <span class="text-sm text-gray-500">20</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Notice 3 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://via.placeholder.com/400x200?text=John+James" alt="John James"
-                    class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-xl font-semibold mb-2">John James has escaped from Prison</h2>
-                    <p class="text-gray-600 mb-4">The Long contained lunatic - Joh james that was arrested on the
-                        5th day of Ju...</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-500">Aug 25 2024</span>
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-1"
-                                viewBox="0 0 20 20" fill="currentColor">
-                                <path
-                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                            </svg>
-                            <span class="text-sm text-gray-500">20</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Notice 4 -->
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://via.placeholder.com/400x200?text=Maryland+bridge" alt="Maryland bridge"
-                    class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-xl font-semibold mb-2">Maryland bridge is under construction</h2>
-                    <p class="text-gray-600 mb-4">VOX 340 G4 for sale. White covet with shield properties and V6
-                        enabled...</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-500">Aug 25 2024</span>
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-1"
-                                viewBox="0 0 20 20" fill="currentColor">
-                                <path
-                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                            </svg>
-                            <span class="text-sm text-gray-500">20</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
 
+        <!-- See More Button -->
         <div class="mt-8 text-center">
             <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
                 See more
@@ -548,7 +492,7 @@
     <section class="max-w-6xl mx-auto px-4 py-8">
         <h2 class="text-2xl font-bold mb-6">Caveat</h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {{-- <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             @foreach ([1, 2, 3, 4] as $index)
                 <div class="bg-white shadow-md rounded-lg overflow-hidden">
                     <img src="/images/news-image.jpeg" alt="News Image {{ $index }}"
@@ -574,6 +518,54 @@
                     </div>
                 </div>
             @endforeach
+        </div> --}}
+
+
+        <div class="overflow-x-auto pb-4">
+            <div class="flex space-x-4 min-w-max">
+                @if (count($caveatPostsData) > 0)
+                    @foreach ($caveatPostsData as $post)
+                        <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
+                            class="hover:text-blue-600 transition-colors w-full">
+                            <div class="w-64 flex-shrink-0">
+                                {{-- <img src="/images/news-image.jpeg" alt="Event Image"
+                            class="w-full h-40 object-cover mb-2 rounded"> --}}
+                                @if ($post['featured_image'])
+                                    <img src="{{ $post['featured_image'] }}"
+                                        alt="{{ ucwords(strtolower($post['title'])) }}"
+                                        class="w-full h-40 object-cover mb-2 rounded">
+                                @else
+                                    <img src="https://picsum.photos/seed/news/1200/600"
+                                        alt="{{ ucwords(strtolower($post['title'])) }}"
+                                        class="w-full h-40 object-cover mb-2 rounded">
+                                @endif
+                                <h3 class="text-sm font-semibold">
+                                    {{ $post['title'] ?? 'Untitled' }}
+                                </h3>
+                                <div class="flex items-center text-gray-500 text-xs mt-1">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                        </path>
+                                    </svg>
+                                    <span>{{ \Carbon\Carbon::parse($post['created_at'])->diffForHumans() }}</span>
+
+                                </div>
+                                <div class="flex items-center text-gray-500 text-xs mt-1">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    <span>By {{ $post['created_by'] }}</span>
+                                </div>
+                            </div>
+                    @endforeach
+                @else
+                    <p>No Caveat news available.</p>
+                @endif
+            </div>
         </div>
 
         <div class="text-center mt-6">
@@ -757,34 +749,121 @@
 
 
 
-
-    <section class="max-w-6xl mx-auto px-4 py-8">
+    <section class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        {{-- Header Section --}}
         <div class="bg-green-500 p-2 mb-4">
-            <h2 class="text-2xl font-bold text-white">Lost but Found</h2>
+            <h2 class="text-2xl font-bold text-white">Misplaced Items &amp; Documents</h2>
         </div>
 
-        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
-            <p class="text-sm">Disclaimer: You would be proved to confirm your ownership of this item. So for your
-                best interest, please come with a prove of ownership</p>
-        </div>
+        {{-- Main Content Container --}}
+        <div class="container mx-auto">
+            {{-- Grid of Lost and Found Posts --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                @forelse ($lostAndFoundPostData['lostAndFoundPostsData'] as $post)
+                    <div
+                        class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
+                        {{-- Post Image --}}
+                        <a href="{{ url('/posts/' . $post['slug']) }}" class="block">
+                            <div class="relative">
+                                <img src="{{ $post['featured_image'] }}" alt="{{ $post['title'] }}"
+                                    class="w-full h-48 object-cover transition duration-300 transform hover:opacity-75">
+                                <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-2">
+                                    <h3 class="text-white text-lg font-semibold truncate">
+                                        {{ $post['title'] }}
+                                    </h3>
+                                </div>
+                            </div>
+                        </a>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-            @foreach (range(1, 4) as $index)
-                <div class="bg-gray-200 p-2 rounded">
-                    <img src="/images/news-image.jpeg" alt="Rolex wristwatch" class="w-full h-40 object-cover mb-2">
-                    <p class="text-sm font-semibold bg-black bg-opacity-50 text-white p-1">Name of Item: Rolex
-                        wristwatch</p>
+                        {{-- Post Details --}}
+                        <div class="p-4">
+                            {{-- Meta Description --}}
+                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">
+                                {{ $post['meta_description'] }}
+                            </p>
+
+                            {{-- Contact Information --}}
+                            <div class="flex items-center mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2"
+                                    viewBox="0 0 20 20" fill="currentColor">
+                                    <path
+                                        d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                                </svg>
+                                <a href="tel:{{ $post['phone_number'] }}"
+                                    class="text-blue-600 hover:text-blue-800 text-sm">
+                                    {{ $post['phone_number'] }}
+                                </a>
+                            </div>
+
+                            {{-- Post Date --}}
+                            <div class="text-xs text-gray-500 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-400" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                Posted on: {{ \Carbon\Carbon::parse($post['created_at'])->format('F j, Y') }}
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-span-full text-center py-10">
+                        <p class="text-gray-500 text-xl">No lost and found items at the moment.</p>
+                    </div>
+                @endforelse
+            </div>
+
+            {{-- Pagination Section --}}
+            @if (
+                !empty($lostAndFoundPostData['pagination']) &&
+                    $lostAndFoundPostData['pagination']['total'] > $lostAndFoundPostData['pagination']['per_page']
+            )
+                <div class="mt-8 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                    {{-- Page Info --}}
+                    <span class="text-sm text-gray-600">
+                        Page {{ $lostAndFoundPostData['pagination']['current_page'] }}
+                        of {{ $lostAndFoundPostData['pagination']['last_page'] }}
+                    </span>
+
+                    {{-- Navigation Buttons --}}
+                    <div class="flex space-x-4">
+                        @if ($lostAndFoundPostData['pagination']['prev_page_url'])
+                            <a href="{{ $lostAndFoundPostData['pagination']['prev_page_url'] }}"
+                                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Previous
+                            </a>
+                        @endif
+
+                        @if ($lostAndFoundPostData['pagination']['next_page_url'])
+                            <a href="{{ $lostAndFoundPostData['pagination']['next_page_url'] }}"
+                                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 flex items-center">
+                                Next
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        @endif
+                    </div>
                 </div>
-            @endforeach
+            @endif
         </div>
 
+        {{-- See More Button --}}
         <div class="text-center">
             <a href="#"
                 class="bg-purple-600 text-white px-6 py-2 rounded-full inline-block hover:bg-purple-700 transition duration-300">See
                 more</a>
         </div>
     </section>
-
 
     <section class="w-full">
         <img src="{{ asset('/images/ad2.png') }}" alt="Advertisement" class="w-full h-auto max-h-60 object-cover">
@@ -851,7 +930,7 @@
         </div>
     </section>
 
-    <section class="max-w-6xl mx-auto px-4 py-8">
+    {{-- <section class="max-w-6xl mx-auto px-4 py-8">
         <div class="bg-gray-200 p-2 mb-4">
             <h2 class="text-2xl font-bold">Loss of Document</h2>
         </div>
@@ -881,7 +960,7 @@
     <section class="w-full">
         <img src="{{ asset('/images/ad3.jpg') }}" alt="Advertisement" class="w-full h-auto max-h-60 object-cover">
     </section>
-
+ --}}
 
 
     <section class="max-w-6xl mx-auto px-4 py-8">
@@ -1003,6 +1082,8 @@
             <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">See more</button>
         </div>
     </section>
+
+
 
 
 
@@ -1137,91 +1218,85 @@
         <img src="{{ asset('/images/ad4.jpg') }}" alt="Advertisement" class="w-full h-auto max-h-60 object-cover">
     </section>
 
-    <section>
+
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">Obituary</h2>
+        <h3 class="text-xl font-semibold mb-4 text-gray-700">In Loving Memory</h3>
 
 
-        <section class="container mx-auto px-4 py-8">
-            <h2 class="text-3xl font-bold mb-6 text-gray-800">Obituary</h2>
-            <h3 class="text-xl font-semibold mb-4 text-gray-700">In Loving Memory</h3>
+        {{-- <pre>{{ print_r($listObituaryPostsData['obituaryPostsData'], true) }}</pre> --}}
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                <!-- Obituary 1 -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <img src="/images/news-image.jpeg" alt="John Obiama" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="font-semibold text-lg mb-2">JOHN OBIAMA</h4>
-                        <div class="text-sm text-gray-600">
-                            <p>Sex: M</p>
-                            <p>Age: 26</p>
-                            <p>DOB: 12-09-95</p>
-                            <p>DOD: 31-12-23</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            @forelse ($listObituaryPostsData['obituaryPostsData'] as $post)
+                <div class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col">
+                    <a href="{{ url('/posts/' . $post['slug']) }}" class="block">
+                        <img src="{{ $post['featured_image'] }}" alt="{{ $post['title'] }}"
+                            class="w-full h-48 object-cover transition-transform duration-300 hover:scale-105">
+                        <div class="p-4 flex-grow">
+                            <h4 class="font-semibold text-lg mb-2 truncate">{{ $post['title'] }}</h4>
+                            <div class="text-sm text-gray-600 space-y-1">
+                                <p>Sex: {{ ucfirst($post['gender'] ?? 'Not specified') }}</p>
+                                <p>Age: {{ $post['age'] ?? 'Not specified' }}</p>
+                                <p>DOB: {{ $post['date_of_birth'] ?? 'Not specified' }}</p>
+                                <p>DOD: {{ $post['date_of_death'] ?? 'Not Available' }}</p>
+                            </div>
                         </div>
-                        <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-                            Send Condolence
-                        </button>
+                    </a>
+                    <div class="p-4 pt-0 mt-auto">
+                        <div class="flex flex-col space-y-2">
+                            <a href="{{ url('/posts/' . $post['slug'] . '/condolence') }}"
+                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded text-center transition duration-300">
+                                Send Condolence
+                            </a>
+                            <span class="text-xs text-gray-500 text-center">
+                                Posted on: {{ \Carbon\Carbon::parse($post['created_at'])->format('F j, Y') }}
+                            </span>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Obituary 2 -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <img src="/images/news-image.jpeg" alt="John Obiama" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="font-semibold text-lg mb-2">JOHN OBIAMA</h4>
-                        <div class="text-sm text-gray-600">
-                            <p>Sex: M</p>
-                            <p>Age: 26</p>
-                            <p>DOB: 12-09-95</p>
-                            <p>DOD: 31-12-23</p>
-                        </div>
-                        <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-                            Send Condolence
-                        </button>
-                    </div>
+            @empty
+                <div class="col-span-full text-center text-gray-600 py-8">
+                    <p>No obituary posts found.</p>
                 </div>
+            @endforelse
+        </div>
 
-                <!-- Obituary 3 -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <img src="/images/news-image.jpeg" alt="John Obiama" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="font-semibold text-lg mb-2">JOHN OBIAMA</h4>
-                        <div class="text-sm text-gray-600">
-                            <p>Sex: M</p>
-                            <p>Age: 26</p>
-                            <p>DOB: 12-09-95</p>
-                            <p>DOD: 31-12-23</p>
-                        </div>
-                        <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-                            Send Condolence
-                        </button>
-                    </div>
-                </div>
+        <!-- Pagination -->
+        @if (
+            !empty($obituaryPostData['pagination']) &&
+                $obituaryPostData['pagination']['total'] > $obituaryPostData['pagination']['per_page']
+        )
+            <div class="mt-8 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                <span class="text-sm text-gray-500">
+                    Page {{ $obituaryPostData['pagination']['current_page'] }} of
+                    {{ $obituaryPostData['pagination']['last_page'] }}
+                </span>
 
-                <!-- Obituary 4 -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <img src="/images/news-image.jpeg" alt="John Obiama" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="font-semibold text-lg mb-2">JOHN OBIAMA</h4>
-                        <div class="text-sm text-gray-600">
-                            <p>Sex: M</p>
-                            <p>Age: 26</p>
-                            <p>DOB: 12-09-95</p>
-                            <p>DOD: 31-12-23</p>
-                        </div>
-                        <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-                            Send Condolence
-                        </button>
-                    </div>
+                <div class="flex space-x-2">
+                    @if ($obituaryPostData['pagination']['prev_page_url'])
+                        <a href="{{ $obituaryPostData['pagination']['prev_page_url'] }}"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
+                            Previous
+                        </a>
+                    @endif
+                    @if ($obituaryPostData['pagination']['next_page_url'])
+                        <a href="{{ $obituaryPostData['pagination']['next_page_url'] }}"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300">
+                            Next
+                        </a>
+                    @endif
                 </div>
             </div>
+        @endif
 
-            <div class="text-center mt-8">
-                <button class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-6 rounded-full">
-                    See more
-                </button>
-            </div>
-        </section>
+        <div class="text-center mt-8">
+            <button
+                class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300">
+                See more
+            </button>
+        </div>
     </section>
-
 
 
     <section class="container mx-auto px-4 py-8 bg-no-repeat bg-cover"
@@ -1975,7 +2050,8 @@
                             class="hover:text-blue-600 transition-colors w-full flex items-start space-x-4">
                             {{-- Image --}}
                             @if ($post['featured_image'])
-                                <img src="{{ $post['featured_image'] }}" alt="{{ ucwords(strtolower($post['title'])) }}"
+                                <img src="{{ $post['featured_image'] }}"
+                                    alt="{{ ucwords(strtolower($post['title'])) }}"
                                     class="w-24 h-24 object-cover rounded-md">
                             @else
                                 <img src="https://picsum.photos/seed/news/1200/600"

@@ -132,6 +132,9 @@ class UserController extends Controller
         // Fetch the posts that are approved and event is true
         $eventsPostsData = $this->listEventsPosts();
 
+        // fetch caveat posts
+        $caveatPostsData = $this->listCaveatPosts();
+
 
         // Fetch the approved music posts
         $musicPostsData = $this->listApprovedMusicPosts();
@@ -149,6 +152,15 @@ class UserController extends Controller
         // fetch the categories
         $categories = $this->listCategories($request);
 
+        // public notice
+        $publicNotice = $this->listPublicNoticePosts();
+
+        // lost and found
+        $lostAndFoundPostData = $this->listLostAndFoundPostData();
+
+        // list obituary posts
+        $listObituaryPostsData = $this->listObituaryPosts();
+
         // Pass both sets of posts data to the view
         return view('welcome', compact(
             'postsData',
@@ -161,6 +173,10 @@ class UserController extends Controller
             'eventsPostsData',
             'categories',
             'topTopicPostsData',
+            'publicNotice',
+            'caveatPostsData',
+            'lostAndFoundPostData',
+            'listObituaryPostsData'
         ));
     }
 
@@ -389,6 +405,43 @@ class UserController extends Controller
     }
 
 
+    private function listCaveatPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching Caveat approved posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/caveat';
+        Log::info('API URL for approved Caveat posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch the approved posts with 'caveat' = true
+            $response = Http::get($apiUrl, [
+                'per_page' => 10,
+                'event' => true,
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract posts data and pagination info
+                $caveatPostsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                // print_r($eventsPostsData);
+                // exit();
+                //Return the data
+                return $caveatPostsData;
+            } else {
+                Log::error('Error fetching approved Events posts: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching approved Events posts: ' . $e->getMessage());
+            return [];
+        }
+    }
+
     private function listTopTopicPosts()
     {
         // Log for debugging
@@ -427,7 +480,50 @@ class UserController extends Controller
     }
 
 
+    private function listPublicNoticePosts()
+    {
+        // Log for debugging
+        Log::info('Fetching public notice posts...');
 
+        $apiUrl = config('api.base_url') . '/public-notice'; // Adjust the URL to match the endpoint
+        Log::info('API URL for Public Notice Posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch published posts
+            $response = Http::get($apiUrl, [
+                'per_page' => 6,    // Limit the result to 6 posts per page
+                'status' => 'published',
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract the posts data
+                $publicNoticePosts = $responseData['posts']['data'] ?? [];
+
+                // If there are posts, log the result
+                if (!empty($publicNoticePosts)) {
+                    Log::info('Public notices fetched successfully', [
+                        'post_count' => count($publicNoticePosts)
+                    ]);
+                }
+
+                // print_r($publicNoticePosts);
+                // exit();
+                // Return the public notice posts
+                return $publicNoticePosts;
+            } else {
+                // If the API call failed
+                Log::error('Error fetching public notice: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            // Catch any exceptions
+            Log::error('Error fetching public notice: ' . $e->getMessage());
+            return [];
+        }
+    }
 
 
 
@@ -709,6 +805,116 @@ class UserController extends Controller
 
             // Handle the error by returning an empty array or null
             return null;
+        }
+    }
+
+
+
+    private function listLostAndFoundPostData()
+    {
+        // Log for debugging
+        Log::info('Fetching Lost and Found published posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/lost-and-found';
+        Log::info('API URL for Lost and Found published posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to the  endpoint to fetch the posts
+            $response = Http::get($apiUrl, [
+                'per_page' => 100,
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                // Extract posts and pagination data from the response
+                $responseData = $response->json();
+
+                // Extract posts data and pagination info
+                $LostAndFoundPostsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                // print_r($LostAndFoundPostsData);
+                // exit();
+
+                // Return the data
+                return [
+                    'lostAndFoundPostsData' => $LostAndFoundPostsData,
+                    'pagination' => $pagination
+                ];
+            } else {
+                // If the response failed, handle the error
+                Log::error('Error fetching lost and found published posts: ' . $response->status());
+                return [
+                    'lostAndFoundPostsData' => [],
+                    'pagination' => []
+                ];
+            }
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the request
+            Log::error('Error fetching lost and found published posts: ' . $e->getMessage());
+            return [
+                'lostAndFoundPostsData' => [],
+                'pagination' => []
+            ];
+        }
+    }
+
+    private function listObituaryPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching Obituary published posts...');
+
+        // Construct API URL
+        $apiUrl = config('api.base_url') . '/posts/obituary';
+        Log::info('API URL for fetching obituary posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to the endpoint to fetch posts
+            $response = Http::get($apiUrl, [
+                'per_page' => 100,
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                // Parse the JSON response
+                $responseData = $response->json();
+
+                // Validate the structure of the response
+                if (!isset($responseData['data']['posts'])) {
+                    Log::error('Invalid API response structure: Missing "posts" key.');
+                    return [
+                        'obituaryPostsData' => [],
+                        'pagination' => []
+                    ];
+                }
+
+                // Extract posts data and pagination info
+                $obituaryPostsData = $responseData['data']['posts'];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                // print_r($obituaryPostsData);
+                // exit();
+
+                // Return the data
+                return [
+                    'obituaryPostsData' => $obituaryPostsData,
+                    'pagination' => $pagination
+                ];
+            } else {
+                // Log the HTTP status code for failed responses
+                Log::error('Error fetching obituary posts: HTTP Status ' . $response->status());
+                return [
+                    'obituaryPostsData' => [],
+                    'pagination' => []
+                ];
+            }
+        } catch (\Exception $e) {
+            // Log any exceptions that occur
+            Log::error('Exception fetching obituary posts: ' . $e->getMessage());
+            return [
+                'obituaryPostsData' => [],
+                'pagination' => []
+            ];
         }
     }
 

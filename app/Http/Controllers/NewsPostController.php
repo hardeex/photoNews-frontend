@@ -835,6 +835,7 @@ class NewsPostController extends Controller
             'event' => 'nullable|boolean',
             'top_topic' => 'nullable|boolean',
             'hot_gist' => 'nullable|boolean',
+            'caveat' => 'nullable|boolean',
 
 
             // Categories and Tags
@@ -879,6 +880,7 @@ class NewsPostController extends Controller
             'event' => $validated['event'] ?? false,
             'top_topic' => $validated['top_topic'] ?? false,
             'hot_gist' => $validated['hot_gist'] ?? false,
+            'caveat' => $validated['caveat'] ?? false,
 
             // Categories and Tags
             // 'tags' => $validated['tags'] ?? [],
@@ -886,7 +888,7 @@ class NewsPostController extends Controller
         ];
 
 
-        print_r($formData);
+        // print_r($formData);
         // exit();
 
         Log::info('Request Payload:', $validated);  // Before sending to the API
@@ -896,35 +898,6 @@ class NewsPostController extends Controller
         Log::info('Connecting to API URL for post creation', [
             'api_url' => $apiUrl,
         ]);
-
-        // // Prepare the form data
-        // $formData = [
-        //     'title' => $validated['title'],
-        //     'slug' => $validated['slug'],
-        //     'content' => $validated['content'],
-        //     'is_featured' => $validated['is_featured'] ?? false,
-        //     'is_draft' => $validated['is_draft'] ?? false,
-        //     'is_scheduled' => $validated['is_scheduled'] ?? false,
-        //     'scheduled_time' => $validated['scheduled_time'] ?? null,
-        //     'allow_comments' => $validated['allow_comments'] ?? true,
-        //     'meta_title' => $validated['meta_title'] ?? null,
-        //     'meta_description' => $validated['meta_description'] ?? null,
-        //     'review_feedback' => $validated['review_feedback'] ?? null,
-
-        //     // added fields
-
-
-        //     'is_breaking' => $validated['is_breaking'] ?? false,
-        //     'event' => $validated['event'] ?? false,
-        //     'top_topic' => $validated['top_topic'] ?? false,
-        //     'hot_gist' => $validated['hot_gist'] ?? false,
-
-        //     // Categories and Tags
-        //     'tags' => $validated['tags'] ?? [],
-        //     'categories' => $validated['categories'] ?? [],
-        // ];
-
-
 
         // Prepare file upload if image exists
         try {

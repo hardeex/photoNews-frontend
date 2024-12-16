@@ -49,7 +49,7 @@ class ObituaryController extends Controller
 
         // API URL for submission
         $apiUrl = config('api.base_url') . '/submit/obituary';
-        Log::info('Connecting to API URL for missing person creation', [
+        Log::info('Connecting to API URL for obituary creation', [
             'api_url' => $apiUrl,
         ]);
 
@@ -89,11 +89,11 @@ class ObituaryController extends Controller
 
             // Log the response and handle the outcome
             if ($response->successful()) {
-                Log::info('Missing person post successfully created through external API', [
+                Log::info('Obituary post successfully created through external API', [
                     'response_data' => $response->json(),
                 ]);
 
-                return redirect()->back()->with('success', 'Missing person post created successfully!');
+                return redirect()->back()->with('success', 'Obituary post created successfully!');
             } else {
                 Log::error('Error returned from external API', [
                     'status_code' => $response->status(),
@@ -106,7 +106,7 @@ class ObituaryController extends Controller
                 'exception_message' => $e->getMessage(),
                 'exception_trace' => $e->getTraceAsString(),
             ]);
-            return back()->withErrors(['error' => 'An error occurred while submitting the missing person post.']);
+            return back()->withErrors(['error' => 'An error occurred while submitting the Obituary post.']);
         }
     }
 }

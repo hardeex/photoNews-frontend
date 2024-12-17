@@ -1004,47 +1004,66 @@
     </section>
 
 
-    <section class="max-w-6xl mx-auto px-4 py-8">
-        <div class="bg-gray-200 p-2 mb-4">
-            <h2 class="text-2xl font-bold">Missing Person</h2>
-        </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-            @foreach (range(1, 4) as $index)
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <img src="/images/news-image.jpeg" alt="Missing Person {{ $index }}"
-                        class="w-full h-48 object-cover">
-                    <div class="p-3">
-                        <table class="w-full text-sm">
-                            <tr>
-                                <td class="font-semibold">Name:</td>
-                                <td>JOHN OBIAMA</td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold">Sex:</td>
-                                <td>M</td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold">Age:</td>
-                                <td>26</td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold">Height:</td>
-                                <td>6.02"</td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold">Tone:</td>
-                                <td>Black</td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold">Call:</td>
-                                <td>08025384758</td>
-                            </tr>
-                        </table>
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        @if (!empty($missingPostsData['posts']))
+            <div class="bg-gray-200 p-2 mb-4">
+                <h2 class="text-2xl font-bold">Missing Person</h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                @foreach ($missingPostsData['posts'] as $post)
+                    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                        <img src="{{ $post['featured_image'] }}" alt="{{ $post['title'] }}"
+                            class="w-full h-48 object-cover">
+                        <div class="p-3">
+                            <table class="w-full text-sm">
+                                <tr>
+                                    <td class="font-semibold">Name:</td>
+                                    <td>{{ $post['title'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold">Sex:</td>
+                                    <td>{{ $post['gender'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold">Age:</td>
+                                    <td>{{ $post['age'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold">Height:</td>
+                                    <td>{{ $post['height'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold">Skin Color:</td>
+                                    <td>{{ $post['skin_color'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold">Call:</td>
+                                    <td>{{ $post['phone_number'] }}</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
+                @endforeach
+            </div>
+            <!-- Pagination for Missing Posts -->
+            @if (!empty($missingPostsData['pagination']))
+                <div>
+                    <!-- Render pagination links (if any) for Missing posts -->
+                    <nav>
+                        <ul class="pagination">
+                            @if ($missingPostsData['pagination']['prev_page_url'])
+                                <li><a href="{{ $missingPostsData['pagination']['prev_page_url'] }}">Previous</a></li>
+                            @endif
+                            @if ($missingPostsData['pagination']['next_page_url'])
+                                <li><a href="{{ $missingPostsData['pagination']['next_page_url'] }}">Next</a></li>
+                            @endif
+                        </ul>
+                    </nav>
                 </div>
-            @endforeach
-        </div>
+            @endif
+        @endif
 
         <div class="text-center">
             <a href="#"
@@ -1053,34 +1072,55 @@
         </div>
     </section>
 
-    <section class="max-w-6xl mx-auto px-4 py-8">
-        <div class="bg-white p-4">
-            <h1 class="text-3xl font-bold mb-4">Wanted Person</h1>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                @for ($i = 0; $i < 4; $i++)
-                    <div class="border border-gray-200 rounded-lg overflow-hidden">
-                        <div class="relative">
-                            <img src="/images/news-image.jpeg" alt="Bridge" class="w-full h-40 object-cover">
-                            <span
-                                class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">DANGEROUS</span>
-                        </div>
-                        <div class="p-4">
-                            <h2 class="font-bold mb-2">Name: JOHN OBIAMA</h2>
-                            <p class="text-sm mb-1">Sex: M &nbsp;&nbsp;&nbsp; Age: 26</p>
-                            <p class="text-sm mb-1">Height: 6.02' &nbsp;&nbsp;&nbsp; Tone: Black</p>
-                            <p class="text-sm mb-1">Bounty: ${{ number_format(450000 + $i * 250000, 0) }}</p>
-                            <p class="text-sm mb-2">More info:</p>
-                            <p class="text-xs mb-4">This is a master of disguise and can be really unpredictable
-                                and very dangerous person! Beware!</p>
-                            <div class="bg-red-500 text-white text-center py-2 font-bold">
-                                DON'T RELATE WITH, CALL 911 IMMEDIATELY
+    <!-- Wanted Posts Section -->
+    @if (!empty($wantedPostsData['posts']))
+        <section class="max-w-6xl mx-auto px-4 py-8">
+            <div class="bg-white p-4">
+                <h1 class="text-3xl font-bold mb-4">Wanted Person</h1>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    @foreach ($wantedPostsData['posts'] as $post)
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <div class="relative">
+                                <img src="{{ $post['featured_image'] }}" alt="{{ $post['title'] }}"
+                                    class="w-full h-40 object-cover">
+                                <span
+                                    class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">DANGEROUS</span>
+                            </div>
+                            <div class="p-4">
+                                <h2 class="font-bold mb-2">Name: {{ $post['title'] }}</h2>
+                                <p class="text-sm mb-1">Sex: M &nbsp;&nbsp;&nbsp; Age: {{ $post['age'] }}</p>
+                                <p class="text-sm mb-1">Height: {{ $post['height'] }} &nbsp;&nbsp;&nbsp; Tone:
+                                    {{ $post['skin_color'] }}</p>
+                                {{-- <p class="text-sm mb-1">Bounty: ${{ number_format(450000 + $i * 250000, 0) }}</p> --}}
+                                <p class="text-sm mb-2">More info:</p>
+                                <p class="text-xs mb-4">{{ $post['meta_description'] }}</p>
+                                <div class="bg-red-500 text-white text-center py-2 font-bold">
+                                    DON'T RELATE WITH, CALL {{ $post['phone_number'] }} IMMEDIATELY
+                                </div>
                             </div>
                         </div>
+                    @endforeach
+                </div>
+
+                <!-- Pagination for Wanted Posts -->
+                @if (!empty($wantedPostsData['pagination']))
+                    <div>
+                        <!-- Render pagination links (if any) for Wanted posts -->
+                        <nav>
+                            <ul class="pagination">
+                                @if ($wantedPostsData['pagination']['prev_page_url'])
+                                    <li><a href="{{ $wantedPostsData['pagination']['prev_page_url'] }}">Previous</a></li>
+                                @endif
+                                @if ($wantedPostsData['pagination']['next_page_url'])
+                                    <li><a href="{{ $wantedPostsData['pagination']['next_page_url'] }}">Next</a></li>
+                                @endif
+                            </ul>
+                        </nav>
                     </div>
-                @endfor
-            </div>
-            <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">See more</button>
-        </div>
+                @endif
+    @endif
+    <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">See more</button>
+    </div>
     </section>
 
 
@@ -1299,6 +1339,8 @@
     </section>
 
 
+
+
     <section class="container mx-auto px-4 py-8 bg-no-repeat bg-cover"
         style="background-image: url('/images/gradient.jpeg');">
         <div class="bg-gradient rounded-lg shadow-lg overflow-hidden">
@@ -1320,42 +1362,61 @@
     </section>
 
 
-    <section class="bg-white p-4">
-        <h2 class="text-2xl font-bold mb-4 bg-gray-200 p-2">Remembrance</h2>
+    @if (!empty($listRemembrancePostsData['remembrancePostsData']))
+        <section class="bg-white p-4">
+            <h2 class="text-2xl font-bold mb-4 bg-gray-200 p-2">Remembrance</h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            @for ($i = 0; $i < 4; $i++)
-                <div class="border border-gray-200 rounded-lg overflow-hidden">
-                    <div class="relative">
-                        <img src="/images/news-image.jpeg" alt="Remembrance Image" class="w-full h-48 object-cover">
-                        <span class="absolute top-2 right-2 bg-white rounded-full p-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                @foreach ($listRemembrancePostsData['remembrancePostsData'] as $post)
+                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <div class="relative">
+                            <img src="{{ $post['featured_image'] }}" alt="{{ $post['title'] }}"
+                                class="w-full h-48 object-cover">
+                            <span class="absolute top-2 right-2 bg-white rounded-full p-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" viewBox="0 0 20 20"
+                                    fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="p-4">
+                            <p class="font-semibold">Name: {{ $post['title'] }}</p>
+                            <p>Aged: {{ $post['age'] }}</p>
+                            <p>Year: {{ $post['year'] }} year{{ $post['year'] !== 1 ? 's' : '' }} Remembrance</p>
+                            <button class="mt-2 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition">
+                                {{ $loop->index % 2 == 0 ? 'Extend Regards' : 'Send Regards' }}
+                            </button>
+                        </div>
                     </div>
-                    <div class="p-4">
-                        <p class="font-semibold">Name: MR AND MRS AMAO ADAMS</p>
-                        <p>Date: 12-Mar</p>
-                        <p>Address:</p>
-                        <p>Year: 2nd year</p>
-                        <button class="mt-2 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition">
-                            {{ $i % 2 == 0 ? 'Extend Regards' : 'Send Regards' }}
-                        </button>
-                    </div>
-                </div>
-            @endfor
-        </div>
+                @endforeach
+            </div>
 
-        <div class="mt-6 text-center">
-            <button class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 transition">
-                See more
-            </button>
-        </div>
-    </section>
+            <!-- Pagination -->
+            <div class="mt-4 flex justify-between items-center">
+                @if ($listRemembrancePostsData['pagination']['prev_page_url'])
+                    <a href="{{ $listRemembrancePostsData['pagination']['prev_page_url'] }}"
+                        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 transition">Previous</a>
+                @endif
+
+                <span>Page {{ $listRemembrancePostsData['pagination']['current_page'] }} of
+                    {{ $listRemembrancePostsData['pagination']['last_page'] }}</span>
+
+                @if ($listRemembrancePostsData['pagination']['next_page_url'])
+                    <a href="{{ $listRemembrancePostsData['pagination']['next_page_url'] }}"
+                        class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 transition">Next</a>
+                @endif
+            </div>
+
+            <div class="mt-6 text-center">
+                <button class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 transition">
+                    See more
+                </button>
+            </div>
+        </section>
+    @endif
+
 
 
     <section class="bg-white p-4">
@@ -1412,18 +1473,64 @@
     </section>
 
 
+
     <section class="bg-white p-4">
         <h2 class="text-2xl font-bold mb-4 bg-gray-200 p-2">Change of Name</h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            @for ($i = 0; $i < 5; $i++)
-                <div class="border border-gray-300 p-4 rounded-lg">
-                    <p class="font-semibold mb-2">Name: JOHN OBIAMA</p>
-                    <p class="text-sm">I, formally John Marvin Kane, now JOHN OBIAMA. All former documents remains
-                        valid. Authority and general public take note</p>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+
+            <!-- Check if posts are available -->
+            @if (count($listChangeOfNamePostsData['changeOfNamePostsData']) > 0)
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    @foreach ($listChangeOfNamePostsData['changeOfNamePostsData'] as $post)
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <img class="w-full h-48 object-cover rounded-t-lg mb-4" src="{{ $post['featured_image'] }}"
+                                alt={{ $post['new_name'] }}>
+
+                            <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $post['old_name'] }} →
+                                {{ $post['new_name'] }}</h2>
+
+                            <div class="text-gray-600 text-sm mb-4">
+                                <p class="text-sm">I, formally {{ $post['old_name'] }}, now {{ $post['new_name'] }}.
+                                    All former documents remains
+                                    valid. Authority and general public take note</p>
+                            </div>
+
+                            <div class="text-gray-700 mb-4">
+                                {!! $post['meta_description'] !!}
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <span
+                                    class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($post['created_at'])->format('M d, Y') }}</span>
+                                @if ($post['is_featured'])
+                                    <span
+                                        class="text-xs font-bold text-blue-500 bg-blue-100 px-2 py-1 rounded-full">Featured</span>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-            @endfor
+
+                <!-- Pagination -->
+                <div class="mt-8 flex justify-between items-center">
+                    @if (isset($listChangeOfNamePostsData['pagination']['prev_page_url']))
+                        <a href="{{ $listChangeOfNamePostsData['pagination']['prev_page_url'] }}"
+                            class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Previous</a>
+                    @endif
+                    <span class="text-gray-600">Page {{ $listChangeOfNamePostsData['pagination']['current_page'] }} of
+                        {{ $listChangeOfNamePostsData['pagination']['last_page'] }}</span>
+                    @if (isset($listChangeOfNamePostsData['pagination']['next_page_url']))
+                        <a href="{{ $listChangeOfNamePostsData['pagination']['next_page_url'] }}"
+                            class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Next</a>
+                    @endif
+                </div>
+            @else
+                <p class="text-center text-lg text-gray-700">No Change of Name posts available.</p>
+            @endif
         </div>
+
 
         <div class="mt-6 text-center">
             <button class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 transition">
@@ -1432,44 +1539,58 @@
         </div>
     </section>
 
+
+
     <section class="bg-green-100 p-4">
         <h2 class="text-2xl font-bold mb-4 text-center text-green-800">PRIDE OF NIGERIA</h2>
 
         <!-- Top News Items -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
-            @foreach (['Osadebe: President Tinubu To Hold Consultation Session', 'Dismay Marathon Winners Wait In Center Of Abuja', 'Lagos State Governor Introduces New Initiative To Boost Productivity Levels', 'Nigerian Army Promises Ongoing Engagement To Maintain Security', 'Nigeria On Track Says IMF, World Bank, But By Cryptos Trade, Ease Trade'] as $index => $title)
+            @foreach ($listPrideOfNigeriaPostsData['prideOfNigeriaPostsData'] as $post)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <img src="/images/news-image.jpeg" alt="News Image" class="w-full h-40 object-cover">
+                    <img src="{{ $post['featured_image'] }}" alt="{{ $post['title'] }}"
+                        class="w-full h-40 object-cover">
                     <div class="p-4">
-                        <h3 class="font-semibold text-sm mb-2">{{ $title }}</h3>
-                        <p class="text-xs text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        <h3 class="font-semibold text-sm mb-2">{{ $post['title'] }}</h3>
+                        <p class="text-xs text-gray-600">
+                            {{ $post['meta_description'] }}
+                        </p>
                     </div>
                 </div>
             @endforeach
         </div>
+        <!-- Pagination -->
+        <div class="mt-8 flex justify-center">
+            @if (isset($listPrideOfNigeriaPostsData['pagination']) && $listPrideOfNigeriaPostsData['pagination']['last_page'] > 1)
+                <nav aria-label="Pagination">
+                    <ul class="flex space-x-2">
+                        @if ($listPrideOfNigeriaPostsData['pagination']['current_page'] > 1)
+                            <li>
+                                <a href="?page={{ $listPrideOfNigeriaPostsData['pagination']['current_page'] - 1 }}"
+                                    class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Previous</a>
+                            </li>
+                        @endif
 
-        <!-- Pride of Nigeria Banner -->
-        <div class="bg-green-700 text-white text-center py-2 mb-8">
-            <h3 class="text-xl font-bold">Pride of Nigeria</h3>
+                        <li>
+                            <span
+                                class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg">{{ $listPrideOfNigeriaPostsData['pagination']['current_page'] }}</span>
+                        </li>
+
+                        @if (
+                            $listPrideOfNigeriaPostsData['pagination']['current_page'] <
+                                $listPrideOfNigeriaPostsData['pagination']['last_page']
+                        )
+                            <li>
+                                <a href="?page={{ $listPrideOfNigeriaPostsData['pagination']['current_page'] + 1 }}"
+                                    class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Next</a>
+                            </li>
+                        @endif
+                    </ul>
+                </nav>
+            @endif
         </div>
 
-        <!-- Lifestyle Interview Section -->
-        <h3 class="text-xl font-semibold mb-4 text-center">11 Lifestyle interview with successful People</h3>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            @for ($i = 0; $i < 4; $i++)
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <img src="/images/news-image.jpeg" alt="Interview Image" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <p class="font-semibold mb-2">Topic: LIVING IN THE EYES OF TODAY'S MEDIA SPACE OF TODAY</p>
-                        <p>Guest: John Stones</p>
-                        <p>Date: 12-Mar</p>
-                        <p>By: John James</p>
-                    </div>
-                </div>
-            @endfor
-        </div>
 
         <div class="text-center">
             <button class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 transition">

@@ -161,6 +161,21 @@
 
                 </div>
 
+                <!-- Status -- I am sending option to the backend-->
+                <div class="mb-6">
+                    <label for="option" class="block text-sm font-medium text-gray-900 mb-2">Status *</label>
+                    <select id="option" name="option"
+                        class="w-full bg-white text-gray-900 border border-gray-300 rounded-md p-2" required>
+                        <option value="" disabled selected>Select a status</option>
+                        <option value="missing" {{ old('option', $post->option ?? '') == 'missing' ? 'selected' : '' }}>
+                            Missing</option>
+                        <option value="wanted" {{ old('option', $post->option ?? '') == 'wanted' ? 'selected' : '' }}>
+                            Wanted</option>
+                    </select>
+                </div>
+
+
+
                 <!-- Gender -->
                 <div class="mb-6">
                     <label for="gender" class="block text-sm font-medium text-gray-900 mb-2">Gender *</label>

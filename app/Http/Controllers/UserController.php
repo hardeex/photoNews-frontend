@@ -135,6 +135,10 @@ class UserController extends Controller
         // fetch caveat posts
         $caveatPostsData = $this->listCaveatPosts();
 
+        // fetch pride of nigeria posts
+        $listPrideOfNigeriaPostsData = $this->listPrideOfNigeriaPosts();
+
+
 
         // Fetch the approved music posts
         $musicPostsData = $this->listApprovedMusicPosts();
@@ -161,6 +165,19 @@ class UserController extends Controller
         // list obituary posts
         $listObituaryPostsData = $this->listObituaryPosts();
 
+        // Fetch Missing posts
+        $missingPostsData = $this->listMissingPosts($request);
+
+        // Fetch Wanted posts
+        $wantedPostsData = $this->listWantedPosts($request);
+
+
+        // Call the listPosts method to get the data
+        $listRemembrancePostsData = $this->listRemembrancePosts($request);
+
+        // fetch change of name
+        $listChangeOfNamePostsData = $this->lisChangeOfNamePosts($request);
+
         // Pass both sets of posts data to the view
         return view('welcome', compact(
             'postsData',
@@ -176,7 +193,12 @@ class UserController extends Controller
             'publicNotice',
             'caveatPostsData',
             'lostAndFoundPostData',
-            'listObituaryPostsData'
+            'listObituaryPostsData',
+            'missingPostsData',
+            'wantedPostsData',
+            'listRemembrancePostsData',
+            'listChangeOfNamePostsData',
+            'listPrideOfNigeriaPostsData'
         ));
     }
 
@@ -441,6 +463,55 @@ class UserController extends Controller
             return [];
         }
     }
+
+
+    private function listPrideOfNigeriaPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching Pride of Nigeria approved posts...');
+
+        // Construct API URL
+        $apiUrl = config('api.base_url') . '/posts/pride-of-nigeria';
+        Log::info('API URL for fetching Pride of Nigeria posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make the API call to fetch Pride of Nigeria posts with the 'event' filter and pagination
+            $response = Http::get($apiUrl, [
+                'per_page' => 10, // Set the number of posts per page
+                'event' => true,  // Assuming this filter is specific to Pride of Nigeria posts
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Validate the structure of the response to ensure 'posts' exists
+                if (!isset($responseData['data']['posts'])) {
+                    Log::error('Invalid API response structure: Missing "posts" key.');
+                    return [];
+                }
+
+                // Extract posts data and pagination info
+                $prideOfNigeriaPostsData = $responseData['data']['posts'];  // Data of Pride of Nigeria posts
+                $pagination = $responseData['data']['pagination'] ?? [];   // Pagination data
+
+                // Return the posts data
+                return [
+                    'prideOfNigeriaPostsData' => $prideOfNigeriaPostsData,
+                    'pagination' => $pagination
+                ];
+            } else {
+                // Log the error if the API request was unsuccessful
+                Log::error('Error fetching Pride of Nigeria posts: HTTP Status ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            // Catch any exceptions and log them
+            Log::error('Exception fetching Pride of Nigeria posts: ' . $e->getMessage());
+            return [];
+        }
+    }
+
 
     private function listTopTopicPosts()
     {
@@ -913,6 +984,224 @@ class UserController extends Controller
             Log::error('Exception fetching obituary posts: ' . $e->getMessage());
             return [
                 'obituaryPostsData' => [],
+                'pagination' => []
+            ];
+        }
+    }
+
+
+
+    private function listMissingPosts(Request $request)
+    {
+        // Construct API URL for missing posts
+        $apiUrl = config('api.base_url') . '/posts/missing-or-wanted';
+
+
+        Log::info('Fetching Missing published posts...', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to the endpoint to fetch missing posts, filtering by 'missing'
+            $response = Http::get($apiUrl, [
+                'option' => 'missing',  // Set filter to 'missing'
+                'per_page' => $request->get('per_page', 100),  // Pagination, default 100 per page
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Return the posts data and pagination information
+                return $responseData['data'];
+            } else {
+                Log::error('Error fetching missing posts: HTTP Status ' . $response->status());
+                return ['posts' => [], 'pagination' => []];
+            }
+        } catch (\Exception $e) {
+            Log::error('Exception fetching missing posts: ' . $e->getMessage());
+            return ['posts' => [], 'pagination' => []];
+        }
+    }
+
+
+    private function listWantedPosts(Request $request)
+    {
+        // Construct API URL for wanted posts
+        $apiUrl = config('api.base_url') . '/posts/missing-or-wanted';  // Adjust to the correct endpoint
+        Log::info('Fetching Wanted published posts...', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to the endpoint to fetch wanted posts, filtering by 'wanted'
+            $response = Http::get($apiUrl, [
+                'option' => 'wanted',  // Set filter to 'wanted'
+                'per_page' => $request->get('per_page', 100),  // Pagination, default 100 per page
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Return the posts data and pagination information
+                return $responseData['data'];
+            } else {
+                Log::error('Error fetching wanted posts: HTTP Status ' . $response->status());
+                return ['posts' => [], 'pagination' => []];
+            }
+        } catch (\Exception $e) {
+            Log::error('Exception fetching wanted posts: ' . $e->getMessage());
+            return ['posts' => [], 'pagination' => []];
+        }
+    }
+
+
+    // List Remembrance Posts with filters and pagination
+    private function listRemembrancePosts(Request $request)
+    {
+        // Log for debugging
+        Log::info('Fetching Remembrance published posts...');
+
+        // Construct API URL
+        $apiUrl = config('api.base_url') . '/posts/remembrance';
+        Log::info('API URL for fetching remembrance posts:', ['url' => $apiUrl]);
+
+        try {
+            // Prepare query parameters (pagination and filters)
+            $queryParams = [
+                'per_page' => $request->get('per_page', 10),  // Default to 10 posts per page if not provided
+            ];
+
+            // Add any additional filters to the query parameters
+            if ($request->has('is_featured')) {
+                $queryParams['is_featured'] = $request->input('is_featured');
+            }
+
+            if ($request->has('is_draft')) {
+                $queryParams['is_draft'] = $request->input('is_draft');
+            }
+
+            if ($request->has('is_scheduled')) {
+                $queryParams['is_scheduled'] = $request->input('is_scheduled');
+            }
+
+            if ($request->has('allow_comments')) {
+                $queryParams['allow_comments'] = $request->input('allow_comments');
+            }
+
+            // Make the API call to fetch the posts
+            $response = Http::get($apiUrl, $queryParams);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                // Parse the JSON response
+                $responseData = $response->json();
+
+                // Validate the structure of the response
+                if (!isset($responseData['data']['posts'])) {
+                    Log::error('Invalid API response structure: Missing "posts" key.');
+                    return [
+                        'remembrancePostsData' => [],
+                        'pagination' => []
+                    ];
+                }
+
+                // Extract the posts data and pagination info
+                $remembrancePostsData = $responseData['data']['posts'];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                // Return the data in the format expected by the frontend
+                return [
+                    'remembrancePostsData' => $remembrancePostsData,
+                    'pagination' => $pagination
+                ];
+            } else {
+                // Log the HTTP status code for failed responses
+                Log::error('Error fetching remembrance posts: HTTP Status ' . $response->status());
+                return [
+                    'remembrancePostsData' => [],
+                    'pagination' => []
+                ];
+            }
+        } catch (\Exception $e) {
+            // Log any exceptions that occur
+            Log::error('Exception fetching remembrance posts: ' . $e->getMessage());
+            return [
+                'remembrancePostsData' => [],
+                'pagination' => []
+            ];
+        }
+    }
+
+
+    private function lisChangeOfNamePosts(Request $request)
+    {
+        // Log for debugging
+        Log::info('Fetching Change of Name published posts...');
+
+        // Construct API URL
+        $apiUrl = config('api.base_url') . '/posts/change-of-name';
+        Log::info('API URL for fetching change of name posts:', ['url' => $apiUrl]);
+
+        try {
+            // Prepare query parameters (pagination and filters)
+            $queryParams = [
+                'per_page' => $request->get('per_page', 10),  // Default to 10 posts per page if not provided
+            ];
+
+            // Add any additional filters to the query parameters
+            if ($request->has('is_featured')) {
+                $queryParams['is_featured'] = $request->input('is_featured');
+            }
+
+            if ($request->has('is_draft')) {
+                $queryParams['is_draft'] = $request->input('is_draft');
+            }
+
+            if ($request->has('is_scheduled')) {
+                $queryParams['is_scheduled'] = $request->input('is_scheduled');
+            }
+
+            if ($request->has('allow_comments')) {
+                $queryParams['allow_comments'] = $request->input('allow_comments');
+            }
+
+            // Make the API call to fetch the posts
+            $response = Http::get($apiUrl, $queryParams);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                // Parse the JSON response
+                $responseData = $response->json();
+
+                // Validate the structure of the response
+                if (!isset($responseData['data']['posts'])) {
+                    Log::error('Invalid API response structure: Missing "posts" key.');
+                    return [
+                        'changeOfNamePostsData' => [],
+                        'pagination' => []
+                    ];
+                }
+
+                // Extract the posts data and pagination info
+                $changeOfNamePostsData = $responseData['data']['posts'];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                // Return the data in the format expected by the frontend
+                return [
+                    'changeOfNamePostsData' => $changeOfNamePostsData,
+                    'pagination' => $pagination
+                ];
+            } else {
+                // Log the HTTP status code for failed responses
+                Log::error('Error fetching change of name posts: HTTP Status ' . $response->status());
+                return [
+                    'changeOfNamePostsData' => [],
+                    'pagination' => []
+                ];
+            }
+        } catch (\Exception $e) {
+            // Log any exceptions that occur
+            Log::error('Exception fetching change of name posts: ' . $e->getMessage());
+            return [
+                'changeOfNamePostsData' => [],
                 'pagination' => []
             ];
         }

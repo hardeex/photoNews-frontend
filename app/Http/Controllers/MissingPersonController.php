@@ -26,6 +26,7 @@ class MissingPersonController extends Controller
             'content' => 'required',
             'featured_image' => 'nullable|image|max:2048',
             'gender' => 'required|in:male,female,other',
+            'option' => 'required|in:missing,wanted',
             'age' => 'required|integer|min:0',
             'height' => 'required|string|max:100',
             'skin_color' => 'required|in:light,medium,dark,other',
@@ -64,6 +65,7 @@ class MissingPersonController extends Controller
             'slug' => $validated['slug'],
             'content' => $validated['content'],
             'gender' => $validated['gender'],
+            'option' => $validated['option'],
             'age' => $validated['age'],
             'height' => $validated['height'],
             'skin_color' => $validated['skin_color'],
@@ -97,7 +99,7 @@ class MissingPersonController extends Controller
 
             // Log the response and handle the outcome
             if ($response->successful()) {
-                Log::info('Missing person post successfully created through external API', [
+                Log::info('Missing &amp; Wanted person post successfully created through external API', [
                     'response_data' => $response->json(),
                 ]);
 

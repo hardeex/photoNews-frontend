@@ -836,6 +836,7 @@ class NewsPostController extends Controller
             'top_topic' => 'nullable|boolean',
             'hot_gist' => 'nullable|boolean',
             'caveat' => 'nullable|boolean',
+            'pride_of_nigeria' => 'nullable|boolean',
 
 
             // Categories and Tags
@@ -881,6 +882,7 @@ class NewsPostController extends Controller
             'top_topic' => $validated['top_topic'] ?? false,
             'hot_gist' => $validated['hot_gist'] ?? false,
             'caveat' => $validated['caveat'] ?? false,
+            'pride_of_nigeria' => $validated['pride_of_nigeria'] ?? false,
 
             // Categories and Tags
             // 'tags' => $validated['tags'] ?? [],

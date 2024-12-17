@@ -212,98 +212,90 @@
                 </div>
 
                 <!-- Publishing Options (Admin Only) -->
-                <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
-                    <div class="p-4 bg-gray-50 rounded-lg">
-                        <h3 class="font-medium mb-3">Post Settings</h3>
-                        <div class="flex flex-wrap md:flex-nowrap items-center">
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="is_featured" name="is_featured"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('is_featured') ? 'checked' : '' }}>
-                                <label for="is_featured" class="ml-2 text-sm text-gray-700">Feature this post</label>
-                            </div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-4">Post Settings</h3>
 
-
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="is_breaking" name="is_breaking"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('is_breaking') ? 'checked' : '' }}>
-                                <label for="is_breaking" class="ml-2 text-sm text-gray-700">Breaking News</label>
-                            </div>
-
-
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="caveat" name="caveat"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('caveat') ? 'checked' : '' }}>
-                                <label for="caveat" class="ml-2 text-sm text-gray-700">Caveat</label>
-                            </div>
-
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="hot_gist" name="hot_gist"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('hot_gist') ? 'checked' : '' }}>
-                                <label for="hot_gist" class="ml-2 text-sm text-gray-700">Hot Gist</label>
-                            </div>
-
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="event" name="event"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('event') ? 'checked' : '' }}>
-                                <label for="event" class="ml-2 text-sm text-gray-700">Event</label>
-                            </div>
-
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="top_topic" name="top_topic"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('top_topic') ? 'checked' : '' }}>
-                                <label for="top_topic" class="ml-2 text-sm text-gray-700">Top Topic</label>
-                            </div>
-
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="pride_of_nigeria" name="pride_of_nigeria"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('pride_of_nigeria') ? 'checked' : '' }}>
-                                <label for="pride_of_nigeria" class="ml-2 text-sm text-gray-700">Pride of Nigeria</label>
-                            </div>
-
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="is_draft" name="is_draft"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-300 ease-in-out hover:bg-blue-50"
-                                    value="1" {{ old('is_draft') ? 'checked' : '' }}>
-                                <label for="is_draft" class="ml-2 text-sm text-gray-700">Save as Draft</label>
-                            </div>
-
-
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="is_scheduled" name="is_scheduled"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('is_scheduled') ? 'checked' : '' }}>
-                                <label for="is_scheduled" class="ml-2 text-sm text-gray-700">Schedule this post</label>
-                            </div>
-
-                            <div id="schedule_date" class="mb-6"
-                                style="display: {{ old('is_scheduled', $post->is_scheduled ?? false) ? 'block' : 'none' }};">
-                                <label for="scheduled_time" class="block text-sm font-medium text-gray-700 mb-2">Scheduled
-                                    Date & Time</label>
-                                <input type="datetime-local" id="scheduled_time" name="scheduled_time"
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    value="{{ old('scheduled_time', $post->scheduled_time ?? '') }}">
-                            </div>
-
-
-
-
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="allow_comments" name="allow_comments" value="1"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    {{ old('allow_comments', $post->allow_comments ?? true) ? 'checked' : '' }}>
-                                <label for="allow_comments" class="ml-2 text-sm text-gray-700">Allow Comments</label>
-                            </div>
-
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="is_featured" name="is_featured"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1" {{ old('is_featured') ? 'checked' : '' }}>
+                            <label for="is_featured" class="ml-2 text-sm text-gray-700">Feature this post</label>
                         </div>
 
+                        <div class="flex items-center">
+                            <input type="checkbox" id="is_breaking" name="is_breaking"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1" {{ old('is_breaking') ? 'checked' : '' }}>
+                            <label for="is_breaking" class="ml-2 text-sm text-gray-700">Breaking News</label>
+                        </div>
 
+                        <div class="flex items-center">
+                            <input type="checkbox" id="caveat" name="caveat"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1" {{ old('caveat') ? 'checked' : '' }}>
+                            <label for="caveat" class="ml-2 text-sm text-gray-700">Caveat</label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="hot_gist" name="hot_gist"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1" {{ old('hot_gist') ? 'checked' : '' }}>
+                            <label for="hot_gist" class="ml-2 text-sm text-gray-700">Hot Gist</label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="event" name="event"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1" {{ old('event') ? 'checked' : '' }}>
+                            <label for="event" class="ml-2 text-sm text-gray-700">Event</label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="top_topic" name="top_topic"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1" {{ old('top_topic') ? 'checked' : '' }}>
+                            <label for="top_topic" class="ml-2 text-sm text-gray-700">Top Topic</label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="pride_of_nigeria" name="pride_of_nigeria"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1" {{ old('pride_of_nigeria') ? 'checked' : '' }}>
+                            <label for="pride_of_nigeria" class="ml-2 text-sm text-gray-700">Pride of Nigeria</label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="is_draft" name="is_draft"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200 transition duration-300 ease-in-out"
+                                value="1" {{ old('is_draft') ? 'checked' : '' }}>
+                            <label for="is_draft" class="ml-2 text-sm text-gray-700">Save as Draft</label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="is_scheduled" name="is_scheduled"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1" {{ old('is_scheduled') ? 'checked' : '' }}>
+                            <label for="is_scheduled" class="ml-2 text-sm text-gray-700">Schedule this post</label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="allow_comments" name="allow_comments"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1"
+                                {{ old('allow_comments', $post->allow_comments ?? true) ? 'checked' : '' }}>
+                            <label for="allow_comments" class="ml-2 text-sm text-gray-700">Allow Comments</label>
+                        </div>
+                    </div>
+
+                    <div id="schedule_date" x-show="document.getElementById('is_scheduled').checked" x-cloak
+                        class="mt-4 hidden">
+                        <label for="scheduled_time" class="block text-sm font-medium text-gray-700 mb-2">
+                            Scheduled Date & Time
+                        </label>
+                        <input type="datetime-local" id="scheduled_time" name="scheduled_time"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            value="{{ old('scheduled_time', $post->scheduled_time ?? '') }}">
                     </div>
                 </div>
 

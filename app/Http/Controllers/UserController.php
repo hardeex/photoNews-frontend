@@ -122,6 +122,7 @@ class UserController extends Controller
         $postsData = $response['postsData'] ?? [];
         $pagination = $response['pagination'] ?? [];
 
+
         // Fetch the posts that are approved and is_breaking is true
         $breakingPostsData = $this->listBreakingPosts();
 
@@ -141,7 +142,13 @@ class UserController extends Controller
 
 
         // Fetch the approved music posts
-        $musicPostsData = $this->listApprovedMusicPosts();
+        //$musicPostsData = $this->listApprovedMusicPosts();
+
+        // Example: Get music posts
+        $musicPostsData = $this->listPostsByCategoryName('Music');
+
+        // Example: Get business posts
+        $businessPostsData = $this->listPostsByCategoryName('Business');
 
         // Fetch the approved local posts
         $localPostsData = $this->listApprovedLocalPosts();
@@ -178,10 +185,33 @@ class UserController extends Controller
         // fetch change of name
         $listChangeOfNamePostsData = $this->lisChangeOfNamePosts($request);
 
+
+        // counting posts
+        $totalPublishedPosts = $response['totalPublishedPosts'] ?? 0;
+        $totalRemembrancePosts = $listRemembrancePostsData['totalRemembrancePosts'] ?? 0;
+
+        $totalPrideOfNigeriaPosts = $listPrideOfNigeriaPosts['totalPrideOfNigeriaPosts'] ?? 0;
+
+        $totalPublicNoticePosts = $listPublicNoticePosts['totalPublicNoticePosts'] ?? 0;
+        $totalLostAndFoundPosts = $listLostAndFoundPostData['totalLostAndFoundPosts'] ?? 0;
+        $totalObituaryPosts = $listObituaryPosts['totalObituaryPosts'] ?? 0;
+        $totalMissingPersonPosts = $listMissingPosts['totalMissingPersonPosts'] ?? 0;
+        $totalWantedPersonPosts = $listWantedPosts['totalWantedPersonPosts'] ?? 0;
+        $totalChangeOfNamePosts = $lisChangeOfNamePosts['totalChangeOfNamePosts'] ?? 0;
+
+
+
+        // Extract posts and total count
+        // $publicNoticePostsData = $publicNotice['posts'] ?? [];
+        // $totalPublicNoticePosts = $publicNotice['total'] ?? 0;
+
+        Log::info('Public Notice Count:', ['total' => $totalPublicNoticePosts]);
+
         // Pass both sets of posts data to the view
         return view('welcome', compact(
             'postsData',
             'pagination',
+
             'musicPostsData',
             'breakingPostsData',
             'localPostsData',
@@ -198,9 +228,137 @@ class UserController extends Controller
             'wantedPostsData',
             'listRemembrancePostsData',
             'listChangeOfNamePostsData',
-            'listPrideOfNigeriaPostsData'
+            'listPrideOfNigeriaPostsData',
+
+            // counts
+            'totalPublishedPosts',
+            'totalRemembrancePosts',
+            'totalPrideOfNigeriaPosts',
+
+            'totalPublicNoticePosts',
+            'totalLostAndFoundPosts',
+            'totalObituaryPosts',
+            'totalMissingPersonPosts',
+            'totalWantedPersonPosts',
+            'totalChangeOfNamePosts'
+
         ));
     }
+
+
+    // private function listPostsByCategoryName($categoryName)
+    // {
+    //     // Log for debugging
+    //     Log::info("Fetching posts for category: {$categoryName}");
+
+    //     // Adjusted API URL: This now calls the new endpoint `category-posts?category_name={categoryName}`
+    //     $apiUrl = config('api.base_url') . '/category-posts'; // The updated API endpoint
+
+    //     Log::info('API URL for category posts:', ['url' => $apiUrl]);
+
+    //     try {
+    //         // Make an API call to fetch posts filtered by category name
+    //         $response = Http::get($apiUrl, [
+    //             'category_name' => $categoryName,  // Use category_name parameter
+    //             'per_page' => 3,  // Limit the result to 3 posts
+    //         ]);
+
+    //         // Check if the response was successful
+    //         if ($response->successful()) {
+    //             $responseData = $response->json();
+
+    //             // Extract posts data from the response
+    //             $postsData = $responseData['posts'] ?? [];
+
+    //             // Return the data
+    //             return $postsData;
+    //         } else {
+    //             Log::error('Error fetching posts for category ' . $categoryName . ': ' . $response->status());
+    //             return [];
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::error('Error fetching posts for category ' . $categoryName . ': ' . $e->getMessage());
+    //         return [];
+    //     }
+    // }
+
+
+    private function listPostsByCategoryName($categoryName)
+    {
+        Log::info("Fetching posts for category: {$categoryName}");
+
+        $apiUrl = config('api.base_url') . '/category-posts';
+        Log::info('API URL for category posts:', ['url' => $apiUrl]);
+
+        try {
+            $response = Http::get($apiUrl, [
+                'category_name' => $categoryName,
+                'per_page' => 3,
+            ]);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                $postsData = $responseData['posts'] ?? [];
+
+                // Ensure creator name is extracted correctly
+                foreach ($postsData as &$post) {
+                    // If created_by is an ID, use the creator field to get the user's name
+                    if (isset($post['creator']['name'])) {
+                        $post['created_by'] = $post['creator']['name'];  // Replace ID with name
+                    }
+                }
+
+                return $postsData;
+            } else {
+                Log::error('Error fetching posts for category ' . $categoryName . ': ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching posts for category ' . $categoryName . ': ' . $e->getMessage());
+            return [];
+        }
+    }
+
+
+    // private function listApprovedMusicPosts()
+    // {
+    //     // Log for debugging
+    //     Log::info('Fetching approved music posts...');
+
+    //     $apiUrl = config('api.base_url') . '/posts/music'; // Assuming the endpoint supports filtering by status
+    //     Log::info('API URL for approved music posts:', ['url' => $apiUrl]);
+
+    //     try {
+    //         // Make an API call to fetch approved posts with 'category' = 'music'
+    //         $response = Http::get($apiUrl, [
+    //             'per_page' => 3,    // Limit the result to 3 posts
+    //             'status' => 'approved',
+    //             'category_id' => 'music', 
+    //         ]);
+
+    //         // Check if the response was successful
+    //         if ($response->successful()) {
+    //             $responseData = $response->json();
+
+    //             // Extract music posts data
+    //             $musicPostsData = $responseData['data']['posts'] ?? [];
+
+    //             // Get the total count of published posts from the pagination data
+    //             $totalMusicPosts = $pagination['total'] ?? 0;
+    //             Log::info('The total music posts count is' . $totalMusicPosts);
+
+    //             // Return the data
+    //             return $musicPostsData;
+    //         } else {
+    //             Log::error('Error fetching approved music posts: ' . $response->status());
+    //             return [];
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::error('Error fetching approved music posts: ' . $e->getMessage());
+    //         return [];
+    //     }
+    // }
+
 
     private function listApprovedMusicPosts()
     {
@@ -215,7 +373,7 @@ class UserController extends Controller
             $response = Http::get($apiUrl, [
                 'per_page' => 3,    // Limit the result to 3 posts
                 'status' => 'approved',
-                'category' => 'music', // Assuming the API allows category filtering
+                'category_id' => 'music',
             ]);
 
             // Check if the response was successful
@@ -224,6 +382,10 @@ class UserController extends Controller
 
                 // Extract music posts data
                 $musicPostsData = $responseData['data']['posts'] ?? [];
+
+                // Get the total count of published posts from the pagination data
+                $totalMusicPosts = $pagination['total'] ?? 0;
+                Log::info('The total music posts count is' . $totalMusicPosts);
 
                 // Return the data
                 return $musicPostsData;
@@ -236,6 +398,7 @@ class UserController extends Controller
             return [];
         }
     }
+
 
 
     private function listApprovedLocalPosts()
@@ -263,6 +426,8 @@ class UserController extends Controller
                 // print_r($localPostsData);
                 // exit();
 
+                $totalLocalPosts = $pagination['total'] ?? 0;
+                Log::info('The total local posts count is' . $totalLocalPosts);
                 // Return the data
                 return $localPostsData;
             } else {
@@ -301,6 +466,9 @@ class UserController extends Controller
                 // print_r($localPostsData);
                 // exit();
 
+                $totalInternationalPosts = $pagination['total'] ?? 0;
+                Log::info('The total International Posts' . $totalInternationalPosts);
+
                 // Return the data
                 return $internationalPostsData;
             } else {
@@ -325,7 +493,7 @@ class UserController extends Controller
             // Make an API call to fetch the approved posts with 'is_breaking' = true
             $response = Http::get($apiUrl, [
                 'per_page' => 100,
-                'is_breaking' => true, // Assuming the API allows such filters
+                'is_breaking' => true,
             ]);
 
             // Check if the response was successful
@@ -338,6 +506,9 @@ class UserController extends Controller
 
                 // print_r($breakingPostsData);
                 // exit();
+
+                $totalBreakingPosts = $pagination['total'] ?? 0;
+                Log::info('The total breaking posts count is' . $totalBreakingPosts);
                 // Return the data
                 return $breakingPostsData;
             } else {
@@ -376,6 +547,9 @@ class UserController extends Controller
 
                 // print_r($hotGistsPostsData);
                 // exit();
+
+                $totalHotGistPosts = $pagination['total'] ?? 0;
+                Log::info('The Hot Gists' . $totalHotGistPosts);
                 //Return the data
                 return $hotGistsPostsData;
             } else {
@@ -411,6 +585,9 @@ class UserController extends Controller
                 // Extract posts data and pagination info
                 $eventsPostsData = $responseData['data']['posts'] ?? [];
                 $pagination = $responseData['data']['pagination'] ?? [];
+
+                $totalEventsPosts = $pagination['total'] ?? 0;
+                Log::info('The Events Total Posts: ' . $totalEventsPosts);
 
                 // print_r($eventsPostsData);
                 // exit();
@@ -449,6 +626,9 @@ class UserController extends Controller
                 // Extract posts data and pagination info
                 $caveatPostsData = $responseData['data']['posts'] ?? [];
                 $pagination = $responseData['data']['pagination'] ?? [];
+
+                $totalCaveatPosts = $pagination['total'] ?? 0;
+                Log::info('The total caveat posts:' . $totalCaveatPosts);
 
                 // print_r($eventsPostsData);
                 // exit();
@@ -495,6 +675,9 @@ class UserController extends Controller
                 $prideOfNigeriaPostsData = $responseData['data']['posts'];  // Data of Pride of Nigeria posts
                 $pagination = $responseData['data']['pagination'] ?? [];   // Pagination data
 
+                $totalPrideOfNigeriaPosts = $pagination['total'] ?? 0;
+                Log::info('The total pride of nigeria posts: ' . $totalPrideOfNigeriaPosts);
+
                 // Return the posts data
                 return [
                     'prideOfNigeriaPostsData' => $prideOfNigeriaPostsData,
@@ -536,6 +719,9 @@ class UserController extends Controller
                 $topTopicPostsData = $responseData['data']['posts'] ?? [];
                 $pagination = $responseData['data']['pagination'] ?? [];
 
+                $totalTopTopicPosts = $pagination['total'] ?? 0;
+                Log::info('The top topic posts counts:' . $totalTopTopicPosts);
+
                 // print_r($topTopicPostsData);
                 // exit();
                 //Return the data
@@ -551,12 +737,63 @@ class UserController extends Controller
     }
 
 
+    private function listPublicNoticePosts2()
+    {
+        // Log for debugging
+        Log::info('Fetching public notice posts...');
+
+        $apiUrl = config('api.base_url') . '/public-notice';
+        Log::info('API URL for Public Notice Posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch published posts
+            $response = Http::get($apiUrl, [
+                'per_page' => 6,    // Limit the result to 6 posts per page
+                'status' => 'published',
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract the posts data
+                $publicNoticePosts = $responseData['posts']['data'] ?? [];
+                $totalPublicNoticePosts = $responseData['posts']['total'] ?? 0;
+
+                // If there are posts, log the result
+                if (!empty($publicNoticePosts)) {
+                    Log::info('Public notices fetched successfully', [
+                        'post_count' => count($publicNoticePosts)
+                    ]);
+                }
+
+                // Log the total count
+                Log::info('Total public notice posts:', ['total' => $totalPublicNoticePosts]);
+
+                // Return both posts data and total count
+                return [
+                    'posts' => $publicNoticePosts,
+                    'total' => $totalPublicNoticePosts
+                ];
+            } else {
+                // If the API call failed
+                Log::error('Error fetching public notice: ' . $response->status());
+                return ['posts' => [], 'total' => 0];
+            }
+        } catch (\Exception $e) {
+            // Catch any exceptions
+            Log::error('Error fetching public notice: ' . $e->getMessage());
+            return ['posts' => [], 'total' => 0];
+        }
+    }
+
+
     private function listPublicNoticePosts()
     {
         // Log for debugging
         Log::info('Fetching public notice posts...');
 
-        $apiUrl = config('api.base_url') . '/public-notice'; // Adjust the URL to match the endpoint
+        $apiUrl = config('api.base_url') . '/public-notice';
         Log::info('API URL for Public Notice Posts:', ['url' => $apiUrl]);
 
         try {
@@ -580,10 +817,23 @@ class UserController extends Controller
                     ]);
                 }
 
+                // Correctly access the total number of posts
+                $totalPublicNoticePosts = $responseData['total'] ?? 0;
+                Log::info('Total public notice posts:', ['total' => $totalPublicNoticePosts]);
+
                 // print_r($publicNoticePosts);
                 // exit();
                 // Return the public notice posts
                 return $publicNoticePosts;
+
+
+
+
+                // return [
+                //     'publicNotice' => $publicNoticePosts,
+                //     //'pagination' => $pagination,
+                //     'totalPublicNoticePosts' => $totalPublicNoticePosts
+                // ];
             } else {
                 // If the API call failed
                 Log::error('Error fetching public notice: ' . $response->status());
@@ -622,9 +872,11 @@ class UserController extends Controller
         Log::info('API URL for published posts:', ['url' => $apiUrl]);
 
         try {
-            // Make an API call to the /published/posts endpoint to fetch the posts
+            // Make an API call to the /published/posts endpoint to fetch the 10 most recent posts
             $response = Http::get($apiUrl, [
-                'per_page' => 100,
+                'per_page' => 12,
+                'order' => 'desc',
+
             ]);
 
             // Check if the response was successful
@@ -636,17 +888,25 @@ class UserController extends Controller
                 $postsData = $responseData['data']['posts'] ?? [];
                 $pagination = $responseData['data']['pagination'] ?? [];
 
+                // Get the total count of published posts from the pagination data
+                $totalPublishedPosts = $pagination['total'] ?? 0;
+
+                // Log the count of published posts for debugging purposes
+                Log::info('Total Published Posts: ' . $totalPublishedPosts);
+
                 // Return the data
                 return [
                     'postsData' => $postsData,
-                    'pagination' => $pagination
+                    'pagination' => $pagination,
+                    'totalPublishedPosts' => $totalPublishedPosts
                 ];
             } else {
                 // If the response failed, handle the error
                 Log::error('Error fetching published posts: ' . $response->status());
                 return [
                     'postsData' => [],
-                    'pagination' => []
+                    'pagination' => [],
+                    'totalPublishedPosts' => 0
                 ];
             }
         } catch (\Exception $e) {
@@ -654,10 +914,12 @@ class UserController extends Controller
             Log::error('Error fetching published posts: ' . $e->getMessage());
             return [
                 'postsData' => [],
-                'pagination' => []
+                'pagination' => [],
+                'totalPublishedPosts' => 0
             ];
         }
     }
+
 
 
     public function listPendingPostsJSON(Request $request)
@@ -819,65 +1081,6 @@ class UserController extends Controller
         }
     }
 
-    private function listCategories22(Request $request)
-    {
-        Log::info('Fetching categories from external API...');
-
-        // API URL for category listing
-        $apiUrl = config('api.base_url') . '/categories/public';
-        Log::info('Connecting to API URL for category listing', [
-            'api_url' => $apiUrl,
-        ]);
-
-        // Prepare any query parameters (e.g., for sorting)
-        $params = [
-            'sort_by' => $request->get('sort_by', 'name'),
-            'sort_order' => $request->get('sort_order', 'asc'),
-        ];
-
-        // Log the query parameters being sent
-        Log::info('Sending query parameters', [
-            'params' => $params,
-        ]);
-
-        // Make the GET request to the external API
-        try {
-            $response = Http::get($apiUrl, $params);
-
-            // Log the response from the external API
-            if ($response->successful()) {
-                Log::info('Categories successfully fetched from external API', [
-                    'response_data' => $response->json(),
-                ]);
-
-                // Extract categories from response
-                $categories = $response->json()['data'] ?? [];
-
-                // print_r($categories);
-                // exit();
-                // Return categories directly
-                return $categories;
-            } else {
-                // Log the error response from the API
-                Log::error('Error fetching categories from external API', [
-                    'status_code' => $response->status(),
-                    'error_message' => $response->json()['message'] ?? 'An error occurred.',
-                ]);
-
-                // Handle the error by returning an empty array or null
-                return null;
-            }
-        } catch (\Exception $e) {
-            // Log the exception error with stack trace
-            Log::error('API request failed with exception', [
-                'exception_message' => $e->getMessage(),
-                'exception_trace' => $e->getTraceAsString(),
-            ]);
-
-            // Handle the error by returning an empty array or null
-            return null;
-        }
-    }
 
 
 
@@ -904,13 +1107,17 @@ class UserController extends Controller
                 $LostAndFoundPostsData = $responseData['data']['posts'] ?? [];
                 $pagination = $responseData['data']['pagination'] ?? [];
 
+                $totalLostAndFoundPosts = $pagination['total'] ?? 0;
+                //Log::info('Total lost and found posts: ', $totalLostAndFoundPosts);
+
                 // print_r($LostAndFoundPostsData);
                 // exit();
 
                 // Return the data
                 return [
                     'lostAndFoundPostsData' => $LostAndFoundPostsData,
-                    'pagination' => $pagination
+                    'pagination' => $pagination,
+                    'totalLostAndFound' => $totalLostAndFoundPosts
                 ];
             } else {
                 // If the response failed, handle the error
@@ -963,6 +1170,9 @@ class UserController extends Controller
                 $obituaryPostsData = $responseData['data']['posts'];
                 $pagination = $responseData['data']['pagination'] ?? [];
 
+                $totalObituaryPosts = $pagination['total'] ?? 0;
+                Log::info('Total Obituary Posts' . $totalObituaryPosts);
+
                 // print_r($obituaryPostsData);
                 // exit();
 
@@ -1010,6 +1220,10 @@ class UserController extends Controller
             if ($response->successful()) {
                 $responseData = $response->json();
 
+                $totalMissingPersonPosts = $pagination['total'] ?? 0;
+                Log::info('The total missing person posts counts:' . $totalMissingPersonPosts);
+
+
                 // Return the posts data and pagination information
                 return $responseData['data'];
             } else {
@@ -1040,6 +1254,8 @@ class UserController extends Controller
             if ($response->successful()) {
                 $responseData = $response->json();
 
+                $totalWantedPosts = $pagination['total'] ?? 0;
+                Log::info('The total wanted person missing counts: ' . $totalWantedPosts);
                 // Return the posts data and pagination information
                 return $responseData['data'];
             } else {
@@ -1107,10 +1323,13 @@ class UserController extends Controller
                 $remembrancePostsData = $responseData['data']['posts'];
                 $pagination = $responseData['data']['pagination'] ?? [];
 
+                $totalRemembrancePosts = $pagination['total'] ?? 0;
+                Log::info('The toatl remembrance posts: ' . $totalRemembrancePosts);
                 // Return the data in the format expected by the frontend
                 return [
                     'remembrancePostsData' => $remembrancePostsData,
-                    'pagination' => $pagination
+                    'pagination' => $pagination,
+                    'totalRemembrancePosts' => $totalRemembrancePosts,
                 ];
             } else {
                 // Log the HTTP status code for failed responses
@@ -1184,6 +1403,8 @@ class UserController extends Controller
                 $changeOfNamePostsData = $responseData['data']['posts'];
                 $pagination = $responseData['data']['pagination'] ?? [];
 
+                $totalChangeOfNamePosts = $pagination['total'] ?? 0;
+                Log::info('The toatl change of name counts: ' . $totalChangeOfNamePosts);
                 // Return the data in the format expected by the frontend
                 return [
                     'changeOfNamePostsData' => $changeOfNamePostsData,

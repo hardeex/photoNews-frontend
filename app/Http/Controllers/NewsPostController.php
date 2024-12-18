@@ -34,16 +34,61 @@ class NewsPostController extends Controller
             return redirect()->route('user.login')->with('error', 'Please log in first');
         }
 
-        // Fetch categories and tags
-        $categories = $this->fetchData('get-categories', $jwtToken);
-        $tags = $this->fetchData('get-tags', $jwtToken);
+           // Fetch categories using the private method
+        $categories = $this->fetchCategories();
 
-        return view('news.create-post', compact('categories', 'tags'));
+        // Sort categories alphabetically by name
+        usort($categories, function ($a, $b) {
+            return strcasecmp($a['name'], $b['name']); // Case-insensitive sort
+        });
+
+
+        return view('news.create-post', compact('categories'));
     }
+
+    // Method to fetch categories from the external API
+    private function fetchCategories()
+    {
+        // Get the base URL from config
+        $baseUrl = config('api.base_url');
+        
+        // Get the full URL for the category-seeder endpoint
+        $url = $baseUrl . '/category-seeder';
+        
+        // Fetch the categories using the HTTP client
+        $response = Http::get($url);
+
+        // Check if the request was successful
+        if ($response->successful()) {
+            return $response->json(); // Return the categories data as an array
+        } else {
+            // Optionally handle failure and return an empty array or error
+            return [];
+        }
+    }
+
+
+//     public function createPost()
+// {
+//     $jwtToken = session('api_token');
+//     if (empty($jwtToken)) {
+//         return redirect()->route('user.login')->with('error', 'Please log in first');
+//     }
+
+//     // Fetch categories from the new API endpoint
+//     $categories = $this->fetchData('get-categories', $jwtToken);
+
+//     // Fetch tags
+//     $tags = $this->fetchData('get-tags', $jwtToken);
+
+//     // Pass the categories and tags to the view
+//     return view('news.create-post', compact('categories', 'tags'));
+// }
+
 
     private function fetchData($endpoint, $jwtToken)
     {
-        $apiUrl = config('api.base_url') . '/' . $endpoint;
+        $apiUrl = config('api.base_url') . '/category-seeder' . $endpoint;
         try {
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $jwtToken,
@@ -56,6 +101,8 @@ class NewsPostController extends Controller
             ]);
 
             if ($response->successful()) {
+                // print_r($response);
+                // exit();
                 return $response->json()['data'] ?? [];
             } else {
                 return [];
@@ -838,17 +885,9 @@ class NewsPostController extends Controller
             'caveat' => 'nullable|boolean',
             'pride_of_nigeria' => 'nullable|boolean',
 
+            'category_id' => 'nullable', 
 
-            // Categories and Tags
-            // 'tags' => 'nullable|array',
-            // 'tags.*' => 'nullable|integer',
-            // 'categories' => 'required|array',
-            // 'categories.*' => 'nullable|integer',
-
-            // 'categories' => 'required|array',
-            // 'categories.*' => 'nullable',
-            // 'tags' => 'nullable|array',
-            // 'tags.*' => 'nullable',
+            
         ]);
 
         // Get the JWT token from session (after login)
@@ -884,9 +923,9 @@ class NewsPostController extends Controller
             'caveat' => $validated['caveat'] ?? false,
             'pride_of_nigeria' => $validated['pride_of_nigeria'] ?? false,
 
-            // Categories and Tags
-            // 'tags' => $validated['tags'] ?? [],
-            // 'categories' => $validated['categories'] ?? [],
+            'category_id' => $validated['category_id'],
+
+           
         ];
 
 

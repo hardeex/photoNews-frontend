@@ -123,7 +123,7 @@
                 </div>
 
 
-                <div class="mb-6">
+                {{-- <div class="mb-6">
                     <label for="categories" class="block text-sm font-medium text-gray-700 mb-2">Categories</label>
                     <div class="relative">
                         <input type="text" id="category_search" placeholder="Search categories..."
@@ -143,9 +143,21 @@
                             @endforelse
                         </select>
                     </div>
+                </div> --}}
+
+
+                <!-- Category Dropdown -->
+                <div class="mb-4">
+                    <label for="category" class="block text-lg font-medium text-gray-700">Category</label>
+                    <select name="category_id" id="category"
+                        class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        required>
+                        <option value="" disabled selected>Select a Category</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
+                        @endforeach
+                    </select>
                 </div>
-
-
 
 
                 <!-- Featured Image -->
@@ -188,7 +200,7 @@
 
 
 
-
+                {{-- 
                 <div class="mb-6">
                     <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
                     <div class="relative">
@@ -209,7 +221,7 @@
                         </select>
 
                     </div>
-                </div>
+                </div> --}}
 
                 <!-- Publishing Options (Admin Only) -->
                 <div class="bg-gray-50 p-6 rounded-lg">
@@ -218,8 +230,8 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <div class="flex items-center">
                             <input type="checkbox" id="is_featured" name="is_featured"
-                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
-                                value="1" {{ old('is_featured') ? 'checked' : '' }}>
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200" value="1"
+                                {{ old('is_featured') ? 'checked' : '' }}>
                             <label for="is_featured" class="ml-2 text-sm text-gray-700">Feature this post</label>
                         </div>
 

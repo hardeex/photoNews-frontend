@@ -7,9 +7,9 @@ use App\Http\Controllers\MisplaceAndFoundController;
 use App\Http\Controllers\MissingPersonController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\obituaryController;
+use App\Http\Controllers\ObituaryController;
 use App\Http\Controllers\RemembranceController;
-use App\Http\Controllers\ChangeOfNameController;
+use App\Http\Controllers\changeOfNameController;
 
 
 
@@ -55,8 +55,8 @@ Route::get('/create/missing-person', [MissingPersonController::class, 'createPos
 Route::post('/submit/missing-and-wanted-person', [MissingPersonController::class, 'submitPost'])->name('missing-person.submit');
 
 // obituary routes
-Route::get('/create/obituary', [obituaryController::class, 'createPost'])->name('obituary.create');
-Route::post('/submit/obituary', [obituaryController::class, 'submitPost'])->name('obituary.submit');
+Route::get('/create/obituary', [ObituaryController::class, 'createPost'])->name('obituary.create');
+Route::post('/submit/obituary', [ObituaryController::class, 'submitPost'])->name('obituary.submit');
 
 // remebrance controller
 Route::get('/create/remembrance', [RemembranceController::class, 'createPost'])->name('remembrance.create');
@@ -64,8 +64,8 @@ Route::post('/submit/remembrance', [RemembranceController::class, 'submitPost'])
 
 
 // change of name routes
-Route::get('/create-change-of-name', [ChangeOfNameController::class, 'createPost'])->name('change-of-name.create');
-Route::post('/submit-change-of-name', [ChangeOfNameController::class, 'submitPost'])->name('change-of-name.submit');
+Route::get('/create-change-of-name', [changeOfNameController::class, 'createPost'])->name('change-of-name.create');
+Route::post('/submit-change-of-name', [changeOfNameController::class, 'submitPost'])->name('change-of-name.submit');
 
 
 

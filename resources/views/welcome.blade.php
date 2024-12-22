@@ -27,155 +27,435 @@
             <!--- END OF TEST CONTAINER-->
 
 
-            <section class="bg-gray-100 py-8 px-4">
-                <div class="container mx-auto">
-                    <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Community Post Statistics</h2>
+            <section class="py-8 px-4 bg-gray-50">
+                <div class="max-w-6xl mx-auto">
+                    <h2 class="text-2xl font-bold text-center mb-8 text-gray-800">
+                        Community Post Statistics
+                    </h2>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                        <div
-                            class="bg-white shadow-md rounded-lg p-4 text-center hover:shadow-xl transition-shadow duration-300">
-                            <div class="text-4xl font-extrabold text-blue-600 mb-2">
-                                {{ $totalPublishedPosts }}
+                    <div class="grid grid-cols-3 gap-4 sm:gap-6">
+                        {{-- Total Approved Posts --}}
+                        <a href="#"
+                            class="block rounded-xl border-2 border-blue-200 bg-blue-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold mb-2 text-blue-600">
+                                    {{ number_format($totalPublishedPosts) }}
+                                </div>
+                                <h3 class="text-xs font-medium uppercase tracking-wider text-blue-600">
+                                    Total Approved Posts
+                                </h3>
                             </div>
-                            <h3 class="text-sm text-gray-600 uppercase tracking-wide">
-                                Total Approved Posts
-                            </h3>
-                        </div>
+                        </a>
 
-                        <div
-                            class="bg-white shadow-md rounded-lg p-4 text-center hover:shadow-xl transition-shadow duration-300">
-                            <div class="text-4xl font-extrabold text-green-600 mb-2">
-                                {{ $totalRemembrancePosts }}
-                            </div>
-                            <h3 class="text-sm text-gray-600 uppercase tracking-wide">
-                                Remembrance Posts
-                            </h3>
-                        </div>
 
-                        <div
-                            class="bg-white shadow-md rounded-lg p-4 text-center hover:shadow-xl transition-shadow duration-300">
-                            <div class="text-4xl font-extrabold text-red-600 mb-2">
-                                {{ $totalPublicNoticePosts }}
+                        {{-- Caveat Posts --}}
+                        <a href="#"
+                            class="block rounded-xl border-2 border-green-200 bg-green-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold mb-2 text-green-600">
+                                    {{ number_format($totalCaveatPostsData) }}
+                                </div>
+                                <h3 class="text-xs font-medium uppercase tracking-wider text-green-600">
+                                    Caveat Posts
+                                </h3>
                             </div>
-                            <h3 class="text-sm text-gray-600 uppercase tracking-wide">
-                                Public Notices
-                            </h3>
-                        </div>
+                        </a>
 
-                        <div
-                            class="bg-white shadow-md rounded-lg p-4 text-center hover:shadow-xl transition-shadow duration-300">
-                            <div class="text-4xl font-extrabold text-purple-600 mb-2">
-                                {{ $totalLostAndFoundPosts }}
+                        {{-- Remembrance Posts --}}
+                        <a href="#"
+                            class="block rounded-xl border-2 border-green-200 bg-green-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold mb-2 text-green-600">
+                                    {{ number_format($totalRemembrancePosts) }}
+                                </div>
+                                <h3 class="text-xs font-medium uppercase tracking-wider text-green-600">
+                                    Remembrance Posts
+                                </h3>
                             </div>
-                            <h3 class="text-sm text-gray-600 uppercase tracking-wide">
-                                Lost and Found
-                            </h3>
-                        </div>
+                        </a>
 
-                        <div
-                            class="bg-white shadow-md rounded-lg p-4 text-center hover:shadow-xl transition-shadow duration-300">
-                            <div class="text-4xl font-extrabold text-yellow-600 mb-2">
-                                {{ $totalObituaryPosts }}
+                        {{-- Public Notices --}}
+                        <a href="#"
+                            class="block rounded-xl border-2 border-red-200 bg-red-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold mb-2 text-red-600">
+                                    {{ number_format($totalPublicNoticePosts) }}
+                                </div>
+                                <h3 class="text-xs font-medium uppercase tracking-wider text-red-600">
+                                    Public Notices
+                                </h3>
                             </div>
-                            <h3 class="text-sm text-gray-600 uppercase tracking-wide">
-                                Obituaries
-                            </h3>
-                        </div>
+                        </a>
 
-                        <div
-                            class="bg-white shadow-md rounded-lg p-4 text-center hover:shadow-xl transition-shadow duration-300">
-                            <div class="text-4xl font-extrabold text-indigo-600 mb-2">
-                                {{ $totalMissingPersonPosts }}
+                        {{-- Lost and Found --}}
+                        <a href="#"
+                            class="block rounded-xl border-2 border-purple-200 bg-purple-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold mb-2 text-purple-600">
+                                    {{ number_format($totalLostAndFoundPosts) }}
+                                </div>
+                                <h3 class="text-xs font-medium uppercase tracking-wider text-purple-600">
+                                    Lost and Found
+                                </h3>
                             </div>
-                            <h3 class="text-sm text-gray-600 uppercase tracking-wide">
-                                Missing Persons
-                            </h3>
-                        </div>
+                        </a>
 
-                        <div
-                            class="bg-white shadow-md rounded-lg p-4 text-center hover:shadow-xl transition-shadow duration-300">
-                            <div class="text-4xl font-extrabold text-pink-600 mb-2">
-                                {{ $totalWantedPersonPosts }}
+                        {{-- Obituaries --}}
+                        <a href="#"
+                            class="block rounded-xl border-2 border-yellow-200 bg-yellow-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold mb-2 text-yellow-600">
+                                    {{ number_format($totalObituaryPosts) }}
+                                </div>
+                                <h3 class="text-xs font-medium uppercase tracking-wider text-yellow-600">
+                                    Obituaries
+                                </h3>
                             </div>
-                            <h3 class="text-sm text-gray-600 uppercase tracking-wide">
-                                Wanted Persons
-                            </h3>
-                        </div>
+                        </a>
 
-                        <div
-                            class="bg-white shadow-md rounded-lg p-4 text-center hover:shadow-xl transition-shadow duration-300">
-                            <div class="text-4xl font-extrabold text-teal-600 mb-2">
-                                {{ $totalChangeOfNamePosts }}
+                        {{-- Missing Persons --}}
+                        <a href="#"
+                            class="block rounded-xl border-2 border-indigo-200 bg-indigo-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold mb-2 text-indigo-600">
+                                    {{ number_format($totalMissingPersonPosts) }}
+                                </div>
+                                <h3 class="text-xs font-medium uppercase tracking-wider text-indigo-600">
+                                    Missing Persons
+                                </h3>
                             </div>
-                            <h3 class="text-sm text-gray-600 uppercase tracking-wide">
-                                Change of Name
-                            </h3>
-                        </div>
+                        </a>
+
+                        {{-- Wanted Persons --}}
+                        <a href="#}"
+                            class="block rounded-xl border-2 border-pink-200 bg-pink-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold mb-2 text-pink-600">
+                                    {{ number_format($totalWantedPersonPosts) }}
+                                </div>
+                                <h3 class="text-xs font-medium uppercase tracking-wider text-pink-600">
+                                    Wanted Persons
+                                </h3>
+                            </div>
+                        </a>
+
+                        {{-- Change of Name --}}
+                        <a href="#"
+                            class="block rounded-xl border-2 border-teal-200 bg-teal-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold mb-2 text-teal-600">
+                                    {{ number_format($totalChangeOfNamePosts) }}
+                                </div>
+                                <h3 class="text-xs font-medium uppercase tracking-wider text-teal-600">
+                                    Change of Name
+                                </h3>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </section>
 
             <div class="bg-gray-100 p-4">
-                <h2 class="text-2xl font-bold mb-4 bg-gray-300 p-2">Latest News</h2>
+                <h2 class="text-2xl font-bold mb-4 bg-gray-300 p-2 rounded-lg">Latest News</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     @if (count($postsData) > 0)
                         @foreach ($postsData as $post)
-                            <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
-                                class="hover:text-blue-600 transition-colors truncate w-full">
-                                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                                    <div class="relative">
-                                        @if ($post['featured_image'])
-                                            <img src="{{ $post['featured_image'] }}"
-                                                alt="{{ ucwords(strtolower($post['title'])) }}"
-                                                class="w-full h-48 object-cover">
-                                        @else
-                                            <img src="https://picsum.photos/seed/news/1200/600"
-                                                alt="{{ ucwords(strtolower($post['title'])) }}"
-                                                class="w-full h-48 object-cover">
-                                        @endif
+                            <div
+                                class="bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+                                <!-- Image Section -->
+                                <div class="relative overflow-hidden">
+                                    @if ($post['featured_image'])
+                                        <img src="{{ $post['featured_image'] }}"
+                                            alt="{{ ucwords(strtolower($post['title'])) }}"
+                                            class="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                                    @else
+                                        <img src="https://picsum.photos/seed/news/1200/600"
+                                            alt="{{ ucwords(strtolower($post['title'])) }}"
+                                            class="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                                    @endif
 
-                                        <!-- Category -->
+                                    <!-- Category Badge -->
+                                    @if (isset($post['category_names']) || (isset($post['category']) && isset($post['category']['name'])))
                                         <span
-                                            class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
-                                            {{ isset($post['category_names']) && $post['category_names'] ? ucwords(strtolower($post['category_names'])) : (isset($post['category']['name']) ? ucwords(strtolower($post['category']['name'])) : 'Not available') }}
+                                            class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                                            {{ isset($post['category_names'])
+                                                ? ucwords(strtolower($post['category_names']))
+                                                : ucwords(strtolower($post['category']['name'])) }}
                                         </span>
-                                    </div>
+                                    @endif
+                                </div>
 
-                                    <div class="p-4">
-                                        <h3 class="text-lg font-semibold mb-2">
-                                            {{ \Illuminate\Support\Str::title(\Illuminate\Support\Str::words($post['title'] ?? 'Untitled', 4, '...')) }}
+                                <!-- Content Section -->
+                                <div class="flex flex-col flex-1">
+                                    <div class="p-4 pb-0">
+                                        <h3
+                                            class="text-lg font-semibold mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                            {{ $post['title'] ?? 'Untitled' }}
                                         </h3>
 
-                                        {{-- <h3 class="text-lg font-semibold mb-2 break-words max-w-full">
-                                            {{ $post['title'] ?? 'Untitled' }}
-                                        </h3> --}}
-
-
-                                        {{-- <h3 class="text-lg font-semibold mb-2 break-words">
-                                            {{ $post['title'] ?? 'Untitled' }}
-                                        </h3> --}}
-
-
-                                        <p class="text-sm text-gray-600 mb-4">
-                                            {{ \Illuminate\Support\Str::limit(strip_tags($post['meta_description'] ?? $post['content']), 150, '...') }}
+                                        <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+                                            {{ strip_tags($post['meta_description'] ?? $post['content']) }}
                                         </p>
 
+                                        <!-- Author and Date -->
+                                        <div class="mb-3">
+                                            <p class="text-sm text-gray-600 mb-1 flex items-center">
+                                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
+                                                </svg>
+                                                <span class="font-medium">{{ $post['created_by'] }}</span>
+                                            </p>
+                                            <span
+                                                class="inline-block text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                                                {{ \Carbon\Carbon::parse($post['created_at'])->format('M d, Y') }}
+                                            </span>
+                                        </div>
+
+                                        <!-- Engagement Metrics Section -->
+                                        <div
+                                            class="flex items-center justify-start text-sm text-gray-500 border-t border-gray-100 pt-3">
+                                            <div class="flex items-center space-x-6">
+                                                <!-- Likes -->
+                                                <div class="flex items-center space-x-2">
+                                                    <svg class="h-4 w-4 text-blue-500" viewBox="0 0 20 20"
+                                                        fill="currentColor">
+                                                        <path
+                                                            d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                                    </svg>
+                                                    <span>{{ number_format($post['likes'] ?? 123) }}</span>
+                                                </div>
+
+                                                <!-- Comments -->
+                                                <div class="flex items-center space-x-2">
+                                                    <svg class="h-4 w-4 text-blue-500" viewBox="0 0 20 20"
+                                                        fill="currentColor">
+                                                        <path fill-rule="evenodd"
+                                                            d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                    <span>{{ number_format($post['comments'] ?? 20) }}</span>
+                                                </div>
+
+                                                <!-- Views -->
+                                                <div class="flex items-center space-x-2">
+                                                    <svg class="h-4 w-4 text-blue-500" viewBox="0 0 20 20"
+                                                        fill="currentColor">
+                                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                                        <path fill-rule="evenodd"
+                                                            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                    <span>{{ number_format($post['views'] ?? 1200) }}</span>
+                                                </div>
+
+                                                <!-- Share Button -->
+                                                <div class="flex items-center space-x-2">
+                                                    <button
+                                                        onclick="sharePost('{{ route('post.details', $post['slug'] ?? '#') }}', '{{ $post['title'] ?? 'Post Title' }}')"
+                                                        class="share-btn flex items-center space-x-2 hover:text-blue-600 transition-colors">
+                                                        <svg class="h-4 w-4 text-blue-500" viewBox="0 0 20 20"
+                                                            fill="currentColor">
+                                                            <path
+                                                                d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                                                        </svg>
+                                                        <span>Share</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Read More Button - Fixed at bottom -->
+                                    <div class="p-4 mt-auto">
+                                        <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
+                                            class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
+                                            <span>Read more</span>
+                                            <svg class="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1"
+                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <!-- No posts message -->
+                        <div class="col-span-full text-center py-8 text-gray-500">
+                            <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <p class="text-lg font-medium">No published posts available.</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
 
 
+
+
+
+
+
+
+
+
+
+
+            <section class="bg-gray-100 py-8 overflow-hidden">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold mb-6">Announcements</h2>
+
+                    <div class="relative">
+                        <div class="flex overflow-x-auto pb-4 scrolling-touch" id="scrollingAnnouncements">
+                            <!-- Announcement items -->
+                            <div class="flex-none w-64 mx-2">
+                                <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                                    <div class="w-24 h-24 mx-auto mb-4 bg-yellow-500 rounded-full"></div>
+                                    <h3 class="text-lg font-semibold">Important Notice</h3>
+                                    <p class="text-sm text-gray-600 mt-2">Annual General Meeting</p>
+                                </div>
+                            </div>
+
+                            <div class="flex-none w-64 mx-2">
+                                <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                                    <div class="w-24 h-24 mx-auto mb-4 bg-blue-500 rounded-full"></div>
+                                    <h3 class="text-lg font-semibold">Event Update</h3>
+                                    <p class="text-sm text-gray-600 mt-2">Annual General Meeting</p>
+                                </div>
+                            </div>
+
+                            <div class="flex-none w-64 mx-2">
+                                <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                                    <div class="w-24 h-24 mx-auto mb-4 bg-green-500 rounded-full"></div>
+                                    <h3 class="text-lg font-semibold">Community News</h3>
+                                    <p class="text-sm text-gray-600 mt-2">Annual General Meeting</p>
+                                </div>
+                            </div>
+
+                            <div class="flex-none w-64 mx-2">
+                                <div class="bg-white rounded-lg shadow-md p-4 text-center">
+                                    <div class="w-24 h-24 mx-auto mb-4 bg-red-500 rounded-full"></div>
+                                    <h3 class="text-lg font-semibold">Upcoming Events</h3>
+                                    <p class="text-sm text-gray-600 mt-2">Annual General Meeting</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 bg-red-600 text-white py-4 px-6 rounded-lg">
+                        <p class="text-xl font-semibold text-center">Stay informed with our latest updates!</p>
+                    </div>
+                </div>
+
+                <script>
+                    const scrollContainer = document.getElementById('scrollingAnnouncements');
+                    let scrollAmount = 0;
+                    const scrollSpeed = 1;
+
+                    function autoScroll() {
+                        scrollContainer.scrollLeft += scrollSpeed;
+                        if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
+                            scrollContainer.scrollLeft = 0;
+                        }
+                        requestAnimationFrame(autoScroll);
+                    }
+
+                    autoScroll();
+                </script>
+            </section>
+
+
+            <section class="w-full">
+                <img src="{{ asset('/images/ad1.png') }}" alt="Advertisement"
+                    class="w-full h-auto max-h-60 object-cover">
+            </section>
+
+
+            <section class="max-w-6xl mx-auto px-4 py-8">
+                <h2 class="text-2xl font-bold mb-6 bg-red-600 text-white p-2">Featured Entertainment News</h2>
+
+                <div class="flex flex-wrap gap-2 mb-6">
+                    @foreach (['Gold Market', 'Nigeria\'s Inflation Rate Eases to 33.40%', 'Adekunle Gold', 'Nigeria and Guinea Strengthen Ties', 'Nigeria\'s Economic Activity Declines Again'] as $tag)
+                        <span class="bg-purple-200 text-purple-800 text-xs px-2 py-1 rounded">{{ $tag }}</span>
+                    @endforeach
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                    <!-- start of another test-->
+
+                    <!-- start of the breaking news section -->
+                    <div class="md:col-span-2">
+                        @if (count($breakingPostsData) > 0)
+                            <h2 class="text-2xl font-bold mb-4">Breaking News</h2>
+                            @foreach ($breakingPostsData as $post)
+                                <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
+                                    class="hover:text-blue-600 transition-colors w-full">
+                                    @if ($post['featured_image'])
+                                        <img src="{{ $post['featured_image'] }}"
+                                            alt="{{ ucwords(strtolower($post['title'])) }}"
+                                            class="w-full h-64 object-cover mb-4">
+                                    @else
+                                        <img src="https://picsum.photos/seed/news/1200/600"
+                                            alt="{{ ucwords(strtolower($post['title'])) }}"
+                                            class="w-full h-64 object-cover mb-4">
+                                    @endif
+                                    <h3 class="text-xl font-semibold mb-2 break-words">
+                                        {{ $post['title'] ?? 'Untitled' }}
+                                    </h3>
+                                    <p class="text-gray-600">
+                                        {{ \Illuminate\Support\Str::limit(strip_tags($post['content']), 100, '...') }}
+                                    </p>
+                                </a>
+                            @endforeach
+                        @else
+                            <p>No breaking news available.</p>
+                        @endif
+                    </div>
+                    <!-- end of the breaking news section -->
+
+
+
+                    <!--- End of another test-->
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Music News</h4>
+                        {{-- @for ($i = 0; $i < 3; $i++)
+                    <div class="mb-4">
+                        <img src="/images/news-image.jpeg" alt="Music News {{ $i + 1 }}"
+                            class="w-full h-32 object-cover mb-2">
+                        <h5 class="font-medium">Nicki Minaj Detained at Amsterdam Airport Over Suspected Drug
+                            Possession</h5>
+                    </div>
+                @endfor --}}
+
+                        @if (count($musicPostsData) > 0)
+                            @foreach ($musicPostsData as $index => $post)
+                                <a href="{{ route('post.details', $post['slug'] ?? '#') }}">
+                                    <div class="mb-4">
+                                        @if ($post['featured_image'])
+                                            <img src="{{ $post['featured_image'] }}"
+                                                alt="Music News {{ $index + 1 }}"
+                                                class="w-full h-32 object-cover mb-2">
+                                        @else
+                                            <img src="/images/news-image.jpeg" alt="Music News {{ $index + 1 }}"
+                                                class="w-full h-32 object-cover mb-2">
+                                        @endif
+                                        <h5 class="font-medium">{{ $post['title'] ?? 'Untitled' }}</h5>
                                         <!-- Author and Category -->
                                         <div class="mb-3">
-                                            <p class="text-sm text-gray-600 mb-1">
-                                                By <span class="font-medium">{{ $post['created_by'] }}</span>
-                                            </p>
+                                            {{-- <p class="text-sm text-gray-600 mb-1">
+                                        By <span class="font-medium">{{ $post['created_by'] }}</span>
+                                    </p> --}}
                                             <!-- Created At -->
                                             <span class="inline-block text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
                                                 {{ \Carbon\Carbon::parse($post['created_at'])->format('M d, Y') }}
                                             </span>
                                         </div>
 
-
-
-                                        <!-- Engagement Metrics -->
                                         <div class="flex items-center space-x-6 text-sm text-gray-500 pt-3 border-t">
                                             <!-- Likes -->
                                             <div class="flex items-center space-x-1">
@@ -211,258 +491,58 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                        @endforeach
-                        </a>
-                        <!-- Pagination Links (if needed) -->
-                        @if ($pagination && isset($pagination['total_pages']))
-                            <div class="pagination">
-                                <p>Page {{ $pagination['current_page'] }} of {{ $pagination['total_pages'] }}</p>
-                                <a href="?page={{ $pagination['next_page'] }}">Next</a>
-                            </div>
-                        @endif
-                    @else
-                        <p>No published posts available.</p>
-                    @endif
+                    </div>
                 </div>
-            </div>
-
-            <!--- End of the news higlight-->
+                </a>
+                @endforeach
+            @else
+                <p class="text-gray-500">No music news available at the moment. Please check back later.</p>
+                @endif
+                <a href="#" class="text-blue-600 hover:underline">See more</a>
     </div>
-
-
-
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-6">Public Notice</h1>
-
-        <!-- Grid Container with Responsive Columns -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Loop through each public notice and display them in a grid item -->
-            @foreach ($publicNotice as $notice)
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <!-- Notice Image -->
-                    <img src="{{ $notice['featured_image'] }}" alt="{{ $notice['title'] }}"
-                        class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <!-- Notice Title -->
-                        <h2 class="text-xl font-semibold mb-2">{{ $notice['title'] }}</h2>
-                        <!-- Notice Content (truncated to 150 characters) -->
-                        <p class="text-gray-600 mb-4">{{ \Illuminate\Support\Str::limit($notice['content'], 150) }}</p>
-                        <!-- Notice Meta Data (Created Date and Comments) -->
-                        <div class="flex items-center justify-between">
-                            <span
-                                class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($notice['created_at'])->format('M d, Y') }}</span>
-                            <div class="flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-1"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path
-                                        d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                                </svg>
-                                <span
-                                    class="text-sm text-gray-500">{{ $notice['allow_comments'] ? 'Open' : 'Closed' }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Engagement Metrics -->
-                    <div class="flex items-center space-x-6 text-sm text-gray-500 pt-3 border-t">
-                        <!-- Likes -->
-                        <div class="flex items-center space-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path
-                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                            </svg>
-                            <span>123</span>
-                        </div>
-
-                        <!-- Comments -->
-                        <div class="flex items-center space-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <span>20</span>
-                        </div>
-
-                        <!-- Views -->
-                        <div class="flex items-center space-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                <path fill-rule="evenodd"
-                                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <span>1.2k views</span>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-        <!-- See More Button -->
-        <div class="mt-8 text-center">
-            <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-                See more
-            </button>
-        </div>
     </div>
-
-
-
-
-    <section class="bg-gray-100 py-8 overflow-hidden">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold mb-6">Announcements</h2>
-
-            <div class="relative">
-                <div class="flex overflow-x-auto pb-4 scrolling-touch" id="scrollingAnnouncements">
-                    <!-- Announcement items -->
-                    <div class="flex-none w-64 mx-2">
-                        <div class="bg-white rounded-lg shadow-md p-4 text-center">
-                            <div class="w-24 h-24 mx-auto mb-4 bg-yellow-500 rounded-full"></div>
-                            <h3 class="text-lg font-semibold">Important Notice</h3>
-                            <p class="text-sm text-gray-600 mt-2">Annual General Meeting</p>
-                        </div>
-                    </div>
-
-                    <div class="flex-none w-64 mx-2">
-                        <div class="bg-white rounded-lg shadow-md p-4 text-center">
-                            <div class="w-24 h-24 mx-auto mb-4 bg-blue-500 rounded-full"></div>
-                            <h3 class="text-lg font-semibold">Event Update</h3>
-                            <p class="text-sm text-gray-600 mt-2">Annual General Meeting</p>
-                        </div>
-                    </div>
-
-                    <div class="flex-none w-64 mx-2">
-                        <div class="bg-white rounded-lg shadow-md p-4 text-center">
-                            <div class="w-24 h-24 mx-auto mb-4 bg-green-500 rounded-full"></div>
-                            <h3 class="text-lg font-semibold">Community News</h3>
-                            <p class="text-sm text-gray-600 mt-2">Annual General Meeting</p>
-                        </div>
-                    </div>
-
-                    <div class="flex-none w-64 mx-2">
-                        <div class="bg-white rounded-lg shadow-md p-4 text-center">
-                            <div class="w-24 h-24 mx-auto mb-4 bg-red-500 rounded-full"></div>
-                            <h3 class="text-lg font-semibold">Upcoming Events</h3>
-                            <p class="text-sm text-gray-600 mt-2">Annual General Meeting</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-8 bg-red-600 text-white py-4 px-6 rounded-lg">
-                <p class="text-xl font-semibold text-center">Stay informed with our latest updates!</p>
-            </div>
-        </div>
-
-        <script>
-            const scrollContainer = document.getElementById('scrollingAnnouncements');
-            let scrollAmount = 0;
-            const scrollSpeed = 1;
-
-            function autoScroll() {
-                scrollContainer.scrollLeft += scrollSpeed;
-                if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
-                    scrollContainer.scrollLeft = 0;
-                }
-                requestAnimationFrame(autoScroll);
-            }
-
-            autoScroll();
-        </script>
     </section>
 
-
-    <section class="w-full">
-        <img src="{{ asset('/images/ad1.png') }}" alt="Advertisement" class="w-full h-auto max-h-60 object-cover">
-    </section>
 
 
     <section class="max-w-6xl mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-6 bg-red-600 text-white p-2">Featured Entertainment News</h2>
+        <h2 class="text-2xl font-bold mb-6">Caveat</h2>
 
-        <div class="flex flex-wrap gap-2 mb-6">
-            @foreach (['Gold Market', 'Nigeria\'s Inflation Rate Eases to 33.40%', 'Adekunle Gold', 'Nigeria and Guinea Strengthen Ties', 'Nigeria\'s Economic Activity Declines Again'] as $tag)
-                <span class="bg-purple-200 text-purple-800 text-xs px-2 py-1 rounded">{{ $tag }}</span>
-            @endforeach
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-            <!-- start of another test-->
-
-            <!-- start of the breaking news section -->
-            <div class="md:col-span-2">
-                @if (count($breakingPostsData) > 0)
-                    <h2 class="text-2xl font-bold mb-4">Breaking News</h2>
-                    @foreach ($breakingPostsData as $post)
+        <div class="overflow-x-auto pb-4">
+            <div class="flex space-x-4 min-w-max">
+                @if (count($caveatPostsData) > 0)
+                    @foreach ($caveatPostsData as $post)
                         <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
                             class="hover:text-blue-600 transition-colors w-full">
-                            @if ($post['featured_image'])
-                                <img src="{{ $post['featured_image'] }}" alt="{{ ucwords(strtolower($post['title'])) }}"
-                                    class="w-full h-64 object-cover mb-4">
-                            @else
-                                <img src="https://picsum.photos/seed/news/1200/600"
-                                    alt="{{ ucwords(strtolower($post['title'])) }}"
-                                    class="w-full h-64 object-cover mb-4">
-                            @endif
-                            <h3 class="text-xl font-semibold mb-2 break-words">
-                                {{ $post['title'] ?? 'Untitled' }}
-                            </h3>
-                            <p class="text-gray-600">
-                                {{ \Illuminate\Support\Str::limit(strip_tags($post['content']), 100, '...') }}
-                            </p>
-                        </a>
-                    @endforeach
-                @else
-                    <p>No breaking news available.</p>
-                @endif
-            </div>
-            <!-- end of the breaking news section -->
-
-
-
-            <!--- End of another test-->
-            <div>
-                <h4 class="text-lg font-semibold mb-4">Music News</h4>
-                {{-- @for ($i = 0; $i < 3; $i++)
-                    <div class="mb-4">
-                        <img src="/images/news-image.jpeg" alt="Music News {{ $i + 1 }}"
-                            class="w-full h-32 object-cover mb-2">
-                        <h5 class="font-medium">Nicki Minaj Detained at Amsterdam Airport Over Suspected Drug
-                            Possession</h5>
-                    </div>
-                @endfor --}}
-
-                @if (count($musicPostsData) > 0)
-                    @foreach ($musicPostsData as $index => $post)
-                        <a href="{{ route('post.details', $post['slug'] ?? '#') }}">
-                            <div class="mb-4">
+                            <div class="w-64 flex-shrink-0">
                                 @if ($post['featured_image'])
-                                    <img src="{{ $post['featured_image'] }}" alt="Music News {{ $index + 1 }}"
-                                        class="w-full h-32 object-cover mb-2">
+                                    <img src="{{ $post['featured_image'] }}"
+                                        alt="{{ ucwords(strtolower($post['title'])) }}"
+                                        class="w-full h-40 object-cover mb-2 rounded">
                                 @else
-                                    <img src="/images/news-image.jpeg" alt="Music News {{ $index + 1 }}"
-                                        class="w-full h-32 object-cover mb-2">
+                                    <img src="https://picsum.photos/seed/news/1200/600"
+                                        alt="{{ ucwords(strtolower($post['title'])) }}"
+                                        class="w-full h-40 object-cover mb-2 rounded">
                                 @endif
-                                <h5 class="font-medium">{{ $post['title'] ?? 'Untitled' }}</h5>
-                                <!-- Author and Category -->
-                                <div class="mb-3">
-                                    {{-- <p class="text-sm text-gray-600 mb-1">
-                                        By <span class="font-medium">{{ $post['created_by'] }}</span>
-                                    </p> --}}
-                                    <!-- Created At -->
-                                    <span class="inline-block text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                                        {{ \Carbon\Carbon::parse($post['created_at'])->format('M d, Y') }}
-                                    </span>
+                                <h3 class="text-sm font-semibold">{{ $post['title'] ?? 'Untitled' }}</h3>
+                                <div class="flex items-center text-gray-500 text-xs mt-1">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                        </path>
+                                    </svg>
+                                    <span>{{ \Carbon\Carbon::parse($post['created_at'])->diffForHumans() }}</span>
                                 </div>
-
+                                <div class="flex items-center text-gray-500 text-xs mt-1">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    <span>By {{ $post['created_by'] }}</span>
+                                </div>
                                 <div class="flex items-center space-x-6 text-sm text-gray-500 pt-3 border-t">
-                                    <!-- Likes -->
                                     <div class="flex items-center space-x-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
                                             viewBox="0 0 20 20" fill="currentColor">
@@ -472,7 +552,6 @@
                                         <span>123</span>
                                     </div>
 
-                                    <!-- Comments -->
                                     <div class="flex items-center space-x-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
                                             viewBox="0 0 20 20" fill="currentColor">
@@ -483,7 +562,6 @@
                                         <span>20</span>
                                     </div>
 
-                                    <!-- Views -->
                                     <div class="flex items-center space-x-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
                                             viewBox="0 0 20 20" fill="currentColor">
@@ -496,49 +574,26 @@
                                     </div>
                                 </div>
                             </div>
+                        </a>
+                    @endforeach
+                @else
+                    <p>No Caveat news available.</p>
+                @endif
             </div>
         </div>
-        </a>
-        @endforeach
-    @else
-        <p class="text-gray-500">No music news available at the moment. Please check back later.</p>
-        @endif
-        <a href="#" class="text-blue-600 hover:underline">See more</a>
-        </div>
+
+        <div class="text-center mt-6">
+            <a href="#"
+                class="bg-purple-600 text-white px-6 py-2 rounded-full inline-block hover:bg-purple-700 transition duration-300">See
+                more</a>
         </div>
     </section>
+
 
 
     <section class="max-w-6xl mx-auto px-4 py-8">
         <h2 class="text-2xl font-bold mb-6">Caveat</h2>
 
-        {{-- <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            @foreach ([1, 2, 3, 4] as $index)
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <img src="/images/news-image.jpeg" alt="News Image {{ $index }}"
-                        class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold mb-2">Nigerian Senators' Monthly Pay Exceeds N2 Billion:
-                            Controversy Over Legislative Salaries and Allowances</h3>
-                        <p class="text-sm text-gray-600 mb-4">Emerging reports indicate that the total monthly
-                            remuneration of 99 non-principal officers of the Nigerian Senate surpa...</p>
-                        <div class="flex items-center justify-between text-xs text-gray-500">
-                            <span>By Shola Akinyele</span>
-                            <span>Category: Local</span>
-                        </div>
-                        <div class="mt-2 flex items-center">
-                            <svg class="w-4 h-4 text-blue-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
-                                </path>
-                            </svg>
-                            <span class="text-sm text-gray-500">123</span>
-                            <span class="ml-2 text-sm text-gray-500">20 comments</span>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div> --}}
 
 
         <div class="overflow-x-auto pb-4">
@@ -1061,126 +1116,136 @@
     </section>
 
 
+    {{-- @dd($missingPostsData['posts']) --}}
 
-    <section class="max-w-6xl mx-auto px-4 py-8">
-        @if (!empty($missingPostsData['posts']))
-            <div class="bg-gray-200 p-2 mb-4">
-                <h2 class="text-2xl font-bold">Missing Person</h2>
+    {{-- <pre>{{ print_r($missingPostsData['posts'], true) }}</pre> --}}
+
+    {{-- welcome.blade.php --}}
+    <div class="container mx-auto px-4 py-8">
+        {{-- Stats Overview --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-red-100 rounded-lg p-6 shadow-sm">
+                <h3 class="text-xl font-semibold text-red-700">Missing Persons</h3>
+                <p class="text-3xl font-bold text-red-800">{{ $totalMissingPersonPosts }}</p>
+                <p class="text-sm text-red-600">Total Cases</p>
             </div>
+            <div class="bg-amber-100 rounded-lg p-6 shadow-sm">
+                <h3 class="text-xl font-semibold text-amber-700">Wanted Persons</h3>
+                <p class="text-3xl font-bold text-amber-800">{{ $totalWantedPersonPosts }}</p>
+                <p class="text-sm text-amber-600">Total Cases</p>
+            </div>
+        </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                @foreach ($missingPostsData['posts'] as $post)
-                    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        {{-- Missing Persons Section --}}
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Missing Persons</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @forelse($missingPosts as $post)
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
                         <img src="{{ $post['featured_image'] }}" alt="{{ $post['title'] }}"
                             class="w-full h-48 object-cover">
-                        <div class="p-3">
-                            <table class="w-full text-sm">
-                                <tr>
-                                    <td class="font-semibold">Name:</td>
-                                    <td>{{ $post['title'] }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-semibold">Sex:</td>
-                                    <td>{{ $post['gender'] }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-semibold">Age:</td>
-                                    <td>{{ $post['age'] }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-semibold">Height:</td>
-                                    <td>{{ $post['height'] }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-semibold">Skin Color:</td>
-                                    <td>{{ $post['skin_color'] }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-semibold">Call:</td>
-                                    <td>{{ $post['phone_number'] }}</td>
-                                </tr>
-                            </table>
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $post['title'] }}</h3>
+                            <div class="space-y-2 text-sm text-gray-600">
+                                <p><span class="font-medium">Age:</span> {{ $post['age'] }} years</p>
+                                <p><span class="font-medium">Gender:</span> {{ ucfirst($post['gender']) }}</p>
+                                <p><span class="font-medium">Height:</span> {{ $post['height'] }} ft</p>
+                                <p><span class="font-medium">Skin Color:</span> {{ ucfirst($post['skin_color']) }}</p>
+                                <p><span class="font-medium">Contact:</span> {{ $post['phone_number'] }}</p>
+                            </div>
+                            <div class="mt-4">
+                                <a href="{{ url('/posts/' . $post['slug']) }}"
+                                    class="inline-block bg-red-600 text-white px-4 py-2 rounded-md text-sm hover:bg-red-700 transition">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-gray-500 col-span-full">No missing persons cases reported.</p>
+                @endforelse
+            </div>
+        </section>
+
+        {{-- Wanted Persons Section --}}
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Wanted Persons</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @forelse($wantedPosts as $post)
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <img src="{{ $post['featured_image'] }}" alt="{{ $post['title'] }}"
+                            class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $post['title'] }}</h3>
+                            <div class="space-y-2 text-sm text-gray-600">
+                                <p><span class="font-medium">Age:</span> {{ $post['age'] }} years</p>
+                                <p><span class="font-medium">Gender:</span> {{ ucfirst($post['gender']) }}</p>
+                                <p><span class="font-medium">Height:</span> {{ $post['height'] }} ft</p>
+                                <p><span class="font-medium">Skin Color:</span> {{ ucfirst($post['skin_color']) }}</p>
+                                <p><span class="font-medium">Contact:</span> {{ $post['phone_number'] }}</p>
+                            </div>
+                            <div class="mt-4">
+                                <a href="{{ url('/posts/' . $post['slug']) }}"
+                                    class="inline-block bg-amber-600 text-white px-4 py-2 rounded-md text-sm hover:bg-amber-700 transition">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-gray-500 col-span-full">No wanted persons cases reported.</p>
+                @endforelse
+            </div>
+        </section>
+    </div>
+
+    {{-- <div class="container mx-auto p-4">
+        <!-- Missing Posts Section -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Missing Posts</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach ($missingPostsData['posts'] as $post)
+                    <div class="bg-white border rounded-lg shadow-md overflow-hidden">
+                        <img src="{{ $post['featured_image'] }}" alt="{{ $post['title'] }}"
+                            class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800">{{ $post['title'] }}</h3>
+                            <p class="text-gray-600 mt-2">{!! $post['content'] !!}</p>
+                            <p class="text-sm text-gray-500 mt-2">Age: {{ $post['age'] }} | Gender:
+                                {{ ucfirst($post['gender']) }}</p>
+                            <p class="text-sm text-gray-500">Phone: {{ $post['phone_number'] }}</p>
                         </div>
                     </div>
                 @endforeach
             </div>
-            <!-- Pagination for Missing Posts -->
-            @if (!empty($missingPostsData['pagination']))
-                <div>
-                    <!-- Render pagination links (if any) for Missing posts -->
-                    <nav>
-                        <ul class="pagination">
-                            @if ($missingPostsData['pagination']['prev_page_url'])
-                                <li><a href="{{ $missingPostsData['pagination']['prev_page_url'] }}">Previous</a></li>
-                            @endif
-                            @if ($missingPostsData['pagination']['next_page_url'])
-                                <li><a href="{{ $missingPostsData['pagination']['next_page_url'] }}">Next</a></li>
-                            @endif
-                        </ul>
-                    </nav>
-                </div>
-            @endif
-        @endif
-
-        <div class="text-center">
-            <a href="#"
-                class="bg-purple-600 text-white px-6 py-2 rounded-full inline-block hover:bg-purple-700 transition duration-300">See
-                more</a>
+            <div class="mt-4">
+                <p>Total Missing Posts: {{ $totalMissingPersonPosts }}</p>
+            </div>
         </div>
-    </section>
 
-    <!-- Wanted Posts Section -->
-    @if (!empty($wantedPostsData['posts']))
-        <section class="max-w-6xl mx-auto px-4 py-8">
-            <div class="bg-white p-4">
-                <h1 class="text-3xl font-bold mb-4">Wanted Person</h1>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                    @foreach ($wantedPostsData['posts'] as $post)
-                        <div class="border border-gray-200 rounded-lg overflow-hidden">
-                            <div class="relative">
-                                <img src="{{ $post['featured_image'] }}" alt="{{ $post['title'] }}"
-                                    class="w-full h-40 object-cover">
-                                <span
-                                    class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">DANGEROUS</span>
-                            </div>
-                            <div class="p-4">
-                                <h2 class="font-bold mb-2">Name: {{ $post['title'] }}</h2>
-                                <p class="text-sm mb-1">Sex: M &nbsp;&nbsp;&nbsp; Age: {{ $post['age'] }}</p>
-                                <p class="text-sm mb-1">Height: {{ $post['height'] }} &nbsp;&nbsp;&nbsp; Tone:
-                                    {{ $post['skin_color'] }}</p>
-                                {{-- <p class="text-sm mb-1">Bounty: ${{ number_format(450000 + $i * 250000, 0) }}</p> --}}
-                                <p class="text-sm mb-2">More info:</p>
-                                <p class="text-xs mb-4">{{ $post['meta_description'] }}</p>
-                                <div class="bg-red-500 text-white text-center py-2 font-bold">
-                                    DON'T RELATE WITH, CALL {{ $post['phone_number'] }} IMMEDIATELY
-                                </div>
-                            </div>
+        <!-- Wanted Posts Section -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Wanted Posts</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach ($wantedPostsData['posts'] as $post)
+                    <div class="bg-white border rounded-lg shadow-md overflow-hidden">
+                        <img src="{{ $post['featured_image'] }}" alt="{{ $post['title'] }}"
+                            class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800">{{ $post['title'] }}</h3>
+                            <p class="text-gray-600 mt-2">{!! $post['content'] !!}</p>
+                            <p class="text-sm text-gray-500 mt-2">Age: {{ $post['age'] }} | Gender:
+                                {{ ucfirst($post['gender']) }}</p>
+                            <p class="text-sm text-gray-500">Phone: {{ $post['phone_number'] }}</p>
                         </div>
-                    @endforeach
-                </div>
-
-                <!-- Pagination for Wanted Posts -->
-                @if (!empty($wantedPostsData['pagination']))
-                    <div>
-                        <!-- Render pagination links (if any) for Wanted posts -->
-                        <nav>
-                            <ul class="pagination">
-                                @if ($wantedPostsData['pagination']['prev_page_url'])
-                                    <li><a href="{{ $wantedPostsData['pagination']['prev_page_url'] }}">Previous</a></li>
-                                @endif
-                                @if ($wantedPostsData['pagination']['next_page_url'])
-                                    <li><a href="{{ $wantedPostsData['pagination']['next_page_url'] }}">Next</a></li>
-                                @endif
-                            </ul>
-                        </nav>
                     </div>
-                @endif
-    @endif
-    <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">See more</button>
-    </div>
-    </section>
-
-
+                @endforeach
+            </div>
+            <div class="mt-4">
+                <p>Total Wanted Posts: {{ $totalWantedPersonPosts }}</p>
+            </div>
+        </div>
+    </div> --}}
 
 
 
@@ -1979,7 +2044,7 @@
 
     <section class="container mx-auto px-4 py-8">
         <div class="bg-blue-600 text-white p-4 mb-6">
-            <h2 class="text-2xl font-bold">Stolen items and vehicles</h2>
+            <h2 class="text-2xl font-bold">Stolen Vehicles</h2>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -2022,8 +2087,7 @@
 
             @foreach ($items as $item)
                 <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    {{-- <img src="{{ asset('images/' . $item['image']) }}" alt="{{ $item['name'] }}"
-                                class="w-full h-48 object-cover"> --}}
+
                     <img src="/images/vehicle.jpg" alt="Stolen Vehicle">
                     <div class="p-4">
                         <h4 class="font-bold">Item: {{ $item['name'] }}</h4>
@@ -2258,5 +2322,59 @@
 
     </div>
     </main>
+
+
+    <!--- share code implementation--->
+    <!-- Toast Notification for Share Success -->
+    <div id="shareToast"
+        class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300 hidden">
+        Link copied to clipboard!
+    </div>
+
+    <!-- JavaScript for Share Functionality -->
+    <script>
+        function sharePost(url, title) {
+            if (navigator.share) {
+                // Use Web Share API if available (mostly mobile devices)
+                navigator.share({
+                    title: title,
+                    url: url
+                }).catch((error) => {
+                    if (error.name !== 'AbortError') {
+                        console.error('Error sharing:', error);
+                        fallbackShare(url);
+                    }
+                });
+            } else {
+                // Fallback to clipboard
+                fallbackShare(url);
+            }
+        }
+
+        function fallbackShare(url) {
+            navigator.clipboard.writeText(url)
+                .then(() => showToast())
+                .catch((error) => {
+                    console.error('Failed to copy:', error);
+                });
+        }
+
+        function showToast() {
+            const toast = document.getElementById('shareToast');
+            toast.classList.remove('hidden');
+            // Wait a tiny bit before adding the show classes
+            setTimeout(() => {
+                toast.classList.remove('translate-y-full', 'opacity-0');
+            }, 10);
+
+            // Hide the toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-y-full', 'opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 300);
+            }, 3000);
+        }
+    </script>
 
 @endsection

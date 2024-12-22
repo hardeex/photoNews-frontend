@@ -96,22 +96,6 @@ class UserController extends Controller
     }
 
 
-    //     public function index(Request $request)
-    // {
-    //     // Fetch the existing published posts
-    //     $response = $this->listPublishedPosts();
-
-    //     // Extract posts data and pagination
-    //     $postsData = $response['postsData'] ?? [];
-    //     $pagination = $response['pagination'] ?? [];
-
-    //     // Fetch the posts that are approved and is_breaking is true
-    //     $breakingPostsData = $this->listBreakingPosts();
-
-    //     // Pass both sets of posts data to the view
-    //     return view('welcome', compact('postsData', 'pagination', 'breakingPostsData'));
-    // }
-
 
     public function index(Request $request)
     {
@@ -134,7 +118,7 @@ class UserController extends Controller
         $eventsPostsData = $this->listEventsPosts();
 
         // fetch caveat posts
-        $caveatPostsData = $this->listCaveatPosts();
+        $caveatPostsData = $this->listCaveatPostsNews();
 
         // fetch pride of nigeria posts
         $listPrideOfNigeriaPostsData = $this->listPrideOfNigeriaPosts();
@@ -163,8 +147,11 @@ class UserController extends Controller
         // fetch the categories
         $categories = $this->listCategories($request);
 
+        // Fetch public notice posts and total count
+        $result = $this->listPublicNoticePosts();
+        $publicNotice = $result['publicNoticePosts'] ?? [];
         // public notice
-        $publicNotice = $this->listPublicNoticePosts();
+        //$publicNotice = $this->listPublicNoticePosts();
 
         // lost and found
         $lostAndFoundPostData = $this->listLostAndFoundPostData();
@@ -173,10 +160,22 @@ class UserController extends Controller
         $listObituaryPostsData = $this->listObituaryPosts();
 
         // Fetch Missing posts
-        $missingPostsData = $this->listMissingPosts($request);
+        // $missingPostsData = $this->listMissingPosts($request);
 
         // Fetch Wanted posts
+        //$wantedPostsData = $this->listWantedPosts($request);
+
+        // Fetch Missing posts data
+        // Fetch Missing posts data
+        $missingPostsData = $this->listMissingPosts($request);
         $wantedPostsData = $this->listWantedPosts($request);
+
+        // Fix the data structure
+        $missingPosts = $missingPostsData['posts']['posts'] ?? [];
+        $wantedPosts = $wantedPostsData['posts']['posts'] ?? [];
+
+        // Log::info('Missing Posts Data:', ['data' => $missingPostsData]);
+        // Log::info('Wanted Posts Data:', ['data' => $wantedPostsData]);
 
 
         // Call the listPosts method to get the data
@@ -185,6 +184,11 @@ class UserController extends Controller
         // fetch change of name
         $listChangeOfNamePostsData = $this->lisChangeOfNamePosts($request);
 
+        $listCaveatPostsData = $this->listCaveatPosts();
+        // Extract the posts data and pagination data
+        $caveatPostsData = $listCaveatPostsData['caveatPostsData'] ?? [];
+        $totalCaveatPostsData = $listCaveatPostsData['totalCaveatPosts'] ?? 0;
+
 
         // counting posts
         $totalPublishedPosts = $response['totalPublishedPosts'] ?? 0;
@@ -192,20 +196,21 @@ class UserController extends Controller
 
         $totalPrideOfNigeriaPosts = $listPrideOfNigeriaPosts['totalPrideOfNigeriaPosts'] ?? 0;
 
-        $totalPublicNoticePosts = $listPublicNoticePosts['totalPublicNoticePosts'] ?? 0;
-        $totalLostAndFoundPosts = $listLostAndFoundPostData['totalLostAndFoundPosts'] ?? 0;
-        $totalObituaryPosts = $listObituaryPosts['totalObituaryPosts'] ?? 0;
-        $totalMissingPersonPosts = $listMissingPosts['totalMissingPersonPosts'] ?? 0;
-        $totalWantedPersonPosts = $listWantedPosts['totalWantedPersonPosts'] ?? 0;
-        $totalChangeOfNamePosts = $lisChangeOfNamePosts['totalChangeOfNamePosts'] ?? 0;
+        // $totalPublicNoticePosts = $publicNotice['totalPublicNoticePosts'] ?? 0;
+        $totalPublicNoticePosts = $result['totalPublicNoticePosts'] ?? 0;
+        $totalLostAndFoundPosts = $lostAndFoundPostData['totalLostAndFoundPosts'] ?? 0;
 
+        $totalObituaryPosts = $listObituaryPostsData['totalObituaryPosts'] ?? 0;
 
+        // $totalMissingPersonPosts = $missingPostsData['totalMissingPersonPosts'] ?? 0;
+        // $totalWantedPersonPosts = $listWantedPosts['totalWantedPersonPosts'] ?? 0;
+        // Extract total counts for missing and wanted posts
+        $totalMissingPersonPosts = $missingPostsData['posts']['pagination']['total'] ?? 0;
+        $totalWantedPersonPosts = $wantedPostsData['posts']['pagination']['total'] ?? 0;
 
-        // Extract posts and total count
-        // $publicNoticePostsData = $publicNotice['posts'] ?? [];
-        // $totalPublicNoticePosts = $publicNotice['total'] ?? 0;
+        $totalChangeOfNamePosts = $listChangeOfNamePostsData['totalChangeOfNamePosts'] ?? 0;
 
-        Log::info('Public Notice Count:', ['total' => $totalPublicNoticePosts]);
+        $totalCaveatPostsData = $listCaveatPostsData['totalCaveatPosts'] ?? 0;
 
         // Pass both sets of posts data to the view
         return view('welcome', compact(
@@ -224,8 +229,15 @@ class UserController extends Controller
             'caveatPostsData',
             'lostAndFoundPostData',
             'listObituaryPostsData',
-            'missingPostsData',
-            'wantedPostsData',
+
+            // 'missingPostsData',
+            // 'wantedPostsData',
+
+            'missingPosts',
+            'wantedPosts',
+
+            'listCaveatPostsData',
+
             'listRemembrancePostsData',
             'listChangeOfNamePostsData',
             'listPrideOfNigeriaPostsData',
@@ -238,9 +250,14 @@ class UserController extends Controller
             'totalPublicNoticePosts',
             'totalLostAndFoundPosts',
             'totalObituaryPosts',
+
             'totalMissingPersonPosts',
             'totalWantedPersonPosts',
-            'totalChangeOfNamePosts'
+
+            'totalChangeOfNamePosts',
+
+
+            'totalCaveatPostsData'
 
         ));
     }
@@ -604,7 +621,7 @@ class UserController extends Controller
     }
 
 
-    private function listCaveatPosts()
+    private function listCaveatPostsNews()
     {
         // Log for debugging
         Log::info('Fetching Caveat approved posts...');
@@ -818,22 +835,15 @@ class UserController extends Controller
                 }
 
                 // Correctly access the total number of posts
-                $totalPublicNoticePosts = $responseData['total'] ?? 0;
+                $totalPublicNoticePosts = $responseData['posts']['total'] ?? 0;
+
                 Log::info('Total public notice posts:', ['total' => $totalPublicNoticePosts]);
 
-                // print_r($publicNoticePosts);
-                // exit();
-                // Return the public notice posts
-                return $publicNoticePosts;
-
-
-
-
-                // return [
-                //     'publicNotice' => $publicNoticePosts,
-                //     //'pagination' => $pagination,
-                //     'totalPublicNoticePosts' => $totalPublicNoticePosts
-                // ];
+                // Return both the public notice posts and the total count
+                return [
+                    'publicNoticePosts' => $publicNoticePosts,
+                    'totalPublicNoticePosts' => $totalPublicNoticePosts
+                ];
             } else {
                 // If the API call failed
                 Log::error('Error fetching public notice: ' . $response->status());
@@ -848,19 +858,6 @@ class UserController extends Controller
 
 
 
-
-    //     public function index(Request $request)
-    //     {
-
-    //         $response = $this->listPublishedPosts();
-
-    //         // Extract posts data and pagination\
-    //         $postsData = $response['postsData'] ?? [];
-    //         $pagination = $response['pagination'] ?? [];
-
-    //         // Pass the posts data to the view
-    //         return view('welcome', compact('postsData', 'pagination'));
-    //     }
 
 
     private function listPublishedPosts()
@@ -919,6 +916,68 @@ class UserController extends Controller
             ];
         }
     }
+
+
+
+    private function listCaveatPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching published Caveat posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/caveat/article';
+        Log::info('API URL for caveat published posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to the caveat endpoint to fetch the 12 most recent posts
+            $response = Http::get($apiUrl, [
+                'per_page' => 12,
+                'order' => 'desc',
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                // Extract posts and pagination data from the response
+                $getCaveatPosts = $response->json();
+
+                // Extract posts data and pagination info
+                $caveatPostsData = $getCaveatPosts['data']['posts'] ?? [];
+                $caveatPagination = $getCaveatPosts['data']['pagination'] ?? [];
+
+                // Get the total count of published posts from the pagination data
+                $totalCaveatPosts = $caveatPagination['total'] ?? 0;
+
+                // print_r($caveatPostsData);
+                // exit();
+
+                // Log the count of published posts for debugging purposes
+                Log::info('Total Caveat Published Posts: ' . $totalCaveatPosts);
+
+                // Return the data
+                return [
+                    'caveatPostsData' => $caveatPostsData,
+                    'caveatPagination' => $caveatPagination,
+                    'totalCaveatPosts' => $totalCaveatPosts
+                ];
+            } else {
+                // If the response failed, handle the error
+                Log::error('Error fetching caveat published posts: ' . $response->status());
+                return [
+                    'caveatPostsData' => [],
+                    'caveatPagination' => [],
+                    'totalCaveatPosts' => 0
+                ];
+            }
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the request
+            Log::error('Error fetching published posts: ' . $e->getMessage());
+            return [
+                'caveatPostsData' => [],
+                'caveatPagination' => [],
+                'totalCaveatPosts' => 0
+            ];
+        }
+    }
+
 
 
 
@@ -1113,11 +1172,13 @@ class UserController extends Controller
                 // print_r($LostAndFoundPostsData);
                 // exit();
 
+                // print_r($totalLostAndFoundPosts);
+                // exit();
                 // Return the data
                 return [
                     'lostAndFoundPostsData' => $LostAndFoundPostsData,
                     'pagination' => $pagination,
-                    'totalLostAndFound' => $totalLostAndFoundPosts
+                    'totalLostAndFoundPosts' => $totalLostAndFoundPosts
                 ];
             } else {
                 // If the response failed, handle the error
@@ -1179,7 +1240,8 @@ class UserController extends Controller
                 // Return the data
                 return [
                     'obituaryPostsData' => $obituaryPostsData,
-                    'pagination' => $pagination
+                    'pagination' => $pagination,
+                    'totalObituaryPosts' => $totalObituaryPosts
                 ];
             } else {
                 // Log the HTTP status code for failed responses
@@ -1201,11 +1263,10 @@ class UserController extends Controller
 
 
 
-    private function listMissingPosts(Request $request)
+    private function listMissingPosts22(Request $request)
     {
         // Construct API URL for missing posts
         $apiUrl = config('api.base_url') . '/posts/missing-or-wanted';
-
 
         Log::info('Fetching Missing published posts...', ['url' => $apiUrl]);
 
@@ -1220,12 +1281,24 @@ class UserController extends Controller
             if ($response->successful()) {
                 $responseData = $response->json();
 
-                $totalMissingPersonPosts = $pagination['total'] ?? 0;
-                Log::info('The total missing person posts counts:' . $totalMissingPersonPosts);
+                // Extract the posts data and pagination data
+                $missingPersonPosts = $responseData['data'] ?? [];
+                $totalMissingPersonPosts = $responseData['pagination']['total'] ?? 0;
 
+                Log::info('The total missing person posts count: ' . $totalMissingPersonPosts);
 
-                // Return the posts data and pagination information
-                return $responseData['data'];
+                // print_r($responseData);
+                // print_r($missingPersonPosts);
+                // print_r("The missing person count: ");
+                // print_r($totalMissingPersonPosts);
+                // exit();  // For testing purposes, print the data and exit immediately
+
+                // Return the posts data along with the total missing person posts count
+                return [
+                    'posts' => $missingPersonPosts,
+                    'totalMissingPersonPosts' => $totalMissingPersonPosts,
+                    'pagination' => $responseData['pagination'] ?? [],
+                ];
             } else {
                 Log::error('Error fetching missing posts: HTTP Status ' . $response->status());
                 return ['posts' => [], 'pagination' => []];
@@ -1237,7 +1310,59 @@ class UserController extends Controller
     }
 
 
+    private function listMissingPosts(Request $request)
+    {
+        $apiUrl = config('api.base_url') . '/posts/missing-or-wanted';
+
+        try {
+            $response = Http::get($apiUrl, [
+                'option' => 'missing',
+                'per_page' => $request->get('per_page', 100),
+            ]);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                return [
+                    'posts' => $responseData['data'] ?? [],
+                    'totalMissingPersonPosts' => $responseData['data']['pagination']['total'] ?? 0,
+                ];
+            }
+
+            return ['posts' => [], 'totalMissingPersonPosts' => 0];
+        } catch (\Exception $e) {
+            Log::error('Exception fetching missing posts: ' . $e->getMessage());
+            return ['posts' => [], 'totalMissingPersonPosts' => 0];
+        }
+    }
+
     private function listWantedPosts(Request $request)
+    {
+        $apiUrl = config('api.base_url') . '/posts/missing-or-wanted';
+
+        try {
+            $response = Http::get($apiUrl, [
+                'option' => 'wanted',
+                'per_page' => $request->get('per_page', 100),
+            ]);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                return [
+                    'posts' => $responseData['data'] ?? [],
+                    'totalWantedPersonPosts' => $responseData['data']['pagination']['total'] ?? 0,
+                ];
+            }
+
+            return ['posts' => [], 'totalWantedPersonPosts' => 0];
+        } catch (\Exception $e) {
+            Log::error('Exception fetching wanted posts: ' . $e->getMessage());
+            return ['posts' => [], 'totalWantedPersonPosts' => 0];
+        }
+    }
+
+
+
+    private function listWantedPosts22(Request $request)
     {
         // Construct API URL for wanted posts
         $apiUrl = config('api.base_url') . '/posts/missing-or-wanted';  // Adjust to the correct endpoint
@@ -1254,10 +1379,18 @@ class UserController extends Controller
             if ($response->successful()) {
                 $responseData = $response->json();
 
-                $totalWantedPosts = $pagination['total'] ?? 0;
-                Log::info('The total wanted person missing counts: ' . $totalWantedPosts);
-                // Return the posts data and pagination information
-                return $responseData['data'];
+                // Extract the posts data and pagination data
+                $wantedPersonPosts = $responseData['data'] ?? [];
+                $totalWantedPersonPosts = $responseData['pagination']['total'] ?? 0;
+
+                Log::info('The total wanted person posts count: ' . $totalWantedPersonPosts);
+
+                // Return the posts data along with the total wanted person posts count
+                return [
+                    'posts' => $wantedPersonPosts,
+                    'totalWantedPersonPosts' => $totalWantedPersonPosts,
+                    'pagination' => $responseData['pagination'] ?? [],
+                ];
             } else {
                 Log::error('Error fetching wanted posts: HTTP Status ' . $response->status());
                 return ['posts' => [], 'pagination' => []];
@@ -1267,6 +1400,7 @@ class UserController extends Controller
             return ['posts' => [], 'pagination' => []];
         }
     }
+
 
 
     // List Remembrance Posts with filters and pagination
@@ -1408,7 +1542,8 @@ class UserController extends Controller
                 // Return the data in the format expected by the frontend
                 return [
                     'changeOfNamePostsData' => $changeOfNamePostsData,
-                    'pagination' => $pagination
+                    'pagination' => $pagination,
+                    'totalChangeOfNamePosts' => $totalChangeOfNamePosts,
                 ];
             } else {
                 // Log the HTTP status code for failed responses

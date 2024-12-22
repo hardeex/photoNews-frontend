@@ -34,7 +34,7 @@ class NewsPostController extends Controller
             return redirect()->route('user.login')->with('error', 'Please log in first');
         }
 
-           // Fetch categories using the private method
+        // Fetch categories using the private method
         $categories = $this->fetchCategories();
 
         // Sort categories alphabetically by name
@@ -42,6 +42,10 @@ class NewsPostController extends Controller
             return strcasecmp($a['name'], $b['name']); // Case-insensitive sort
         });
 
+        // Convert category names to title case
+        foreach ($categories as &$category) {
+            $category['name'] = ucwords(strtolower($category['name'])); // Convert to title case
+        }
 
         return view('news.create-post', compact('categories'));
     }
@@ -51,10 +55,10 @@ class NewsPostController extends Controller
     {
         // Get the base URL from config
         $baseUrl = config('api.base_url');
-        
+
         // Get the full URL for the category-seeder endpoint
         $url = $baseUrl . '/category-seeder';
-        
+
         // Fetch the categories using the HTTP client
         $response = Http::get($url);
 
@@ -68,22 +72,22 @@ class NewsPostController extends Controller
     }
 
 
-//     public function createPost()
-// {
-//     $jwtToken = session('api_token');
-//     if (empty($jwtToken)) {
-//         return redirect()->route('user.login')->with('error', 'Please log in first');
-//     }
+    //     public function createPost()
+    // {
+    //     $jwtToken = session('api_token');
+    //     if (empty($jwtToken)) {
+    //         return redirect()->route('user.login')->with('error', 'Please log in first');
+    //     }
 
-//     // Fetch categories from the new API endpoint
-//     $categories = $this->fetchData('get-categories', $jwtToken);
+    //     // Fetch categories from the new API endpoint
+    //     $categories = $this->fetchData('get-categories', $jwtToken);
 
-//     // Fetch tags
-//     $tags = $this->fetchData('get-tags', $jwtToken);
+    //     // Fetch tags
+    //     $tags = $this->fetchData('get-tags', $jwtToken);
 
-//     // Pass the categories and tags to the view
-//     return view('news.create-post', compact('categories', 'tags'));
-// }
+    //     // Pass the categories and tags to the view
+    //     return view('news.create-post', compact('categories', 'tags'));
+    // }
 
 
     private function fetchData($endpoint, $jwtToken)
@@ -175,6 +179,156 @@ class NewsPostController extends Controller
 
 
 
+    public function createCategorySeeder()
+    {
+        $jwtToken = session('api_token');
+        if (empty($jwtToken)) {
+            return redirect()->route('user.login')->with('error', 'Please log in first');
+        }
+
+        // Original endpoint to get categories for creation (keep existing variable name)
+        $apiUrl = config('api.base_url') . '/category-seeder';
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $jwtToken,
+            ])->get($apiUrl);
+
+            if ($response->successful()) {
+                $categories = $response->json()['data']['categories'] ?? [];  // Fetch categories
+
+                // Convert each category name to title case
+                $categories = array_map(function ($category) {
+                    $category['name'] = ucwords(strtolower($category['name'])); // Title case for each category name
+                    return $category;
+                }, $categories);
+
+                Log::info('Fetched categories seeder for creation: ' . json_encode($categories));
+            } else {
+                $categories = [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching categories seeder for creation: ' . $e->getMessage());
+            $categories = [];
+        }
+
+        // New endpoint to list categories for display (new variable name)
+        $listCategoriesUrl = config('api.base_url') . '/list-categories-seeder'; // the one with pagination
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $jwtToken,
+            ])->get($listCategoriesUrl);
+
+            if ($response->successful()) {
+                $data = $response->json()['data'] ?? [];
+                $categoriesForDisplay = $data['categories'] ?? []; // Categories list
+                $pagination = $data['pagination'] ?? []; // Pagination details
+
+                // Convert each category name to title case for display
+                $categoriesForDisplay = array_map(function ($category) {
+                    $category['name'] = ucwords(strtolower($category['name'])); // Title case for each category name
+                    return $category;
+                }, $categoriesForDisplay);
+
+                Log::info('Fetched categories for display: ' . json_encode($categoriesForDisplay));
+                Log::info('Pagination data: ' . json_encode($pagination));
+            } else {
+                $categoriesForDisplay = [];
+                $pagination = [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching categories for display: ' . $e->getMessage());
+            $categoriesForDisplay = [];
+            $pagination = [];
+        }
+
+        // Pass categories and pagination to the view
+        return view('news.category-seeder', compact('categories', 'categoriesForDisplay', 'pagination'));
+    }
+
+
+
+
+    public function submitCategorySeeder(Request $request)
+    {
+        Log::info('Submit category seeder to the endpoint method is called...', [
+            'request_data' => $request->all(),  // Log all incoming request data
+        ]);
+
+        // Validate the incoming form data
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+
+        ]);
+
+        // Log the validated data before proceeding
+        Log::info('Validated category data', [
+            'name' => $validated['name'],
+
+        ]);
+
+        // Get the JWT token from session (after login)
+        $jwtToken = session('api_token');
+
+        // If the JWT token is missing or expired, redirect to the login page
+        if (empty($jwtToken)) {
+            Log::warning('JWT token missing or expired');
+            return redirect()->route('user.login')->with('error', 'Please log in first');
+        }
+
+        // API URL for category submission
+        $apiUrl = config('api.base_url') . '/create-category-seeder';
+        Log::info('Connecting to API URL for category creation', [
+            'api_url' => $apiUrl,
+        ]);
+
+        // Prepare the data to be sent to the API
+        $data = [
+            'name' => $validated['name'],
+        ];
+
+        // Log the data that is about to be sent to the external API
+        Log::info('Sending data to external API', [
+            'data' => $data,
+        ]);
+
+        // Make the POST request to the external API
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $jwtToken,
+            ])->post($apiUrl, $data);
+
+
+            // Log the response from the external API
+            if ($response->successful()) {
+                Log::info('Category successfully created through external API', [
+                    'response_data' => $response->json(),
+                ]);
+
+                // Handle successful response
+                return redirect()->back()->with('success', 'Category created successfully!');
+            } else {
+                // If the token has expired or is invalid, we need to catch that
+                if ($response->status() === 401) {
+                    Log::warning('Expired or invalid token detected');
+                    return redirect()->route('user.login')->with('error', 'Session expired. Please log in again.');
+                }
+
+                // Log the error response from the API
+                Log::error('Error returned from external API', [
+                    'status_code' => $response->status(),
+                    'error_message' => $response->json()['message'] ?? 'An error occurred.',
+                ]);
+                return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
+            }
+        } catch (\Exception $e) {
+            // Log the exception error with stack trace
+            Log::error('API request failed with exception', [
+                'exception_message' => $e->getMessage(),
+                'exception_trace' => $e->getTraceAsString(),
+            ]);
+            return back()->withErrors(['error' => 'An error occurred while submitting the category.']);
+        }
+    }
 
     public function submitCategory(Request $request)
     {
@@ -885,9 +1039,9 @@ class NewsPostController extends Controller
             'caveat' => 'nullable|boolean',
             'pride_of_nigeria' => 'nullable|boolean',
 
-            'category_id' => 'nullable', 
+            'category_id' => 'nullable',
 
-            
+
         ]);
 
         // Get the JWT token from session (after login)
@@ -925,7 +1079,7 @@ class NewsPostController extends Controller
 
             'category_id' => $validated['category_id'],
 
-           
+
         ];
 
 

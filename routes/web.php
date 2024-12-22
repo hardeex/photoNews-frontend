@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CaveatController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\PublicNoticeController;
 use App\Http\Controllers\userAuthenticationController;
@@ -68,6 +69,10 @@ Route::get('/create-change-of-name', [changeOfNameController::class, 'createPost
 Route::post('/submit-change-of-name', [changeOfNameController::class, 'submitPost'])->name('change-of-name.submit');
 
 
+// caveat routes
+Route::get('/create/caveat', [CaveatController::class, 'createPost'])->name('caveat.create');
+Route::post('/submit/caveat', [CaveatController::class, 'submitPost'])->name('caveat.submit');
+
 
 
 // ctaegory and tag routes
@@ -75,3 +80,8 @@ Route::get('/create-category', [NewsPostController::class, 'createCategory'])->n
 Route::post('/submit-category', [NewsPostController::class, 'submitCategory'])->name('submit-category');
 Route::get('/create-tag', [NewsPostController::class, 'createTag'])->name('create-tag');
 Route::post('/submit-tag', [NewsPostController::class, 'submitTag'])->name('submit-tag');
+
+
+// seeder category routes
+Route::get('/create-category-seeder', [NewsPostController::class, 'createCategorySeeder'])->name('create-category-seeder');
+Route::post('/submit-category-seeder', [NewsPostController::class, 'submitCategorySeeder'])->name('submit-category-seeder');

@@ -50,7 +50,7 @@
     <div class="container mx-auto px-6 py-8">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="text-2xl font-semibold">Create Obituary Post</h1>
+                <h1 class="text-2xl font-semibold">Create Caveat Post</h1>
                 <p class="text-sm text-gray-600" id="saveStatus"></p>
             </div>
             <div class="flex gap-4">
@@ -100,7 +100,7 @@
 
 
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <form action="{{ route('obituary.submit') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('caveat.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
 
@@ -108,8 +108,7 @@
 
                 <!-- Title -->
                 <div class="mb-6">
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Name of the Deceased
-                        *</label>
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
                     <input type="text" id="title" name="title"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         value="{{ old('title', $post->title ?? '') }}" required>
@@ -127,7 +126,7 @@
 
                 <!-- Featured Image -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">The image of the person *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Featured Image *</label>
                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">
                             <div class="flex text-sm text-gray-600">
@@ -153,102 +152,69 @@
 
 
 
+
+
                 <!-- Content -->
                 <div class="mb-6">
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2"> Information or Details
-                        *</label>
+                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Content *</label>
                     <textarea id="editor" rows="10" name="content" class="w-full" required>{{ old('content', $post->content ?? '') }}</textarea>
 
                 </div>
 
-                <!-- Gender -->
-                <div class="mb-6">
-                    <label for="gender" class="block text-sm font-medium text-gray-900 mb-2">Gender *</label>
-                    <select id="gender" name="gender"
-                        class="w-full bg-white text-gray-900 border border-gray-300 rounded-md p-2" required>
-                        <option value="male" {{ old('gender', $post->gender ?? '') == 'male' ? 'selected' : '' }}>Male
-                        </option>
-                        <option value="female" {{ old('gender', $post->gender ?? '') == 'female' ? 'selected' : '' }}>
-                            Female</option>
-                        <option value="other" {{ old('gender', $post->gender ?? '') == 'other' ? 'selected' : '' }}>Other
-                        </option>
-                    </select>
-                </div>
 
-                <!-- Age -->
-                <div class="mb-6">
-                    <label for="age" class="block text-sm font-medium text-gray-900 mb-2">Aged  *</label>
-                    <input type="number" id="age" name="age"
-                        class="w-full bg-white text-gray-900 border border-gray-300 rounded-md p-2"
-                        value="{{ old('age', $post->age ?? '') }}" required />
-                </div>
 
-                <!-- Date of Birth -->
-                <div class="mb-6">
-                    <label for="date_of_birth" class="block text-sm font-medium text-gray-900 mb-2">Date of Birth *</label>
-                    <input type="date" id="date_of_birth" name="date_of_birth"
-                        class="w-full bg-white text-gray-900 border border-gray-300 rounded-md p-2"
-                        value="{{ old('date_of_birth', $post->date_of_birth ?? '') }}" required />
-                </div>
 
 
 
                 <!-- Publishing Options (Admin Only) -->
-                <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
-                    <div class="p-4 bg-gray-50 rounded-lg">
-                        <h3 class="font-medium mb-3">Post Settings</h3>
-                        <div class="flex flex-wrap md:flex-nowrap items-center">
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="is_featured" name="is_featured"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('is_featured') ? 'checked' : '' }}>
-                                <label for="is_featured" class="ml-2 text-sm text-gray-700">Feature this post</label>
-                            </div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-4">Post Settings</h3>
 
-
-
-
-
-
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="is_draft" name="is_draft"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-300 ease-in-out hover:bg-blue-50"
-                                    value="1" {{ old('is_draft') ? 'checked' : '' }}>
-                                <label for="is_draft" class="ml-2 text-sm text-gray-700">Save as Draft</label>
-                            </div>
-
-
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="is_scheduled" name="is_scheduled"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    value="1" {{ old('is_scheduled') ? 'checked' : '' }}>
-                                <label for="is_scheduled" class="ml-2 text-sm text-gray-700">Schedule this post</label>
-                            </div>
-
-                            <div id="schedule_date" class="mb-6"
-                                style="display: {{ old('is_scheduled', $post->is_scheduled ?? false) ? 'block' : 'none' }};">
-                                <label for="scheduled_time" class="block text-sm font-medium text-gray-700 mb-2">Scheduled
-                                    Date & Time</label>
-                                <input type="datetime-local" id="scheduled_time" name="scheduled_time"
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    value="{{ old('scheduled_time', $post->scheduled_time ?? '') }}">
-                            </div>
-
-
-
-
-                            <div class="flex items-center mr-4">
-                                <input type="checkbox" id="allow_comments" name="allow_comments" value="1"
-                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    {{ old('allow_comments', $post->allow_comments ?? true) ? 'checked' : '' }}>
-                                <label for="allow_comments" class="ml-2 text-sm text-gray-700">Allow Comments</label>
-                            </div>
-
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="is_featured" name="is_featured"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200" value="1"
+                                {{ old('is_featured') ? 'checked' : '' }}>
+                            <label for="is_featured" class="ml-2 text-sm text-gray-700">Feature this post</label>
                         </div>
 
 
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="is_draft" name="is_draft"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200 transition duration-300 ease-in-out"
+                                value="1" {{ old('is_draft') ? 'checked' : '' }}>
+                            <label for="is_draft" class="ml-2 text-sm text-gray-700">Save as Draft</label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="is_scheduled" name="is_scheduled"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1" {{ old('is_scheduled') ? 'checked' : '' }}>
+                            <label for="is_scheduled" class="ml-2 text-sm text-gray-700">Schedule this post</label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="allow_comments" name="allow_comments"
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1"
+                                {{ old('allow_comments', $post->allow_comments ?? true) ? 'checked' : '' }}>
+                            <label for="allow_comments" class="ml-2 text-sm text-gray-700">Allow Comments</label>
+                        </div>
+                    </div>
+
+                    <div id="schedule_date" x-show="document.getElementById('is_scheduled').checked" x-cloak
+                        class="mt-4 hidden">
+                        <label for="scheduled_time" class="block text-sm font-medium text-gray-700 mb-2">
+                            Scheduled Date & Time
+                        </label>
+                        <input type="datetime-local" id="scheduled_time" name="scheduled_time"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            value="{{ old('scheduled_time', $post->scheduled_time ?? '') }}">
                     </div>
                 </div>
+
+
 
                 <div class="mb-6">
                     <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
@@ -368,7 +334,6 @@
             }
         });
     </script>
-
 
 
     <script>

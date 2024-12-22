@@ -1,5 +1,5 @@
 <div id="sidebar"
-    class="bg-green-600 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-all duration-300 ease-in-out overflow-y-auto h-screen"
+    class="bg-gray-600 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-all duration-300 ease-in-out overflow-y-auto h-screen"
     aria-hidden="true">
     <style>
         #sidebar {
@@ -41,12 +41,30 @@
             <div class="submenu pl-4 bg-green-700">
                 <a href="{{ route('news.create-post') }}"
                     class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create Post</a>
-                <a href="{{ route('create-category') }}"
+                <a href="{{ route('create-category-seeder') }}"
+                    class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create Category</a>
+                {{-- <a href="{{ route('create-category') }}"
                     class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create Category</a>
                 <a href="{{ route('create-tag') }}" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create
-                    Tag</a>
+                    Tag</a> --}}
             </div>
         </div>
+
+
+        <!-- Caveat -->
+        <div class="menu-item">
+            <a href="#"
+                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-yellow-500 hover:text-white flex justify-between items-center">
+                <span><i class="fas fa-exclamation-triangle mr-2"></i> Caveat</span>
+                <i class="fas fa-chevron-down text-xs"></i>
+            </a>
+            <div class="submenu pl-4 bg-yellow-700">
+                <a href="{{ route('caveat.create') }}"
+                    class="block py-2 px-4 text-sm hover:bg-yellow-500 rounded">Create</a>
+                <a href="#" class="block py-2 px-4 text-sm hover:bg-yellow-500 rounded">Manage</a>
+            </div>
+        </div>
+
 
         <!-- Public Notice -->
         <div class="menu-item">

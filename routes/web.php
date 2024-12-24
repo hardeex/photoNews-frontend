@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CaveatController;
+use App\Http\Controllers\CelebrationController;
 use App\Http\Controllers\NewsPostController;
 use App\Http\Controllers\PublicNoticeController;
 use App\Http\Controllers\userAuthenticationController;
@@ -11,8 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ObituaryController;
 use App\Http\Controllers\RemembranceController;
 use App\Http\Controllers\changeOfNameController;
-
-
+use App\Http\Controllers\StolenVehicle;
 
 // Authentication routes
 Route::get('/register', [userAuthenticationController::class, 'userRegister'])->name('user.register');
@@ -85,3 +85,18 @@ Route::post('/submit-tag', [NewsPostController::class, 'submitTag'])->name('subm
 // seeder category routes
 Route::get('/create-category-seeder', [NewsPostController::class, 'createCategorySeeder'])->name('create-category-seeder');
 Route::post('/submit-category-seeder', [NewsPostController::class, 'submitCategorySeeder'])->name('submit-category-seeder');
+
+
+// celebration routes
+Route::get('/create/birthday', [CelebrationController::class, 'createBirthday'])->name('create.birthday');
+Route::get('/manage/birthday', [CelebrationController::class, 'manageBirthday'])->name('manage.birthday');
+
+Route::get('/create/wedding', [CelebrationController::class, 'createWedding'])->name('create.wedding');
+Route::get('/manage/wedding', [CelebrationController::class, 'manageWedding'])->name('manage.wedding');
+
+Route::get('/create/dedication', [CelebrationController::class, 'createDedication'])->name('create.dedication');
+Route::get('/manage/dedication', [CelebrationController::class, 'manageDedication'])->name('manage.dedication');
+
+
+// stolen vehicles
+Route::get('/create/stolen-vehicle', [StolenVehicle::class, 'create'])->name('create.vehicle');

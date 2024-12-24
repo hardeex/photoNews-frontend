@@ -50,7 +50,7 @@
     <div class="container mx-auto px-6 py-8">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="text-2xl font-semibold">Create New Post</h1>
+                <h1 class="text-2xl font-semibold">Create Caveat Post</h1>
                 <p class="text-sm text-gray-600" id="saveStatus"></p>
             </div>
             <div class="flex gap-4">
@@ -100,7 +100,7 @@
 
 
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <form action="{{ route('posts.submit') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('caveat.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
 
@@ -122,42 +122,6 @@
                         value="{{ old('slug', $post->slug ?? '') }}" required>
                 </div>
 
-
-                {{-- <div class="mb-6">
-                    <label for="categories" class="block text-sm font-medium text-gray-700 mb-2">Categories</label>
-                    <div class="relative">
-                        <input type="text" id="category_search" placeholder="Search categories..."
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            oninput="filterCategories()">
-
-                        <select id="categories" name="categories[]" class="w-full select2"
-                            onchange="handleCategoryChange(this)" required>
-                            <option value="">Select a category</option>
-                            @forelse ($categories as $category)
-                                <option value="{{ $category['id'] }}"
-                                    {{ old('parent_id') == $category['id'] ? 'selected' : '' }}>
-                                    {{ $category['name'] }}
-                                </option>
-                            @empty
-                                <option disabled>No categories available</option>
-                            @endforelse
-                        </select>
-                    </div>
-                </div> --}}
-
-
-                <!-- Category Dropdown -->
-                <div class="mb-4">
-                    <label for="category" class="block text-lg font-medium text-gray-700">Category</label>
-                    <select name="category_id" id="category"
-                        class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        required>
-                        <option value="" disabled selected>Select a Category</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
-                        @endforeach
-                    </select>
-                </div>
 
 
                 <!-- Featured Image -->
@@ -200,28 +164,7 @@
 
 
 
-                {{-- 
-                <div class="mb-6">
-                    <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
-                    <div class="relative">
-                        <input type="text" id="tag_search" placeholder="Search tags..."
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            oninput="filterTags()">
 
-                        <select id="tags" name="tags[]" class="w-full select2" multiple>
-
-                            @forelse ($tags as $tag)
-                                <option value="{{ $tag['id'] }}"
-                                    {{ old('parent_id') == $tag['id'] ? 'selected' : '' }}>
-                                    {{ $tag['name'] }}
-                                </option>
-                            @empty
-                                <option disabled>No tags available</option>
-                            @endforelse
-                        </select>
-
-                    </div>
-                </div> --}}
 
                 <!-- Publishing Options (Admin Only) -->
                 <div class="bg-gray-50 p-6 rounded-lg">
@@ -235,47 +178,7 @@
                             <label for="is_featured" class="ml-2 text-sm text-gray-700">Feature this post</label>
                         </div>
 
-                        <div class="flex items-center">
-                            <input type="checkbox" id="is_breaking" name="is_breaking"
-                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
-                                value="1" {{ old('is_breaking') ? 'checked' : '' }}>
-                            <label for="is_breaking" class="ml-2 text-sm text-gray-700">Breaking News</label>
-                        </div>
 
-                        <div class="flex items-center">
-                            <input type="checkbox" id="caveat" name="caveat"
-                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
-                                value="1" {{ old('caveat') ? 'checked' : '' }}>
-                            <label for="caveat" class="ml-2 text-sm text-gray-700">Caveat</label>
-                        </div>
-
-                        <div class="flex items-center">
-                            <input type="checkbox" id="hot_gist" name="hot_gist"
-                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
-                                value="1" {{ old('hot_gist') ? 'checked' : '' }}>
-                            <label for="hot_gist" class="ml-2 text-sm text-gray-700">Hot Gist</label>
-                        </div>
-
-                        <div class="flex items-center">
-                            <input type="checkbox" id="event" name="event"
-                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
-                                value="1" {{ old('event') ? 'checked' : '' }}>
-                            <label for="event" class="ml-2 text-sm text-gray-700">Event</label>
-                        </div>
-
-                        <div class="flex items-center">
-                            <input type="checkbox" id="top_topic" name="top_topic"
-                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
-                                value="1" {{ old('top_topic') ? 'checked' : '' }}>
-                            <label for="top_topic" class="ml-2 text-sm text-gray-700">Top Topic</label>
-                        </div>
-
-                        <div class="flex items-center">
-                            <input type="checkbox" id="pride_of_nigeria" name="pride_of_nigeria"
-                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
-                                value="1" {{ old('pride_of_nigeria') ? 'checked' : '' }}>
-                            <label for="pride_of_nigeria" class="ml-2 text-sm text-gray-700">Pride of Nigeria</label>
-                        </div>
 
                         <div class="flex items-center">
                             <input type="checkbox" id="is_draft" name="is_draft"
@@ -312,13 +215,6 @@
                 </div>
 
 
-                {{-- 
-                <div class="mb-6">
-                    <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
-                    <input type="text" id="meta_title" name="meta_title"
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        value="{{ old('meta_title', $post->meta_title ?? '') }}">
-                </div> --}}
 
                 <div class="mb-6">
                     <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
@@ -368,12 +264,12 @@
                 <div class="relative group">
                     <!-- Main bubble -->
                     <div
-                        class="bg-green-500 text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 cursor-pointer hover:bg-yellow-600 transition-all duration-300">
+                        class="bg-violet-500 text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 cursor-pointer hover:bg-yellow-600 transition-all duration-300">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <span class="font-medium">Blog/News Posts Mode Active</span>
+                        <span class="font-medium">Stolen Vehicle Mode Active</span>
                     </div>
 
                     <!-- Animated rings -->
@@ -637,142 +533,7 @@
         </script>
 
 
-        <script>
-            // Handling category creation and searching
-            function handleCategoryChange(selectElement) {
-                // Check if no category is selected
-                if (selectElement.value === '') {
-                    alert('Please select a category before submitting the form.');
-                    return false; // Prevent form submission
-                }
 
-                // Check if 'create_new' is selected
-                if (selectElement.value === 'create_new') {
-                    // Prevent form submission and ask for category creation
-                    alert('You must create a category before submitting.');
-                    window.location.href = "#"; // Redirect to category creation
-                    return false; // Prevent form submission
-                }
-
-                // Allow form submission
-                return true;
-            }
-
-            function filterCategories() {
-                const searchInput = document.getElementById('category_search').value.toLowerCase();
-                const dropdown = document.getElementById('category_dropdown');
-                const options = dropdown.getElementsByClassName('category-option');
-
-                let hasMatches = false;
-
-                for (let option of options) {
-                    const optionText = option.textContent.toLowerCase();
-                    if (optionText.includes(searchInput)) {
-                        option.style.display = '';
-                        hasMatches = true;
-                    } else {
-                        option.style.display = 'none';
-                    }
-                }
-
-                dropdown.style.display = hasMatches ? 'block' : 'none';
-            }
-
-            document.getElementById('category_dropdown').addEventListener('click', function(e) {
-                if (e.target.classList.contains('category-option')) {
-                    const selectedValue = e.target.getAttribute('data-value');
-                    if (selectedValue === 'create_new') {
-                        window.location.href = '#';
-                    } else {
-                        document.getElementById('category_search').value = e.target.textContent;
-                        document.getElementById('categories').value = selectedValue; // Set the select value
-                    }
-                    document.getElementById('category_dropdown').style.display =
-                        'none'; // Hide the dropdown after selection
-                }
-            });
-
-            document.addEventListener('click', function(e) {
-                const dropdown = document.getElementById('category_dropdown');
-                if (!dropdown.contains(e.target) && e.target.id !== 'category_search' && e.target.id !== 'categories') {
-                    dropdown.style.display = 'none';
-                }
-            });
-        </script>
-
-
-        <script>
-            // handling tag creation and search list
-            function handleTagChange(selectElement) {
-                if (selectElement.value === 'create_new') {
-                    window.location.href = "#";
-                }
-            }
-
-            function filterTags() {
-                const searchInput = document.getElementById('tag_search').value.toLowerCase();
-                const dropdown = document.getElementById('tag_dropdown');
-                const options = dropdown.getElementsByClassName('tag-option');
-
-                let hasMatches = false;
-
-                for (let option of options) {
-                    const optionText = option.textContent.toLowerCase();
-                    if (optionText.includes(searchInput)) {
-                        option.style.display = '';
-                        hasMatches = true;
-                    } else {
-                        option.style.display = 'none';
-                    }
-                }
-
-                dropdown.style.display = hasMatches ? 'block' : 'none';
-            }
-
-            document.getElementById('tag_dropdown').addEventListener('click', function(e) {
-                if (e.target.classList.contains('tag-option')) {
-                    const selectedValue = e.target.getAttribute('data-value');
-                    const selectElement = document.getElementById('tags');
-
-                    if (selectedValue === 'create_new') {
-                        window.location.href = '#';
-                    } else {
-                        // Check if the option is already selected
-                        const optionExists = Array.from(selectElement.options).some(option => option.value ===
-                            selectedValue);
-
-                        if (!optionExists) {
-                            const newOption = new Option(e.target.textContent, selectedValue, true, true);
-                            selectElement.add(newOption);
-                        } else {
-                            // Deselect the option if it's already selected
-                            for (let option of selectElement.options) {
-                                if (option.value === selectedValue) {
-                                    option.selected = false;
-                                }
-                            }
-                        }
-                    }
-                    document.getElementById('tag_dropdown').style.display = 'none'; // Hide the dropdown after selection
-                }
-            });
-
-            document.addEventListener('click', function(e) {
-                const dropdown = document.getElementById('tag_dropdown');
-                if (!dropdown.contains(e.target) && e.target.id !== 'tag_search' && e.target.id !== 'tags') {
-                    dropdown.style.display = 'none';
-                }
-            });
-        </script>
-
-
-
-        <script>
-            document.querySelector('form').onsubmit = function(e) {
-                console.log('Categories:', document.querySelector('#categories').value);
-                console.log('Tags:', document.querySelector('#tags').value);
-            };
-        </script>
 
 
         <script>

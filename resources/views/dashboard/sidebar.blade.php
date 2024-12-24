@@ -54,7 +54,7 @@
         <!-- Caveat -->
         <div class="menu-item">
             <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-yellow-500 hover:text-white flex justify-between items-center">
+                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
                 <span><i class="fas fa-exclamation-triangle mr-2"></i> Caveat</span>
                 <i class="fas fa-chevron-down text-xs"></i>
             </a>
@@ -65,6 +65,93 @@
             </div>
         </div>
 
+
+        <div class="w-64 shadow-lg rounded-lg">
+            <div class="menu-item">
+                <button id="celebration-button"
+                    class="w-full py-2.5 px-4 rounded transition duration-200 hover:bg-yellow-500 hover:text-white flex justify-between items-center"
+                    onclick="toggleCategory('celebration')">
+                    <span class="flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        Celebration
+                    </span>
+                    <svg class="w-4 h-4 transform transition-transform" id="celebration-arrow" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <div id="celebration-submenu" class="pl-4 hidden">
+                    @php
+                        $categories = [
+                            ['name' => 'Birthday', 'id' => 'birthday'],
+                            ['name' => 'Wedding', 'id' => 'wedding'],
+                            ['name' => 'Dedication', 'id' => 'dedication'],
+                        ];
+                    @endphp
+                    @foreach ($categories as $category)
+                        <div class="relative">
+                            <button id="category-{{ $category['id'] }}-button"
+                                class="w-full py-2.5 px-4 rounded transition duration-200 hover:bg-yellow-500 hover:text-white flex justify-between items-center"
+                                onclick="toggleSubmenu('{{ $category['id'] }}')">
+                                <span>{{ $category['name'] }}</span>
+                                <svg class="w-4 h-4 transform transition-transform"
+                                    id="category-{{ $category['id'] }}-arrow" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+
+                            <div id="category-{{ $category['id'] }}-submenu" class="pl-4 hidden">
+                                <a href="{{ route('create.' . $category['id']) }}"
+                                    class="block py-2 px-4 text-sm hover:bg-yellow-500 hover:text-white rounded">Create</a>
+                                <a href="{{ route('manage.' . $category['id']) }}"
+                                    class="block py-2 px-4 text-sm hover:bg-yellow-500 hover:text-white rounded">Manage</a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        <script>
+            let openCategory = null;
+            let openSubmenu = null;
+
+            function toggleCategory(category) {
+                const celebrationSubmenu = document.getElementById('celebration-submenu');
+                const celebrationArrow = document.getElementById('celebration-arrow');
+
+                if (openCategory === category) {
+                    openCategory = null;
+                    celebrationSubmenu.classList.add('hidden');
+                    celebrationArrow.classList.remove('rotate-180');
+                } else {
+                    openCategory = category;
+                    celebrationSubmenu.classList.remove('hidden');
+                    celebrationArrow.classList.add('rotate-180');
+                }
+            }
+
+            function toggleSubmenu(categoryId) {
+                const submenu = document.getElementById(`category-${categoryId}-submenu`);
+                const arrow = document.getElementById(`category-${categoryId}-arrow`);
+
+                if (openSubmenu === categoryId) {
+                    openSubmenu = null;
+                    submenu.classList.add('hidden');
+                    arrow.classList.remove('rotate-180');
+                } else {
+                    openSubmenu = categoryId;
+                    submenu.classList.remove('hidden');
+                    arrow.classList.add('rotate-180');
+                }
+            }
+        </script>
 
         <!-- Public Notice -->
         <div class="menu-item">
@@ -165,6 +252,19 @@
             </div>
         </div>
 
+        <!-- Stolen Vehicle -->
+        <div class="menu-item">
+            <a href="#"
+                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
+                <span><i class="fas fa-id-card mr-2"></i> Stolen Vehicle</span>
+                <i class="fas fa-chevron-down text-xs"></i>
+            </a>
+            <div class="submenu pl-4 bg-green-700">
+                <a href="{{ route('create.vehicle') }}"
+                    class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
+                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
+            </div>
+        </div>
 
 
         <!-- Profile Menu -->

@@ -286,6 +286,96 @@
 
 
             </form>
+            <!-- start of the signifier -->
+            <div id="caveat-bubble" class="fixed bottom-4 right-4 animate-bounce-in">
+                <div class="relative group">
+                    <!-- Main bubble -->
+                    <div
+                        class="bg-gray-500 text-white px-6 py-3 rounded-full shadow-lg flex items-center space-x-2 cursor-pointer hover:bg-yellow-600 transition-all duration-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="font-medium">Remembrance Mode Active</span>
+                    </div>
+
+                    <!-- Animated rings -->
+                    <div class="absolute inset-0 -z-10">
+                        <div class="absolute inset-0 animate-ping-slow rounded-full bg-yellow-500 opacity-20"></div>
+                        <div class="absolute inset-0 animate-ping-slower rounded-full bg-yellow-500 opacity-10"></div>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                @keyframes bounceIn {
+                    0% {
+                        transform: translateY(100px);
+                        opacity: 0;
+                    }
+
+                    60% {
+                        transform: translateY(-10px);
+                        opacity: 1;
+                    }
+
+                    100% {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
+                }
+
+                @keyframes ping-slow {
+                    0% {
+                        transform: scale(1);
+                        opacity: 0.2;
+                    }
+
+                    100% {
+                        transform: scale(2);
+                        opacity: 0;
+                    }
+                }
+
+                @keyframes ping-slower {
+                    0% {
+                        transform: scale(1);
+                        opacity: 0.1;
+                    }
+
+                    100% {
+                        transform: scale(2.5);
+                        opacity: 0;
+                    }
+                }
+
+                .animate-bounce-in {
+                    animation: bounceIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                }
+
+                .animate-ping-slow {
+                    animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+                }
+
+                .animate-ping-slower {
+                    animation: ping-slower 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+                }
+            </style>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const bubble = document.getElementById('caveat-bubble');
+
+                    // Optional: Add click to dismiss
+                    bubble.addEventListener('click', function() {
+                        bubble.style.opacity = '0';
+                        bubble.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            bubble.style.display = 'none';
+                        }, 300);
+                    });
+                });
+            </script>
+            <!--- end of signifier-->
         </div>
     </div>
     <script>

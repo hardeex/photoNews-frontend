@@ -194,8 +194,9 @@
                                         </h3>
 
                                         <p class="text-sm text-gray-600 mb-4 line-clamp-3">
-                                            {{ strip_tags($post['meta_description'] ?? $post['content']) }}
+                                            {{ strip_tags(strlen($post['meta_description'] ?? '') > 150 ? substr($post['meta_description'], 0, 150) . '...' : $post['meta_description'] ?? $post['content']) }}
                                         </p>
+
 
                                         <!-- Author and Date -->
                                         <div class="mb-3">
@@ -759,6 +760,125 @@
     </section>
 
 
+    <section class="max-w-6xl mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-6">Caveat</h2>
+
+        {{-- <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            @foreach ([1, 2, 3, 4] as $index)
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <img src="/images/news-image.jpeg" alt="News Image {{ $index }}"
+                        class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">Nigerian Senators' Monthly Pay Exceeds N2 Billion:
+                            Controversy Over Legislative Salaries and Allowances</h3>
+                        <p class="text-sm text-gray-600 mb-4">Emerging reports indicate that the total monthly
+                            remuneration of 99 non-principal officers of the Nigerian Senate surpa...</p>
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span>By Shola Akinyele</span>
+                            <span>Category: Local</span>
+                        </div>
+                        <div class="mt-2 flex items-center">
+                            <svg class="w-4 h-4 text-blue-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z">
+                                </path>
+                            </svg>
+                            <span class="text-sm text-gray-500">123</span>
+                            <span class="ml-2 text-sm text-gray-500">20 comments</span>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div> --}}
+
+
+        <div class="overflow-x-auto pb-4">
+            <div class="flex space-x-4 min-w-max">
+                @if (count($caveatPostsData) > 0)
+                    @foreach ($caveatPostsData as $post)
+                        <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
+                            class="hover:text-blue-600 transition-colors w-full">
+                            <div class="w-64 flex-shrink-0">
+                                {{-- <img src="/images/news-image.jpeg" alt="Event Image"
+                            class="w-full h-40 object-cover mb-2 rounded"> --}}
+                                @if ($post['featured_image'])
+                                    <img src="{{ $post['featured_image'] }}"
+                                        alt="{{ ucwords(strtolower($post['title'])) }}"
+                                        class="w-full h-40 object-cover mb-2 rounded">
+                                @else
+                                    <img src="https://picsum.photos/seed/news/1200/600"
+                                        alt="{{ ucwords(strtolower($post['title'])) }}"
+                                        class="w-full h-40 object-cover mb-2 rounded">
+                                @endif
+                                <h3 class="text-sm font-semibold">
+                                    {{ $post['title'] ?? 'Untitled' }}
+                                </h3>
+                                <div class="flex items-center text-gray-500 text-xs mt-1">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                        </path>
+                                    </svg>
+                                    <span>{{ \Carbon\Carbon::parse($post['created_at'])->diffForHumans() }}</span>
+
+                                </div>
+                                <div class="flex items-center text-gray-500 text-xs mt-1">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    <span>By {{ $post['created_by'] }}</span>
+                                </div>
+                                <div class="flex items-center space-x-6 text-sm text-gray-500 pt-3 border-t">
+                                    <!-- Likes -->
+                                    <div class="flex items-center space-x-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
+                                            viewBox="0 0 20 20" fill="currentColor">
+                                            <path
+                                                d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                        </svg>
+                                        <span>123</span>
+                                    </div>
+
+                                    <!-- Comments -->
+                                    <div class="flex items-center space-x-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
+                                            viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <span>20</span>
+                                    </div>
+
+                                    <!-- Views -->
+                                    <div class="flex items-center space-x-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
+                                            viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                            <path fill-rule="evenodd"
+                                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <span>1.2k views</span>
+                                    </div>
+                                </div>
+                            </div>
+                    @endforeach
+                @else
+                    <p>No Caveat news available.</p>
+                @endif
+            </div>
+        </div>
+
+        <div class="text-center mt-6">
+            <a href="#"
+                class="bg-purple-600 text-white px-6 py-2 rounded-full inline-block hover:bg-purple-700 transition duration-300">See
+                more</a>
+        </div>
+    </section>
 
 
     <section class="max-w-6xl mx-auto px-4 py-8">

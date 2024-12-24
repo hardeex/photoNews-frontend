@@ -131,7 +131,7 @@ class UserController extends Controller
         // Example: Get music posts
         $musicPostsData = $this->listPostsByCategoryName('Music');
 
-        // Example: Get business posts
+        // buisness posts category
         $businessPostsData = $this->listPostsByCategoryName('Business');
 
         // Fetch the approved local posts
@@ -201,10 +201,6 @@ class UserController extends Controller
         $totalLostAndFoundPosts = $lostAndFoundPostData['totalLostAndFoundPosts'] ?? 0;
 
         $totalObituaryPosts = $listObituaryPostsData['totalObituaryPosts'] ?? 0;
-
-        // $totalMissingPersonPosts = $missingPostsData['totalMissingPersonPosts'] ?? 0;
-        // $totalWantedPersonPosts = $listWantedPosts['totalWantedPersonPosts'] ?? 0;
-        // Extract total counts for missing and wanted posts
         $totalMissingPersonPosts = $missingPostsData['posts']['pagination']['total'] ?? 0;
         $totalWantedPersonPosts = $wantedPostsData['posts']['pagination']['total'] ?? 0;
 
@@ -337,85 +333,6 @@ class UserController extends Controller
     }
 
 
-    // private function listApprovedMusicPosts()
-    // {
-    //     // Log for debugging
-    //     Log::info('Fetching approved music posts...');
-
-    //     $apiUrl = config('api.base_url') . '/posts/music'; // Assuming the endpoint supports filtering by status
-    //     Log::info('API URL for approved music posts:', ['url' => $apiUrl]);
-
-    //     try {
-    //         // Make an API call to fetch approved posts with 'category' = 'music'
-    //         $response = Http::get($apiUrl, [
-    //             'per_page' => 3,    // Limit the result to 3 posts
-    //             'status' => 'approved',
-    //             'category_id' => 'music', 
-    //         ]);
-
-    //         // Check if the response was successful
-    //         if ($response->successful()) {
-    //             $responseData = $response->json();
-
-    //             // Extract music posts data
-    //             $musicPostsData = $responseData['data']['posts'] ?? [];
-
-    //             // Get the total count of published posts from the pagination data
-    //             $totalMusicPosts = $pagination['total'] ?? 0;
-    //             Log::info('The total music posts count is' . $totalMusicPosts);
-
-    //             // Return the data
-    //             return $musicPostsData;
-    //         } else {
-    //             Log::error('Error fetching approved music posts: ' . $response->status());
-    //             return [];
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching approved music posts: ' . $e->getMessage());
-    //         return [];
-    //     }
-    // }
-
-
-    private function listApprovedMusicPosts()
-    {
-        // Log for debugging
-        Log::info('Fetching approved music posts...');
-
-        $apiUrl = config('api.base_url') . '/posts/music'; // Assuming the endpoint supports filtering by status
-        Log::info('API URL for approved music posts:', ['url' => $apiUrl]);
-
-        try {
-            // Make an API call to fetch approved posts with 'category' = 'music'
-            $response = Http::get($apiUrl, [
-                'per_page' => 3,    // Limit the result to 3 posts
-                'status' => 'approved',
-                'category_id' => 'music',
-            ]);
-
-            // Check if the response was successful
-            if ($response->successful()) {
-                $responseData = $response->json();
-
-                // Extract music posts data
-                $musicPostsData = $responseData['data']['posts'] ?? [];
-
-                // Get the total count of published posts from the pagination data
-                $totalMusicPosts = $pagination['total'] ?? 0;
-                Log::info('The total music posts count is' . $totalMusicPosts);
-
-                // Return the data
-                return $musicPostsData;
-            } else {
-                Log::error('Error fetching approved music posts: ' . $response->status());
-                return [];
-            }
-        } catch (\Exception $e) {
-            Log::error('Error fetching approved music posts: ' . $e->getMessage());
-            return [];
-        }
-    }
-
 
 
     private function listApprovedLocalPosts()
@@ -509,7 +426,7 @@ class UserController extends Controller
         try {
             // Make an API call to fetch the approved posts with 'is_breaking' = true
             $response = Http::get($apiUrl, [
-                'per_page' => 100,
+                'per_page' => 3,
                 'is_breaking' => true,
             ]);
 
@@ -753,56 +670,6 @@ class UserController extends Controller
         }
     }
 
-
-    private function listPublicNoticePosts2()
-    {
-        // Log for debugging
-        Log::info('Fetching public notice posts...');
-
-        $apiUrl = config('api.base_url') . '/public-notice';
-        Log::info('API URL for Public Notice Posts:', ['url' => $apiUrl]);
-
-        try {
-            // Make an API call to fetch published posts
-            $response = Http::get($apiUrl, [
-                'per_page' => 6,    // Limit the result to 6 posts per page
-                'status' => 'published',
-            ]);
-
-            // Check if the response was successful
-            if ($response->successful()) {
-                $responseData = $response->json();
-
-                // Extract the posts data
-                $publicNoticePosts = $responseData['posts']['data'] ?? [];
-                $totalPublicNoticePosts = $responseData['posts']['total'] ?? 0;
-
-                // If there are posts, log the result
-                if (!empty($publicNoticePosts)) {
-                    Log::info('Public notices fetched successfully', [
-                        'post_count' => count($publicNoticePosts)
-                    ]);
-                }
-
-                // Log the total count
-                Log::info('Total public notice posts:', ['total' => $totalPublicNoticePosts]);
-
-                // Return both posts data and total count
-                return [
-                    'posts' => $publicNoticePosts,
-                    'total' => $totalPublicNoticePosts
-                ];
-            } else {
-                // If the API call failed
-                Log::error('Error fetching public notice: ' . $response->status());
-                return ['posts' => [], 'total' => 0];
-            }
-        } catch (\Exception $e) {
-            // Catch any exceptions
-            Log::error('Error fetching public notice: ' . $e->getMessage());
-            return ['posts' => [], 'total' => 0];
-        }
-    }
 
 
     private function listPublicNoticePosts()
@@ -1263,51 +1130,7 @@ class UserController extends Controller
 
 
 
-    private function listMissingPosts22(Request $request)
-    {
-        // Construct API URL for missing posts
-        $apiUrl = config('api.base_url') . '/posts/missing-or-wanted';
 
-        Log::info('Fetching Missing published posts...', ['url' => $apiUrl]);
-
-        try {
-            // Make an API call to the endpoint to fetch missing posts, filtering by 'missing'
-            $response = Http::get($apiUrl, [
-                'option' => 'missing',  // Set filter to 'missing'
-                'per_page' => $request->get('per_page', 100),  // Pagination, default 100 per page
-            ]);
-
-            // Check if the response was successful
-            if ($response->successful()) {
-                $responseData = $response->json();
-
-                // Extract the posts data and pagination data
-                $missingPersonPosts = $responseData['data'] ?? [];
-                $totalMissingPersonPosts = $responseData['pagination']['total'] ?? 0;
-
-                Log::info('The total missing person posts count: ' . $totalMissingPersonPosts);
-
-                // print_r($responseData);
-                // print_r($missingPersonPosts);
-                // print_r("The missing person count: ");
-                // print_r($totalMissingPersonPosts);
-                // exit();  // For testing purposes, print the data and exit immediately
-
-                // Return the posts data along with the total missing person posts count
-                return [
-                    'posts' => $missingPersonPosts,
-                    'totalMissingPersonPosts' => $totalMissingPersonPosts,
-                    'pagination' => $responseData['pagination'] ?? [],
-                ];
-            } else {
-                Log::error('Error fetching missing posts: HTTP Status ' . $response->status());
-                return ['posts' => [], 'pagination' => []];
-            }
-        } catch (\Exception $e) {
-            Log::error('Exception fetching missing posts: ' . $e->getMessage());
-            return ['posts' => [], 'pagination' => []];
-        }
-    }
 
 
     private function listMissingPosts(Request $request)
@@ -1357,47 +1180,6 @@ class UserController extends Controller
         } catch (\Exception $e) {
             Log::error('Exception fetching wanted posts: ' . $e->getMessage());
             return ['posts' => [], 'totalWantedPersonPosts' => 0];
-        }
-    }
-
-
-
-    private function listWantedPosts22(Request $request)
-    {
-        // Construct API URL for wanted posts
-        $apiUrl = config('api.base_url') . '/posts/missing-or-wanted';  // Adjust to the correct endpoint
-        Log::info('Fetching Wanted published posts...', ['url' => $apiUrl]);
-
-        try {
-            // Make an API call to the endpoint to fetch wanted posts, filtering by 'wanted'
-            $response = Http::get($apiUrl, [
-                'option' => 'wanted',  // Set filter to 'wanted'
-                'per_page' => $request->get('per_page', 100),  // Pagination, default 100 per page
-            ]);
-
-            // Check if the response was successful
-            if ($response->successful()) {
-                $responseData = $response->json();
-
-                // Extract the posts data and pagination data
-                $wantedPersonPosts = $responseData['data'] ?? [];
-                $totalWantedPersonPosts = $responseData['pagination']['total'] ?? 0;
-
-                Log::info('The total wanted person posts count: ' . $totalWantedPersonPosts);
-
-                // Return the posts data along with the total wanted person posts count
-                return [
-                    'posts' => $wantedPersonPosts,
-                    'totalWantedPersonPosts' => $totalWantedPersonPosts,
-                    'pagination' => $responseData['pagination'] ?? [],
-                ];
-            } else {
-                Log::error('Error fetching wanted posts: HTTP Status ' . $response->status());
-                return ['posts' => [], 'pagination' => []];
-            }
-        } catch (\Exception $e) {
-            Log::error('Exception fetching wanted posts: ' . $e->getMessage());
-            return ['posts' => [], 'pagination' => []];
         }
     }
 
@@ -1562,49 +1344,6 @@ class UserController extends Controller
             ];
         }
     }
-
-
-    // public function listPendingPosts()
-    // {
-    //     $jwtToken = session('api_token'); // Retrieve the JWT token from the session
-    //     if (empty($jwtToken)) {
-    //         return redirect()->route('user.login')->with('error', 'Please log in first');
-    //     }
-
-    //     // Define the API endpoint to fetch pending posts
-    //     $apiUrl = config('api.base_url') . '/pending/posts';
-
-    //     try {
-    //         // Make an API call to the /pending/posts endpoint to fetch the posts
-    //         $response = Http::withHeaders([
-    //             'Authorization' => 'Bearer ' . $jwtToken, // Include the JWT token in the request header
-    //         ])->get($apiUrl, [
-    //             'page' => 1, // Default to the first page
-    //             'per_page' => 10, // Default to 10 posts per page
-    //         ]);
-
-    //         // Check if the response was successful
-    //         if ($response->successful()) {
-    //             $postsData = $response->json()['data']['posts'] ?? []; // Access posts correctly
-    //             $pagination = $response->json()['data']['pagination'] ?? []; // Access pagination correctly
-
-    //             // Log the fetched data
-    //             Log::info('Fetched pending posts: ', ['posts_count' => count($postsData), 'pagination' => $pagination]);
-
-    //             // Return the posts data and pagination
-    //             return compact('postsData', 'pagination');
-    //         } else {
-    //             // If the response failed, return empty arrays
-    //             return ['postsData' => [], 'pagination' => []];
-    //         }
-    //     } catch (\Exception $e) {
-    //         // Handle any errors that occur during the request
-    //         Log::error('Error fetching pending posts: ' . $e->getMessage());
-    //         return ['postsData' => [], 'pagination' => []];
-    //     }
-    // }
-
-
 
 
 

@@ -90,13 +90,17 @@ Route::post('/submit-category-seeder', [NewsPostController::class, 'submitCatego
 // celebration routes
 Route::get('/create/birthday', [CelebrationController::class, 'createBirthday'])->name('create.birthday');
 Route::get('/manage/birthday', [CelebrationController::class, 'manageBirthday'])->name('manage.birthday');
+Route::post('submit/birthday', [celebrationController::class, 'submitBirthday'])->name('submit.birthday');
 
 Route::get('/create/wedding', [CelebrationController::class, 'createWedding'])->name('create.wedding');
 Route::get('/manage/wedding', [CelebrationController::class, 'manageWedding'])->name('manage.wedding');
+Route::post('submit/wedding', [CelebrationController::class, 'submitWedding'])->name('submit.wedding');
 
 Route::get('/create/dedication', [CelebrationController::class, 'createDedication'])->name('create.dedication');
 Route::get('/manage/dedication', [CelebrationController::class, 'manageDedication'])->name('manage.dedication');
+Route::post('submit/dedication', [CelebrationController::class, 'submitDedication'])->name('submit.dedication');
 
 
 // stolen vehicles
 Route::get('/create/stolen-vehicle', [StolenVehicle::class, 'create'])->name('create.vehicle');
+Route::post('submit/stolen-vehicle', [StolenVehicle::class, 'submitVehicle'])->name('submit.vehicle');

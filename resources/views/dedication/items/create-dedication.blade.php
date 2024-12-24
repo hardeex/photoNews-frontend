@@ -50,7 +50,7 @@
     <div class="container mx-auto px-6 py-8">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="text-2xl font-semibold">Create Caveat Post</h1>
+                <h1 class="text-2xl font-semibold">Create Child Dedication Post</h1>
                 <p class="text-sm text-gray-600" id="saveStatus"></p>
             </div>
             <div class="flex gap-4">
@@ -100,33 +100,54 @@
 
 
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <form action="{{ route('caveat.submit') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('submit.dedication') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-
 
                 <input type="hidden" name="post_id" id="post_id" value="{{ $post->id ?? '' }}">
 
-                <!-- Title -->
+                <!-- Title (Child's Name) -->
                 <div class="mb-6">
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Child's Name *</label>
                     <input type="text" id="title" name="title"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         value="{{ old('title', $post->title ?? '') }}" required>
                 </div>
 
-                <!-- Slug -->
+                <!--- slug-->
                 <div class="mb-6">
-                    <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">Slug</label>
+                    <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">Child Slug *</label>
                     <input type="text" id="slug" name="slug"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         value="{{ old('slug', $post->slug ?? '') }}" required>
                 </div>
 
-
-
-                <!-- Featured Image -->
+                <!-- Dedication Date -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Featured Image *</label>
+                    <label for="dedication_date" class="block text-sm font-medium text-gray-700 mb-2">Dedication Date
+                        *</label>
+                    <input type="date" id="dedication_date" name="dedication_date"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('dedication_date', $post->dedication_date ?? '') }}" required>
+                </div>
+
+                <!-- Parent Names -->
+                <div class="mb-6">
+                    <label for="parents_names" class="block text-sm font-medium text-gray-700 mb-2">Parents' Names *</label>
+                    <input type="text" id="parents_names" name="parents_names"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('parents_names', $post->parents_names ?? '') }}" required>
+                </div>
+
+                <!-- Message or Prayer -->
+                <div class="mb-6">
+                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Dedication Message or Prayer
+                        *</label>
+                    <textarea id="editor" rows="10" name="content" class="w-full" required>{{ old('content', $post->content ?? '') }}</textarea>
+                </div>
+
+                <!-- Featured Image (Optional) -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Featured Image (Optional)</label>
                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">
                             <div class="flex text-sm text-gray-600">
@@ -150,22 +171,6 @@
                     </div>
                 </div>
 
-
-
-
-
-                <!-- Content -->
-                <div class="mb-6">
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Content *</label>
-                    <textarea id="editor" rows="10" name="content" class="w-full" required>{{ old('content', $post->content ?? '') }}</textarea>
-
-                </div>
-
-
-
-
-
-
                 <!-- Publishing Options (Admin Only) -->
                 <div class="bg-gray-50 p-6 rounded-lg">
                     <h3 class="font-semibold text-lg mb-4">Post Settings</h3>
@@ -173,12 +178,10 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <div class="flex items-center">
                             <input type="checkbox" id="is_featured" name="is_featured"
-                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200" value="1"
-                                {{ old('is_featured') ? 'checked' : '' }}>
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1" {{ old('is_featured') ? 'checked' : '' }}>
                             <label for="is_featured" class="ml-2 text-sm text-gray-700">Feature this post</label>
                         </div>
-
-
 
                         <div class="flex items-center">
                             <input type="checkbox" id="is_draft" name="is_draft"
@@ -214,8 +217,7 @@
                     </div>
                 </div>
 
-
-
+                <!-- Meta Title -->
                 <div class="mb-6">
                     <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
                     <input type="text" id="meta_title" name="meta_title"
@@ -224,9 +226,7 @@
                     <p id="char_count" class="text-sm text-gray-500 mt-2">0 / 155 characters</p>
                 </div>
 
-
-
-
+                <!-- Meta Description -->
                 <div class="mb-6">
                     <label for="meta_description" class="block text-sm font-medium text-gray-700 mb-2">Meta
                         Description</label>
@@ -235,7 +235,6 @@
                         {{ old('meta_description', Str::limit(strip_tags($post->content ?? ''), 155)) }}
                     </textarea>
                 </div>
-                <!-- End of the publishing option--->
 
                 <!-- Admin Review Section -->
                 @if (auth()->check() && auth()->user()->hasRole('admin') && isset($post) && $post->status == 'pending')
@@ -247,15 +246,12 @@
                     </div>
                 @endif
 
-
-
                 <button
                     class="relative inline-block px-6 py-2 font-semibold text-white bg-gray-800 rounded-lg overflow-hidden group active:bg-transparent">
                     <span
                         class="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-700 transform scale-0 group-active:scale-100 transition-all duration-500 ease-out"></span>
-                    Publish
+                    Submit Dedication
                 </button>
-
 
             </form>
 

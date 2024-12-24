@@ -50,7 +50,7 @@
     <div class="container mx-auto px-6 py-8">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="text-2xl font-semibold">Create Caveat Post</h1>
+                <h1 class="text-2xl font-semibold">Create Wedding Post</h1>
                 <p class="text-sm text-gray-600" id="saveStatus"></p>
             </div>
             <div class="flex gap-4">
@@ -100,39 +100,36 @@
 
 
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <form action="{{ route('caveat.submit') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('submit.wedding') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-
 
                 <input type="hidden" name="post_id" id="post_id" value="{{ $post->id ?? '' }}">
 
-                <!-- Title -->
+                <!-- Wedding Title -->
                 <div class="mb-6">
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Wedding Title *</label>
                     <input type="text" id="title" name="title"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         value="{{ old('title', $post->title ?? '') }}" required>
                 </div>
 
-                <!-- Slug -->
+                <!-- Wedding Slug -->
                 <div class="mb-6">
-                    <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">Slug</label>
+                    <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">Wedding Slug *</label>
                     <input type="text" id="slug" name="slug"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         value="{{ old('slug', $post->slug ?? '') }}" required>
                 </div>
 
-
-
-                <!-- Featured Image -->
+                <!-- Wedding Featured Image -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Featured Image *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Wedding Featured Image *</label>
                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">
                             <div class="flex text-sm text-gray-600">
                                 <label for="featured_image"
                                     class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
-                                    <span>Upload a file</span>
+                                    <span>Upload a wedding image</span>
                                     <input id="featured_image" name="featured_image" type="file" class="sr-only"
                                         accept="image/*">
                                 </label>
@@ -143,42 +140,63 @@
 
                     <div id="image-preview" class="mt-2 {{ isset($post->featured_image) ? '' : 'hidden' }}">
                         @if (isset($post->featured_image))
-                            <img src="{{ $post->featured_image }}" alt="Preview" class="max-h-48 rounded">
+                            <img src="{{ $post->featured_image }}" alt="Wedding Preview" class="max-h-48 rounded">
                         @else
-                            <img src="" alt="Preview" class="max-h-48 rounded">
+                            <img src="" alt="Wedding Preview" class="max-h-48 rounded">
                         @endif
                     </div>
                 </div>
 
-
-
-
-
-                <!-- Content -->
+                <!-- Wedding Content -->
                 <div class="mb-6">
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Content *</label>
+                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Wedding Story *</label>
                     <textarea id="editor" rows="10" name="content" class="w-full" required>{{ old('content', $post->content ?? '') }}</textarea>
-
                 </div>
 
+                <!-- Wedding Bride & Groom Names -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="bride_name" class="block text-sm font-medium text-gray-700 mb-2">Bride's Name *</label>
+                        <input type="text" id="bride_name" name="bride_name"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            value="{{ old('bride_name', $post->bride_name ?? '') }}" required>
+                    </div>
 
+                    <div>
+                        <label for="groom_name" class="block text-sm font-medium text-gray-700 mb-2">Groom's Name *</label>
+                        <input type="text" id="groom_name" name="groom_name"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            value="{{ old('groom_name', $post->groom_name ?? '') }}" required>
+                    </div>
+                </div>
 
+                <!-- Wedding Date -->
+                <div class="mb-6">
+                    <label for="wedding_date" class="block text-sm font-medium text-gray-700 mb-2">Wedding Date *</label>
+                    <input type="date" id="wedding_date" name="wedding_date"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('wedding_date', $post->wedding_date ?? '') }}" required>
+                </div>
 
-
+                <!-- Wedding Venue -->
+                <div class="mb-6">
+                    <label for="venue" class="block text-sm font-medium text-gray-700 mb-2">Wedding Venue</label>
+                    <input type="text" id="venue" name="venue"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('venue', $post->venue ?? '') }}">
+                </div>
 
                 <!-- Publishing Options (Admin Only) -->
                 <div class="bg-gray-50 p-6 rounded-lg">
-                    <h3 class="font-semibold text-lg mb-4">Post Settings</h3>
+                    <h3 class="font-semibold text-lg mb-4">Wedding Post Settings</h3>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <div class="flex items-center">
                             <input type="checkbox" id="is_featured" name="is_featured"
-                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200" value="1"
-                                {{ old('is_featured') ? 'checked' : '' }}>
-                            <label for="is_featured" class="ml-2 text-sm text-gray-700">Feature this post</label>
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1" {{ old('is_featured') ? 'checked' : '' }}>
+                            <label for="is_featured" class="ml-2 text-sm text-gray-700">Feature this wedding post</label>
                         </div>
-
-
 
                         <div class="flex items-center">
                             <input type="checkbox" id="is_draft" name="is_draft"
@@ -191,7 +209,8 @@
                             <input type="checkbox" id="is_scheduled" name="is_scheduled"
                                 class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
                                 value="1" {{ old('is_scheduled') ? 'checked' : '' }}>
-                            <label for="is_scheduled" class="ml-2 text-sm text-gray-700">Schedule this post</label>
+                            <label for="is_scheduled" class="ml-2 text-sm text-gray-700">Schedule this wedding
+                                post</label>
                         </div>
 
                         <div class="flex items-center">
@@ -203,10 +222,11 @@
                         </div>
                     </div>
 
+                    <!-- Scheduled Wedding Date & Time -->
                     <div id="schedule_date" x-show="document.getElementById('is_scheduled').checked" x-cloak
                         class="mt-4 hidden">
                         <label for="scheduled_time" class="block text-sm font-medium text-gray-700 mb-2">
-                            Scheduled Date & Time
+                            Scheduled Wedding Date & Time
                         </label>
                         <input type="datetime-local" id="scheduled_time" name="scheduled_time"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -214,49 +234,43 @@
                     </div>
                 </div>
 
-
-
+                <!-- Meta Title -->
                 <div class="mb-6">
-                    <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
+                    <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">Wedding Meta
+                        Title</label>
                     <input type="text" id="meta_title" name="meta_title"
                         class="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-14"
                         value="{{ old('meta_title', $post->meta_title ?? '') }}">
                     <p id="char_count" class="text-sm text-gray-500 mt-2">0 / 155 characters</p>
                 </div>
 
-
-
-
+                <!-- Meta Description -->
                 <div class="mb-6">
-                    <label for="meta_description" class="block text-sm font-medium text-gray-700 mb-2">Meta
+                    <label for="meta_description" class="block text-sm font-medium text-gray-700 mb-2">Wedding Meta
                         Description</label>
                     <textarea id="meta_description" name="meta_description"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         {{ old('meta_description', Str::limit(strip_tags($post->content ?? ''), 155)) }}
                     </textarea>
                 </div>
-                <!-- End of the publishing option--->
 
-                <!-- Admin Review Section -->
+                <!-- Admin Review Section (if pending) -->
                 @if (auth()->check() && auth()->user()->hasRole('admin') && isset($post) && $post->status == 'pending')
                     <div class="mb-6 p-4 bg-yellow-50 rounded-lg">
-                        <h3 class="font-medium mb-3">Review Feedback</h3>
+                        <h3 class="font-medium mb-3">Wedding Post Review Feedback</h3>
                         <textarea name="review_feedback"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                            rows="3" placeholder="Provide feedback for the author (optional)">{{ old('review_feedback', $post->review_feedback ?? '') }}</textarea>
+                            rows="3" placeholder="Provide feedback for the wedding post author (optional)">{{ old('review_feedback', $post->review_feedback ?? '') }}</textarea>
                     </div>
                 @endif
 
-
-
+                <!-- Submit Button -->
                 <button
                     class="relative inline-block px-6 py-2 font-semibold text-white bg-gray-800 rounded-lg overflow-hidden group active:bg-transparent">
                     <span
                         class="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-700 transform scale-0 group-active:scale-100 transition-all duration-500 ease-out"></span>
-                    Publish
+                    Publish Wedding Post
                 </button>
-
-
             </form>
 
             <!-- start of the signifier -->
@@ -269,7 +283,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <span class="font-medium">Caveat Mode Active</span>
+                        <span class="font-medium">Wedding Mode Active</span>
                     </div>
 
                     <!-- Animated rings -->

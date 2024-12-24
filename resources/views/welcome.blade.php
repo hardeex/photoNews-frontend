@@ -42,7 +42,7 @@
                                     {{ number_format($totalPublishedPosts) }}
                                 </div>
                                 <h3 class="text-xs font-medium uppercase tracking-wider text-blue-600">
-                                    Total Approved Posts
+                                    News Post
                                 </h3>
                             </div>
                         </a>

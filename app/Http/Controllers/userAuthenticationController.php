@@ -170,7 +170,7 @@ class userAuthenticationController extends Controller
                     return redirect()->route('login')->with('success', 'You have successfully logged out.');
                 } else {
                     // If the API logout failed, show an error message
-                    return back()->withErrors(['logout_error' => 'Error logging out from the API.']);
+                    return back()->withErrors(['logout_error' => 'Your token has expired. Kindly, login again']);
                 }
             } catch (\Exception $e) {
                 // Handle any exceptions that occur during the API request

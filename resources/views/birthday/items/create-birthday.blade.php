@@ -50,7 +50,7 @@
     <div class="container mx-auto px-6 py-8">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="text-2xl font-semibold">Create Caveat Post</h1>
+                <h1 class="text-2xl font-semibold">Create Birthday Post</h1>
                 <p class="text-sm text-gray-600" id="saveStatus"></p>
             </div>
             <div class="flex gap-4">
@@ -100,15 +100,15 @@
 
 
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <form action="{{ route('caveat.submit') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('submit.birthday') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-
 
                 <input type="hidden" name="post_id" id="post_id" value="{{ $post->id ?? '' }}">
 
-                <!-- Title -->
+                <!-- Name of the Celebrant -->
                 <div class="mb-6">
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Name of the Celebrant
+                        *</label>
                     <input type="text" id="title" name="title"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         value="{{ old('title', $post->title ?? '') }}" required>
@@ -123,10 +123,26 @@
                 </div>
 
 
+                <!-- Celebrant's Age -->
+                <div class="mb-6">
+                    <label for="celebrant_age" class="block text-sm font-medium text-gray-700 mb-2">Celebrant's Age
+                        *</label>
+                    <input type="number" id="celebrant_age" name="celebrant_age"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('celebrant_age', $post->celebrant_age ?? '') }}" required min="0">
+                </div>
+
+                <!-- Date of Birth -->
+                <div class="mb-6">
+                    <label for="dob" class="block text-sm font-medium text-gray-700 mb-2">Date of Birth *</label>
+                    <input type="date" id="dob" name="dob"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('dob', $post->dob ?? '') }}" required>
+                </div>
 
                 <!-- Featured Image -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Featured Image *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Celebrant Photo *</label>
                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">
                             <div class="flex text-sm text-gray-600">
@@ -150,35 +166,47 @@
                     </div>
                 </div>
 
-
-
-
-
-                <!-- Content -->
+                <!-- Content (Birthday Celebration Details) -->
                 <div class="mb-6">
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Content *</label>
+                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Celebration Details *</label>
                     <textarea id="editor" rows="10" name="content" class="w-full" required>{{ old('content', $post->content ?? '') }}</textarea>
-
                 </div>
 
+                <!-- Event Location -->
+                <div class="mb-6">
+                    <label for="event_location" class="block text-sm font-medium text-gray-700 mb-2">Event Location
+                        (Optional)</label>
+                    <input type="text" id="event_location" name="event_location"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('event_location', $post->event_location ?? '') }}">
+                </div>
 
+                <!-- RSVP Options (Optional) -->
+                <div class="mb-6">
+                    <label for="rsvp" class="block text-sm font-medium text-gray-700 mb-2">RSVP (Optional)</label>
+                    <textarea id="rsvp" name="rsvp"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{ old('rsvp', $post->rsvp ?? '') }}</textarea>
+                </div>
 
+                <!-- Gift Suggestions (Optional) -->
+                <div class="mb-6">
+                    <label for="gift_suggestions" class="block text-sm font-medium text-gray-700 mb-2">Gift Suggestions
+                        (Optional)</label>
+                    <textarea id="gift_suggestions" name="gift_suggestions"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{ old('gift_suggestions', $post->gift_suggestions ?? '') }}</textarea>
+                </div>
 
-
-
-                <!-- Publishing Options (Admin Only) -->
+                <!-- Publishing Options -->
                 <div class="bg-gray-50 p-6 rounded-lg">
                     <h3 class="font-semibold text-lg mb-4">Post Settings</h3>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <div class="flex items-center">
                             <input type="checkbox" id="is_featured" name="is_featured"
-                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200" value="1"
-                                {{ old('is_featured') ? 'checked' : '' }}>
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1" {{ old('is_featured') ? 'checked' : '' }}>
                             <label for="is_featured" class="ml-2 text-sm text-gray-700">Feature this post</label>
                         </div>
-
-
 
                         <div class="flex items-center">
                             <input type="checkbox" id="is_draft" name="is_draft"
@@ -214,8 +242,6 @@
                     </div>
                 </div>
 
-
-
                 <div class="mb-6">
                     <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
                     <input type="text" id="meta_title" name="meta_title"
@@ -223,9 +249,6 @@
                         value="{{ old('meta_title', $post->meta_title ?? '') }}">
                     <p id="char_count" class="text-sm text-gray-500 mt-2">0 / 155 characters</p>
                 </div>
-
-
-
 
                 <div class="mb-6">
                     <label for="meta_description" class="block text-sm font-medium text-gray-700 mb-2">Meta
@@ -235,7 +258,6 @@
                         {{ old('meta_description', Str::limit(strip_tags($post->content ?? ''), 155)) }}
                     </textarea>
                 </div>
-                <!-- End of the publishing option--->
 
                 <!-- Admin Review Section -->
                 @if (auth()->check() && auth()->user()->hasRole('admin') && isset($post) && $post->status == 'pending')
@@ -247,17 +269,14 @@
                     </div>
                 @endif
 
-
-
                 <button
                     class="relative inline-block px-6 py-2 font-semibold text-white bg-gray-800 rounded-lg overflow-hidden group active:bg-transparent">
                     <span
                         class="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-700 transform scale-0 group-active:scale-100 transition-all duration-500 ease-out"></span>
                     Publish
                 </button>
-
-
             </form>
+
 
             <!-- start of the signifier -->
             <div id="caveat-bubble" class="fixed bottom-4 right-4 animate-bounce-in">

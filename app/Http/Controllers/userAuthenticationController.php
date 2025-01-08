@@ -70,8 +70,21 @@ class userAuthenticationController extends Controller
 
 
     // login methods
+    // public function userLogin()
+    // {
+    //     return view('user.login');
+    // }
+
+
     public function userLogin()
     {
+        // Check if the user is already logged in by verifying the session for a valid token
+        if (session()->has('api_token')) {
+            // Redirect to the create-post page if the user is already logged in
+            return redirect()->route('news.create-post');
+        }
+
+        // If no token exists, show the login page
         return view('user.login');
     }
 
@@ -125,7 +138,7 @@ class userAuthenticationController extends Controller
                 }
 
                 // Redirect to the user dashboard if the user is not an admin
-                return redirect()->route('user.dashboard')->with('success', 'Login successful! Welcome back.');
+                return redirect()->route('news.create-post')->with('success', 'Login successful! Welcome back.');
             } else {
                 // If API login failed, show the error message
                 return back()->withErrors(['login_error' => $response->json()['message'] ?? 'Login failed.']);

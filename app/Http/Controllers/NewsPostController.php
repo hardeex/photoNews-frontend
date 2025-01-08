@@ -118,11 +118,53 @@ class NewsPostController extends Controller
     }
 
 
-    public function newsCategoryList()
+    public function newsCategoryList(Request $request)
     {
-        return view('news.show');
-    }
+        Log::info('Fetching published posts...');
 
+        $apiUrl = config('api.base_url') . '/posts/published';
+        Log::info('API URL for published posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to the /published/posts endpoint
+            $response = Http::get($apiUrl, [
+                'per_page' => 12,
+                'page' => $request->get('page', 1), // Add current page
+                'order' => 'desc',
+            ]);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                $postsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+                $totalPublishedPosts = $pagination['total'] ?? 0;
+
+                Log::info('Total Published Posts: ' . $totalPublishedPosts);
+
+                return view('news.show', [
+                    'postsData' => $postsData,
+                    'pagination' => $pagination,
+                    'totalPublishedPosts' => $totalPublishedPosts,
+                ]);
+            } else {
+                // If the response failed, handle the error
+                Log::error('Error fetching published posts: ' . $response->status());
+                return view('news.show', [
+                    'postsData' => [],
+                    'pagination' => [],
+                    'totalPublishedPosts' => 0,
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the request
+            Log::error('Error fetching published posts: ' . $e->getMessage());
+            return view('news.show', [
+                'postsData' => [],
+                'pagination' => [],
+                'totalPublishedPosts' => 0,
+            ]);
+        }
+    }
 
 
 

@@ -56,7 +56,7 @@
                     <li><a href="#"class="hover:text-blue-600">Obituary</a></li>
                     <li><a href="#" class="hover:text-blue-600">History</a></li>
                     <li><a href="#" class="hover:text-blue-600">Marketplace</a></li>
-                    <li class="relative group">
+                    {{-- <li class="relative group">
                         <a href="#" class="hover:text-green-600">Account</a>
                         <div class="absolute hidden bg-white shadow-lg mt-2 rounded-md w-40 group-hover:block">
                             <ul class="flex flex-col">
@@ -68,7 +68,89 @@
                                         class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Profile</a></li>
                             </ul>
                         </div>
+                    </li> --}}
+
+                    <li class="relative">
+                        <button onclick="toggleDropdown('accountDropdown')"
+                            class="flex items-center hover:text-green-600 focus:outline-none" aria-expanded="false"
+                            aria-haspopup="true">
+                            Account
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div id="accountDropdown"
+                            class="absolute hidden bg-white shadow-lg mt-2 rounded-md w-40 z-50 transition-all duration-200 ease-in-out"
+                            aria-label="Account dropdown">
+                            <ul class="flex flex-col py-1">
+                                <li>
+                                    <a href="{{ route('user.login') }}"
+                                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
+                                        Login
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('user.register') }}"
+                                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
+                                        Register
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
+                                        Profile
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
+
+                    <script>
+                        // Add this to your JavaScript
+                        function toggleDropdown(dropdownId) {
+                            const dropdown = document.getElementById(dropdownId);
+                            const button = dropdown.previousElementSibling;
+                            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+                            // Close all other dropdowns first
+                            document.querySelectorAll('[id$="Dropdown"]').forEach(d => {
+                                if (d.id !== dropdownId) {
+                                    d.classList.add('hidden');
+                                    const btn = d.previousElementSibling;
+                                    btn.setAttribute('aria-expanded', 'false');
+                                }
+                            });
+
+                            // Toggle current dropdown
+                            dropdown.classList.toggle('hidden');
+                            button.setAttribute('aria-expanded', !isExpanded);
+                        }
+
+                        // Close dropdown when clicking outside
+                        document.addEventListener('click', function(event) {
+                            const dropdowns = document.querySelectorAll('[id$="Dropdown"]');
+                            dropdowns.forEach(dropdown => {
+                                const button = dropdown.previousElementSibling;
+                                if (!dropdown.contains(event.target) && !button.contains(event.target)) {
+                                    dropdown.classList.add('hidden');
+                                    button.setAttribute('aria-expanded', 'false');
+                                }
+                            });
+                        });
+
+                        // Close dropdown when pressing Escape key
+                        document.addEventListener('keydown', function(event) {
+                            if (event.key === 'Escape') {
+                                const dropdowns = document.querySelectorAll('[id$="Dropdown"]');
+                                dropdowns.forEach(dropdown => {
+                                    const button = dropdown.previousElementSibling;
+                                    dropdown.classList.add('hidden');
+                                    button.setAttribute('aria-expanded', 'false');
+                                });
+                            }
+                        });
+                    </script>
 
                 </ul>
             </nav>

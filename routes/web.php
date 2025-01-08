@@ -49,11 +49,14 @@ Route::post('/submit/public-notice', [PublicNoticeController::class, 'submitPost
 // misplaced and found routes
 Route::get('/create/misplaced-and-found', [MisplaceAndFoundController::class, 'createPost'])->name('misplaced.create');
 Route::post('/submit/misplaced-and-found', [MisplaceAndFoundController::class, 'submitPost'])->name('misplaced-and-found.submit');
+Route::get('/misplaced/{slug}', [MisplaceAndFoundController::class, 'showPostDetails'])->name('misplaced.details');
 
 
 // missing person routes
 Route::get('/create/missing-person', [MissingPersonController::class, 'createPost'])->name('missing.create');
 Route::post('/submit/missing-and-wanted-person', [MissingPersonController::class, 'submitPost'])->name('missing-person.submit');
+Route::get('/missing-or-wanted-adewale/{slug}', [MissingPersonController::class, 'showPostDetails'])->name('missing-wanted.details');
+
 
 // obituary routes
 Route::get('/create/obituary', [ObituaryController::class, 'createPost'])->name('obituary.create');
@@ -72,8 +75,8 @@ Route::post('/submit-change-of-name', [changeOfNameController::class, 'submitPos
 // caveat routes
 Route::get('/create/caveat', [CaveatController::class, 'createPost'])->name('caveat.create');
 Route::post('/submit/caveat', [CaveatController::class, 'submitPost'])->name('caveat.submit');
-
-
+Route::get('/caveat/{slug}', [CaveatController::class, 'showCaveatDetails'])->name('caveat.details');
+Route::get('/posts/caveat', [CaveatController::class, 'listCaveatPosts'])->name('caveat.posts');
 
 // ctaegory and tag routes
 Route::get('/create-category', [NewsPostController::class, 'createCategory'])->name('create-category');
@@ -103,4 +106,4 @@ Route::post('submit/dedication', [CelebrationController::class, 'submitDedicatio
 
 // stolen vehicles
 Route::get('/create/stolen-vehicle', [StolenVehicle::class, 'create'])->name('create.vehicle');
-Route::post('submit/stolen-vehicle', [StolenVehicle::class, 'submitVehicle'])->name('submit.vehicle');
+Route::post('submit/stolen-vehicle', [StolenVehicle::class, 'submitPost'])->name('submit.vehicle');

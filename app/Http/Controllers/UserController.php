@@ -20,83 +20,6 @@ class UserController extends Controller
 
 
 
-    public function indexOPTION1(Request $request)
-    {
-        // Call listPendingPosts to get posts data and pagination
-        return $this->listPendingPosts($request);
-    }
-
-    public function listPendingPostsOPTION1(Request $request)
-    {
-        $apiUrl = config('api.base_url') . '/pending/posts';
-
-        try {
-            // Make the API call
-            $response = Http::get($apiUrl, [
-                'page' => $request->get('page', 1),
-                'per_page' => 10,
-            ]);
-
-            if ($response->successful()) {
-                $data = $response->json();
-                $postsData = $data['data'] ?? [];
-                $pagination = $data['pagination'] ?? [];
-            } else {
-                $postsData = [];
-                $pagination = [];
-            }
-        } catch (\Exception $e) {
-            // Handle error
-            Log::error('Error fetching pending posts: ' . $e->getMessage());
-            $postsData = [];
-            $pagination = [];
-        }
-
-        // Return the view with the data
-        return view('welcome', compact('postsData', 'pagination'));
-    }
-
-    // OPTION 2 FOR PASSING THE DATA
-    public function indexOPTION2(Request $request)
-    {
-        // Ensure that listPendingPosts is called to populate data
-        $this->listPendingPosts($request);
-
-        return view('welcome', [
-            'postsData' => $this->postsData,
-            'pagination' => $this->pagination,
-        ]);
-    }
-
-    public function listPendingPostsOPTION2(Request $request)
-    {
-        $apiUrl = config('api.base_url') . '/pending/posts';
-
-        try {
-            // Make the API call
-            $response = Http::get($apiUrl, [
-                'page' => $request->get('page', 1),
-                'per_page' => 10,
-            ]);
-
-            if ($response->successful()) {
-                $data = $response->json();
-                $this->postsData = $data['data'] ?? [];
-                $this->pagination = $data['pagination'] ?? [];
-            } else {
-                $this->postsData = [];
-                $this->pagination = [];
-            }
-        } catch (\Exception $e) {
-            // Handle error
-            Log::error('Error fetching pending posts: ' . $e->getMessage());
-            $this->postsData = [];
-            $this->pagination = [];
-        }
-    }
-
-
-
     public function index(Request $request)
     {
         // Fetch the existing published posts
@@ -130,15 +53,17 @@ class UserController extends Controller
 
         // Example: Get music posts
         $musicPostsData = $this->listPostsByCategoryName('Music');
+        $localPostsData = $this->listPostsByCategoryName('Local');
+        $internationalPostsData = $this->listPostsByCategoryName('International');
 
         // buisness posts category
         $businessPostsData = $this->listPostsByCategoryName('Business');
 
         // Fetch the approved local posts
-        $localPostsData = $this->listApprovedLocalPosts();
+        //$localPostsData = $this->listApprovedLocalPosts();
 
         // Fetch the approved local posts
-        $internationalPostsData = $this->listApprovedInternationalPosts();
+        // $internationalPostsData = $this->listApprovedInternationalPosts();
 
         // Fetch the posts that are approved and event is true
         $topTopicPostsData = $this->listTopTopicPosts();
@@ -189,6 +114,33 @@ class UserController extends Controller
         $caveatPostsData = $listCaveatPostsData['caveatPostsData'] ?? [];
         $totalCaveatPostsData = $listCaveatPostsData['totalCaveatPosts'] ?? 0;
 
+        // Fetch Birthday Posts Data using the private method
+        $birthdayPostsData = $this->listBirthdayPostsData();
+
+        // Get the total post count from the data
+        $totalBirthdayPosts = count($birthdayPostsData);
+
+        // Fetch Wedding Posts Data using the private method
+        $weddingPostsData = $this->listWeddingPostsData();
+
+        // Get the total post count from the data
+        $totalWeddingPosts = count($weddingPostsData);
+
+
+        // Fetch Child Dedication Posts Data using the private method
+        $childDedicationPostsData = $this->listChildDedicationPostsData();
+
+        // Get the total post count from the data
+        $totalChildDedicationPosts = count($childDedicationPostsData);
+
+        // Fetch Stolen Vehicle Posts Data using the private method
+        $stolenVehiclePostsData = $this->listStolenVehiclePostsData();
+
+        // Get the total post count from the data
+        $totalStolenVehiclePosts = count($stolenVehiclePostsData);
+
+        // Fetch categories using the private method
+        $categoriesData = $this->getCategoriesData();
 
         // counting posts
         $totalPublishedPosts = $response['totalPublishedPosts'] ?? 0;
@@ -214,8 +166,9 @@ class UserController extends Controller
             'pagination',
 
             'musicPostsData',
-            'breakingPostsData',
             'localPostsData',
+            'breakingPostsData',
+            // 'localPostsData',
             'internationalPostsData',
             'hotGistsPostsData',
             'eventsPostsData',
@@ -238,6 +191,20 @@ class UserController extends Controller
             'listChangeOfNamePostsData',
             'listPrideOfNigeriaPostsData',
 
+            'birthdayPostsData',
+            'totalBirthdayPosts',
+
+            'weddingPostsData',
+            'totalWeddingPosts',
+
+            'childDedicationPostsData',
+            'totalChildDedicationPosts',
+
+            'stolenVehiclePostsData',
+            'totalStolenVehiclePosts',
+
+            'categoriesData',
+
             // counts
             'totalPublishedPosts',
             'totalRemembrancePosts',
@@ -259,48 +226,49 @@ class UserController extends Controller
     }
 
 
-    // private function listPostsByCategoryName($categoryName)
-    // {
-    //     // Log for debugging
-    //     Log::info("Fetching posts for category: {$categoryName}");
 
-    //     // Adjusted API URL: This now calls the new endpoint `category-posts?category_name={categoryName}`
-    //     $apiUrl = config('api.base_url') . '/category-posts'; // The updated API endpoint
+    private function getCategoriesData()
+    {
+        $apiUrl = config('api.base_url') . '/category-seeder';
 
-    //     Log::info('API URL for category posts:', ['url' => $apiUrl]);
+        try {
+            // Fetch categories data from the API
+            $response = Http::get($apiUrl);
 
-    //     try {
-    //         // Make an API call to fetch posts filtered by category name
-    //         $response = Http::get($apiUrl, [
-    //             'category_name' => $categoryName,  // Use category_name parameter
-    //             'per_page' => 3,  // Limit the result to 3 posts
-    //         ]);
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
 
-    //         // Check if the response was successful
-    //         if ($response->successful()) {
-    //             $responseData = $response->json();
+                // Check if the 'data' key exists in the response and contains categories
+                if (isset($responseData) && is_array($responseData) && count($responseData) > 0) {
+                    // Randomly pick 24 categories if there are enough categories
+                    $randomCategories = (count($responseData) > 24)
+                        ? collect($responseData)->random(24)->all()  // Pick 24 random categories
+                        : $responseData;  // If there are less than 24, return all of them
 
-    //             // Extract posts data from the response
-    //             $postsData = $responseData['posts'] ?? [];
+                    return $randomCategories;
+                } else {
+                    Log::warning('No categories found or invalid data format in the API response.');
+                    return [];
+                }
+            } else {
+                Log::error('Error fetching categories. HTTP Status: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            // Log the exception error for debugging
+            Log::error('Error in fetching categories: ' . $e->getMessage());
+            return [];
+        }
+    }
 
-    //             // Return the data
-    //             return $postsData;
-    //         } else {
-    //             Log::error('Error fetching posts for category ' . $categoryName . ': ' . $response->status());
-    //             return [];
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching posts for category ' . $categoryName . ': ' . $e->getMessage());
-    //         return [];
-    //     }
-    // }
 
 
-    private function listPostsByCategoryName($categoryName)
+    private function listPostsByCategoryName2($categoryName)
     {
         Log::info("Fetching posts for category: {$categoryName}");
 
-        $apiUrl = config('api.base_url') . '/category-posts';
+        $apiUrl = config('api.base_url') . '/category/posts';
         Log::info('API URL for category posts:', ['url' => $apiUrl]);
 
         try {
@@ -329,6 +297,48 @@ class UserController extends Controller
         } catch (\Exception $e) {
             Log::error('Error fetching posts for category ' . $categoryName . ': ' . $e->getMessage());
             return [];
+        }
+    }
+
+
+    private function listPostsByCategoryName($categoryName)
+    {
+        $apiUrl = config('api.base_url') . '/category/posts';
+
+        try {
+            $response = Http::get($apiUrl, [
+                'category_name' => $categoryName,
+                'per_page' => 3
+            ]);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Check if 'posts' key exists
+                if (!isset($responseData['posts'])) {
+                    Log::error("Posts key missing in response for category: {$categoryName}");
+                    return ['posts' => [], 'pagination' => []];
+                }
+
+                $postsData = $responseData['posts']['data'] ?? [];
+                $pagination = [
+                    'current_page' => $responseData['posts']['current_page'] ?? 1,
+                    'last_page' => $responseData['posts']['last_page'] ?? 1,
+                    'total' => $responseData['posts']['total'] ?? 0,
+                    'next_page_url' => $responseData['posts']['next_page_url'],
+                    'prev_page_url' => $responseData['posts']['prev_page_url']
+                ];
+
+                return [
+                    'posts' => $postsData,
+                    'pagination' => $pagination
+                ];
+            }
+
+            return ['posts' => [], 'pagination' => []];
+        } catch (\Exception $e) {
+            Log::error('Error fetching posts for category ' . $categoryName . ': ' . $e->getMessage());
+            return ['posts' => [], 'pagination' => []];
         }
     }
 
@@ -578,6 +588,160 @@ class UserController extends Controller
         }
     }
 
+    private function listBirthdayPostsData()
+    {
+        // Log for debugging
+        Log::info('Fetching Birthday approved posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/birthday';
+        Log::info('API URL for approved Birthday posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch the approved posts with 'caveat' = true
+            $response = Http::get($apiUrl, [
+                'per_page' => 10,
+                'event' => true,
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract posts data
+                $birthdayPostsData = $responseData['data']['posts'] ?? [];
+
+                // Log total number of posts
+                $totalBirthdayPosts = $responseData['data']['pagination']['total'] ?? 0;
+                Log::info('Total Birthday Posts: ' . $totalBirthdayPosts);
+
+                // Return the data
+                return $birthdayPostsData;
+            } else {
+                Log::error('Error fetching approved Birthday posts: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching approved Birthday posts: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+
+    private function listWeddingPostsData()
+    {
+        // Log for debugging
+        Log::info('Fetching Wedding approved posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/wedding';
+        Log::info('API URL for approved Wedding posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch the approved posts with 'caveat' = true
+            $response = Http::get($apiUrl, [
+                'per_page' => 10,
+                'event' => true,
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract posts data
+                $weddingPostsData = $responseData['data']['posts'] ?? [];
+
+                // Log total number of posts
+                $totalWeddingPosts = $responseData['data']['pagination']['total'] ?? 0;
+                Log::info('Total Wedding Posts: ' . $totalWeddingPosts);
+
+                // Return the data
+                return $weddingPostsData;
+            } else {
+                Log::error('Error fetching approved Wedding posts: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching approved Wedding posts: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+
+    private function listChildDedicationPostsData()
+    {
+        // Log for debugging
+        Log::info('Fetching Child Dedication approved posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/dedication';
+        Log::info('API URL for approved Child Dedication posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch the approved child dedication posts
+            $response = Http::get($apiUrl, [
+                'per_page' => 10,
+                'event' => true,
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract posts data
+                $childDedicationPostsData = $responseData['data']['posts'] ?? [];
+
+                // Log total number of posts
+                $totalChildDedicationPosts = $responseData['data']['pagination']['total'] ?? 0;
+                Log::info('Total Child Dedication Posts: ' . $totalChildDedicationPosts);
+
+                // Return the data
+                return $childDedicationPostsData;
+            } else {
+                Log::error('Error fetching approved Child Dedication posts: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching approved Child Dedication posts: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+
+    private function listStolenVehiclePostsData()
+    {
+        // Log for debugging
+        Log::info('Fetching Stolen Vehicle approved posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/stolen-vehicle'; // API endpoint for stolen vehicle posts
+        Log::info('API URL for approved Stolen Vehicle posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch the approved stolen vehicle posts
+            $response = Http::get($apiUrl, [
+                'per_page' => 10,
+                'event' => true,
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract posts data
+                $stolenVehiclePostsData = $responseData['data']['posts'] ?? [];
+
+                // Log total number of posts
+                $totalStolenVehiclePosts = $responseData['data']['pagination']['total'] ?? 0;
+                Log::info('Total Stolen Vehicle Posts: ' . $totalStolenVehiclePosts);
+
+                // Return the data
+                return $stolenVehiclePostsData;
+            } else {
+                Log::error('Error fetching approved Stolen Vehicle posts: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching approved Stolen Vehicle posts: ' . $e->getMessage());
+            return [];
+        }
+    }
 
     private function listPrideOfNigeriaPosts()
     {
@@ -628,6 +792,8 @@ class UserController extends Controller
             return [];
         }
     }
+
+
 
 
     private function listTopTopicPosts()

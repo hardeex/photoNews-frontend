@@ -242,12 +242,12 @@
                             <label for="is_breaking" class="ml-2 text-sm text-gray-700">Breaking News</label>
                         </div>
 
-                        <div class="flex items-center">
+                        {{-- <div class="flex items-center">
                             <input type="checkbox" id="caveat" name="caveat"
                                 class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
                                 value="1" {{ old('caveat') ? 'checked' : '' }}>
                             <label for="caveat" class="ml-2 text-sm text-gray-700">Caveat</label>
-                        </div>
+                        </div> --}}
 
                         <div class="flex items-center">
                             <input type="checkbox" id="hot_gist" name="hot_gist"
@@ -362,6 +362,26 @@
 
 
             </form>
+
+
+
+            <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+            <script>
+                // select 2 for category optimization
+
+                // Include jQuery and Select2 JS & CSS -->
+
+                $(document).ready(function() {
+                    $('#category').select2({
+                        placeholder: 'Select a Category',
+                        allowClear: true
+                    });
+                });
+            </script>
+
 
             <!-- start of the signifier -->
             <div id="caveat-bubble" class="fixed bottom-4 right-4 animate-bounce-in">

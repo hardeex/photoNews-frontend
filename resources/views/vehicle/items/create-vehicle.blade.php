@@ -50,7 +50,7 @@
     <div class="container mx-auto px-6 py-8">
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="text-2xl font-semibold">Create Caveat Post</h1>
+                <h1 class="text-2xl font-semibold">Create Stolen Vehicle Post</h1>
                 <p class="text-sm text-gray-600" id="saveStatus"></p>
             </div>
             <div class="flex gap-4">
@@ -100,7 +100,7 @@
 
 
         <div class="bg-white rounded-lg shadow-lg p-6">
-            <form action="{{ route('caveat.submit') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('submit.vehicle') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
 
@@ -108,7 +108,8 @@
 
                 <!-- Title -->
                 <div class="mb-6">
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Title / Name of the Vehicle
+                        *</label>
                     <input type="text" id="title" name="title"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         value="{{ old('title', $post->title ?? '') }}" required>
@@ -126,7 +127,7 @@
 
                 <!-- Featured Image -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Featured Image *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Image of the Vehicle *</label>
                     <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">
                             <div class="flex text-sm text-gray-600">
@@ -152,11 +153,63 @@
 
 
 
+                <!-- Vehicle Make and Model -->
+                <div class="mb-6">
+                    <label for="vehicle_make" class="block text-sm font-medium text-gray-700 mb-2">Vehicle Make and Model
+                        *</label>
+                    <input type="text" id="vehicle_make" name="vehicle_make"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('vehicle_make', $post->vehicle_make ?? '') }}" required>
+                </div>
+
+                <!-- Vehicle Year -->
+                <div class="mb-6">
+                    <label for="vehicle_year" class="block text-sm font-medium text-gray-700 mb-2">Vehicle Year *</label>
+                    <input type="text" id="vehicle_year" name="vehicle_year"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('vehicle_year', $post->vehicle_year ?? '') }}" required>
+                </div>
+
+                <!-- Vehicle Color -->
+                <div class="mb-6">
+                    <label for="vehicle_color" class="block text-sm font-medium text-gray-700 mb-2">Vehicle Color *</label>
+                    <input type="text" id="vehicle_color" name="vehicle_color"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('vehicle_color', $post->vehicle_color ?? '') }}" required>
+                </div>
+
+                <!-- Vehicle License Plate -->
+                <div class="mb-6">
+                    <label for="license_plate" class="block text-sm font-medium text-gray-700 mb-2">License Plate *</label>
+                    <input type="text" id="license_plate" name="license_plate"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('license_plate', $post->license_plate ?? '') }}" required>
+                </div>
+
+                <!-- Stolen Location -->
+                <div class="mb-6">
+                    <label for="stolen_location" class="block text-sm font-medium text-gray-700 mb-2">Location of Theft
+                        *</label>
+                    <textarea id="stolen_location" name="stolen_location"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        rows="3" required>{{ old('stolen_location', $post->stolen_location ?? '') }}</textarea>
+                </div>
+
+                <!-- Date and Time of Theft -->
+                <div class="mb-6">
+                    <label for="theft_date" class="block text-sm font-medium text-gray-700 mb-2">Date and Time of Theft
+                        *</label>
+                    <input type="datetime-local" id="theft_date" name="theft_date"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value="{{ old('theft_date', $post->theft_date ?? '') }}" required>
+                </div>
+
 
 
                 <!-- Content -->
                 <div class="mb-6">
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Content *</label>
+                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Description of the Theft
+                        and/or More Information *</label>
                     <textarea id="editor" rows="10" name="content" class="w-full" required>{{ old('content', $post->content ?? '') }}</textarea>
 
                 </div>
@@ -173,8 +226,8 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <div class="flex items-center">
                             <input type="checkbox" id="is_featured" name="is_featured"
-                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200" value="1"
-                                {{ old('is_featured') ? 'checked' : '' }}>
+                                class="rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
+                                value="1" {{ old('is_featured') ? 'checked' : '' }}>
                             <label for="is_featured" class="ml-2 text-sm text-gray-700">Feature this post</label>
                         </div>
 

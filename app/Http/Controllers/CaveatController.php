@@ -114,4 +114,172 @@ class CaveatController extends Controller
             return back()->withErrors(['error' => 'An error occurred while submitting the post.']);
         }
     }
+
+
+    public function showCaveatDetails(Request $request, $slug)
+    {
+        $apiUrl = config('api.base_url') . '/caveat/' . $slug;
+
+        try {
+            $response = Http::get($apiUrl);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                // Access the post data correctly from the nested structure
+                $post = $responseData['data']['post'] ?? null;
+            } else {
+                $post = null;
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching post details: ' . $e->getMessage());
+            $post = null;
+        }
+
+        return view('caveat.show', compact('post'));
+    }
+
+
+
+    // public function listCaveatPosts()
+    // {
+    //     // Log for debugging
+    //     Log::info('Fetching Caveat approved posts...');
+
+    //     $apiUrl = config('api.base_url') . '/posts/caveat';
+    //     Log::info('API URL for approved Caveat posts:', ['url' => $apiUrl]);
+
+    //     try {
+    //         // Make an API call to fetch the approved posts with 'caveat' = true
+    //         $response = Http::get($apiUrl, [
+    //             'per_page' => 10,
+    //             //'event' => true,
+    //         ]);
+
+    //         // Check if the response was successful
+    //         if ($response->successful()) {
+    //             $responseData = $response->json();
+
+    //             // Extract posts data and pagination info
+    //             $caveatPostsData = $responseData['data']['posts'] ?? [];
+    //             $pagination = $responseData['data']['pagination'] ?? [];
+
+    //             $totalCaveatPosts = $pagination['total'] ?? 0;
+    //             Log::info('The total caveat posts:' . $totalCaveatPosts);
+
+    //             print_r($caveatPostsData);
+    //             exit();
+
+    //             //Return the data
+    //             //return $caveatPostsData;
+    //             return view('caveat.list', compact('caveatPostsData', 'totalCaveatPosts'));
+    //         } else {
+    //             Log::error('Error fetching approved Events posts: ' . $response->status());
+    //             return [];
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::error('Error fetching approved Events posts: ' . $e->getMessage());
+    //         return [];
+    //     }
+    // }
+
+
+    public function listCaveatPosts2()
+    {
+        // Log for debugging
+        Log::info('Fetching Caveat approved posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/caveat';
+        Log::info('API URL for approved Caveat posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to fetch the approved posts with 'caveat' = true
+            $response = Http::get($apiUrl, [
+                'per_page' => 10,
+            ]);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract posts data and pagination info
+                $caveatPostsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                $totalCaveatPosts = $pagination['total'] ?? 0;
+                Log::info('The total caveat posts:' . $totalCaveatPosts);
+
+                return view('caveat.list', compact('caveatPostsData', 'totalCaveatPosts'));
+            } else {
+                Log::error('Error fetching approved Caveat posts: ' . $response->status());
+                return [];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching approved Caveat posts: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function listCaveatPosts()
+    {
+        // Log for debugging
+        Log::info('Fetching Caveat approved posts...');
+
+        // Define both API URLs
+        $apiBaseUrl = config('api.base_url');
+        $caveatUrl = $apiBaseUrl . '/posts/caveat';
+        $articleUrl = $apiBaseUrl . '/posts/caveat/article';
+
+        // Log the API URLs
+        Log::info('API URL for Caveat posts:', ['url' => $caveatUrl]);
+        Log::info('API URL for Caveat article posts:', ['url' => $articleUrl]);
+
+        try {
+            // Fetch Caveat posts from /posts/caveat
+            $responseCaveat = Http::get($caveatUrl, [
+                'per_page' => 10,
+            ]);
+
+            // Fetch Caveat articles from /posts/caveat/article
+            $responseArticle = Http::get($articleUrl, [
+                'per_page' => 10,
+            ]);
+
+            // Check if both responses are successful
+            $caveatPostsData = [];
+            $articlePostsData = [];
+            $totalCaveatPosts = 0;
+            $totalArticlePosts = 0;
+
+            if ($responseCaveat->successful()) {
+                $responseDataCaveat = $responseCaveat->json();
+                $caveatPostsData = $responseDataCaveat['data']['posts'] ?? [];
+                $paginationCaveat = $responseDataCaveat['data']['pagination'] ?? [];
+                $totalCaveatPosts = $paginationCaveat['total'] ?? 0;
+                Log::info('The total Caveat posts: ' . $totalCaveatPosts);
+            } else {
+                Log::error('Error fetching Caveat posts: ' . $responseCaveat->status());
+            }
+
+            if ($responseArticle->successful()) {
+                $responseDataArticle = $responseArticle->json();
+                $articlePostsData = $responseDataArticle['data']['posts'] ?? [];
+                $paginationArticle = $responseDataArticle['data']['pagination'] ?? [];
+                $totalArticlePosts = $paginationArticle['total'] ?? 0;
+                Log::info('The total Article posts: ' . $totalArticlePosts);
+            } else {
+                Log::error('Error fetching Article posts: ' . $responseArticle->status());
+            }
+
+            // Return the combined view with data from both API calls
+            return view('caveat.list', [
+                'caveatPostsData' => $caveatPostsData,
+                'totalCaveatPosts' => $totalCaveatPosts,
+                'articlePostsData' => $articlePostsData,
+                'totalArticlePosts' => $totalArticlePosts,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error fetching Caveat posts: ' . $e->getMessage());
+            return [];
+        }
+    }
 }

@@ -96,6 +96,59 @@ class MisplaceAndFoundController extends Controller
     }
 
 
+    // public function showPostDetails(Request $request, $slug)
+    // {
+    //     $apiUrl = config('api.base_url') . '/misplaced/' . $slug;
+
+    //     try {
+    //         // Make the API call to fetch post details by slug
+    //         $response = Http::get($apiUrl);
+
+    //         if ($response->successful()) {
+    //             // Get post data from the API response
+    //             $data = $response->json();
+    //             $post = $data['data'] ?? null;  // The 'post' data from the API response
+    //             // print_r($post);
+    //             // exit();
+
+    //             dd($post);
+    //         } else {
+    //             $post = null;
+    //         }
+    //     } catch (\Exception $e) {
+    //         // Log error and handle failure
+    //         Log::error('Error fetching post details: ' . $e->getMessage());
+    //         $post = null;
+    //     }
+
+    //     // Return the view with the post data
+    //     return view('misplace-and-found.show', compact('post'));
+    // }
+
+
+    public function showPostDetails(Request $request, $slug)
+    {
+        $apiUrl = config('api.base_url') . '/misplaced/' . $slug;
+
+        try {
+            $response = Http::get($apiUrl);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                // Access the post data correctly from the nested structure
+                $post = $data['data']['post'] ?? null;
+            } else {
+                $post = null;
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching post details: ' . $e->getMessage());
+            $post = null;
+        }
+
+        return view('misplace-and-found.show', compact('post'));
+    }
+
+
 
     // end of the method signature
 }

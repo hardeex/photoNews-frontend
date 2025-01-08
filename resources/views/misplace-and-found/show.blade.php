@@ -1,19 +1,9 @@
 @extends('base.base')
-@section('title', ucwords(strtolower($post['title'])))
+@section('title', $post['title'] ?? 'Post Details')
 
 @section('content')
     @if ($post)
         <div class="bg-gray-100 min-h-screen pb-12">
-            <!-- Header -->
-            {{-- <header class="bg-white shadow-md">
-                <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center">
-                    <h1 class="text-3xl font-bold text-gray-900">{{ strtoupper($post['title']) }}</h1>
-                    <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                        Back to Home
-                    </button>
-                </div>
-            </header> --}}
-
             <main class="max-w-7xl mx-auto mt-8 px-4 sm:px-6 lg:px-8">
                 <article class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <!-- Image Section -->
@@ -85,9 +75,9 @@
                                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                             </svg>
                                         </div>
-                                        <span>
+                                        {{-- <span>
                                             By {{ $post['created_by_name'] }}
-                                        </span>
+                                        </span> --}}
                                     </div>
 
                                     <!-- Category -->
@@ -205,18 +195,6 @@
                             </script>
 
 
-                            <!-- Tags -->
-                            <div class="mt-8">
-                                <h4 class="text-lg font-semibold mb-2">Tags:</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    <span class="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-                                        @foreach ($post['tags'] as $tag)
-                                            <span>{{ $tag['name'] }}</span>
-                                        @endforeach
-                                    </span>
-
-                                </div>
-                            </div>
 
                             <!-- Social Share -->
                             <div>

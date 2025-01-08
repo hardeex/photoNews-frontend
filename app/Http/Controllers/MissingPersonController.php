@@ -119,4 +119,78 @@ class MissingPersonController extends Controller
             return back()->withErrors(['error' => 'An error occurred while submitting the missing person post.']);
         }
     }
+
+
+    // public function showPostDetails(Request $request, $slug)
+    // {
+    //     $apiUrl = config('api.base_url') . '/mising-or-wanted/' . $slug;
+
+    //     try {
+    //         $response = Http::get($apiUrl);
+
+    //         if ($response->successful()) {
+    //             $data = $response->json();
+    //             // Access the post data correctly from the nested structure
+    //             $post = $data['data']['post'] ?? null;
+    //             // print_r($post);
+    //             // exit();
+    //             dd($post);
+    //         } else {
+    //             $post = null;
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::error('Error fetching post details: ' . $e->getMessage());
+    //         $post = null;
+    //     }
+
+    //     return view('missing.show', compact('post'));
+    // }
+
+    public function showPostDetails(Request $request, $slug)
+    {
+        // Step 1: Construct the API URL and log it
+        $apiUrl = config('api.base_url') . '/mising-or-wanted/' . $slug;
+        Log::info('Constructed API URL: ' . $apiUrl);
+
+        try {
+            // Step 2: Make the API request and log the response status
+            Log::info('Making API GET request...');
+            $response = Http::get($apiUrl);
+
+            // Step 3: Log the response status code and body
+            Log::info('API Response Status Code: ' . $response->status());
+            Log::info('API Response Body: ' . $response->body());
+
+            // Step 4: Check if the response is successful (status 200)
+            if ($response->successful()) {
+                Log::info('API request successful.');
+
+                // Step 5: Decode the response JSON and log the structure
+                $data = $response->json();
+                Log::info('API Response Structure: ' . json_encode($data));
+
+                // Step 6: Access the 'post' data
+                $post = $data['data']['post'] ?? null;
+                Log::info('Post data fetched: ' . json_encode($post));
+
+                // Step 7: If post data is found, dump it using dd()
+                if ($post) {
+                    dd($post); // This will output the post data and stop execution
+                } else {
+                    Log::warning('No post data found for slug: ' . $slug);
+                }
+            } else {
+                // Step 8: Handle unsuccessful response and log the status
+                Log::warning('API request failed with status: ' . $response->status());
+                $post = null;
+            }
+        } catch (\Exception $e) {
+            // Step 9: Log any exceptions that occur during the request
+            Log::error('Error fetching post details: ' . $e->getMessage());
+            $post = null;
+        }
+
+        // Step 10: Return the view with post data (or null if not found)
+        return view('missing.show', compact('post'));
+    }
 }

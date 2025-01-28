@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Arr;
 
 class ObituaryController extends Controller
 {
@@ -107,6 +108,113 @@ class ObituaryController extends Controller
                 'exception_trace' => $e->getTraceAsString(),
             ]);
             return back()->withErrors(['error' => 'An error occurred while submitting the Obituary post.']);
+        }
+    }
+
+
+    public function listObituaryPosts(Request $request)
+    {
+        Log::info('Fetching Obituaries...');
+
+        // Set up the API URL
+        $apiUrl = config('api.base_url') . '/posts/obituary';
+        Log::info('API URL for obituaries:', ['url' => $apiUrl]);
+
+        try {
+            // Call the API to fetch obituary posts
+            $response = Http::get($apiUrl, [
+                'per_page' => 12,
+                'page' => $request->get('page', 1),
+                'order' => 'desc',
+            ]);
+
+            // Check if the response is successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Extract the posts data
+                $postsData = $responseData['data']['posts'] ?? [];
+
+                // Extract pagination data
+                $pagination = [
+                    'total' => $responseData['data']['pagination']['total'] ?? 0,
+                    'current_page' => $responseData['data']['pagination']['current_page'] ?? 1,
+                    'per_page' => $responseData['data']['pagination']['per_page'] ?? 12,
+                    'last_page' => $responseData['data']['pagination']['last_page'] ?? 1,
+                    'next_page_url' => $responseData['data']['pagination']['next_page_url'] ?? null,
+                    'prev_page_url' => $responseData['data']['pagination']['prev_page_url'] ?? null,
+                ];
+
+                // Dump postsData for debugging
+                //dd($postsData);  
+
+                // Pass data to view
+                return view('obituary.lists', [
+                    'postsData' => $postsData,
+                    'pagination' => $pagination,
+                ]);
+            } else {
+                // Log the error if API call fails
+                Log::error('Error fetching obituary posts:', ['status' => $response->status()]);
+                return view('obituary.lists', [
+                    'postsData' => [],
+                    'pagination' => ['total' => 0, 'per_page' => 12],
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Log any exceptions
+            Log::error('Error fetching obituary posts:', ['message' => $e->getMessage()]);
+            return view('obituary.lists', [
+                'postsData' => [],
+                'pagination' => ['total' => 0, 'per_page' => 12],
+            ]);
+        }
+    }
+
+    public function showObituaryDetails(Request $request, $slug)
+    { Log::info('Fetching Public notice post details...', ['slug' => $slug]);
+
+        // Define the API URL for fetching single post details
+        $apiUrl = config('api.base_url') . '/posts/public-notice/' . $slug;
+
+        try {
+            // Make an API call to fetch post details by slug
+            $response = Http::get($apiUrl);
+
+            // Check if the request was successful (HTTP status 2xx)
+            if ($response->successful()) {
+                // Extract the response body as an array
+                $data = $response->json();
+
+                // Check if the 'status' key exists in the response
+                if (isset($data['status']) && $data['status'] === 'success') {
+                    // The post data is available
+                    $post = $data['post'] ?? null;
+
+                    // If no post data, return a warning message
+                    if (!$post) {
+                        Log::warning('Post not found for slug: ' . $slug);
+                        return response()->json(['message' => 'Post not found'], 404);
+                    }
+
+                    //dd($data);
+
+                    // Return the view with the post data
+                    return view('public-notice.show', compact('post'));
+                } else {
+                    // If the status is not 'success', log the message and return an error
+                    Log::error('Failed to fetch post details from backend: ' . $data['message']);
+                    return response()->json(['message' => 'Failed to fetch post details: ' . $data['message']], 500);
+                }
+            } else {
+                // If the HTTP request fails (non-2xx status), log the error
+                Log::error('Failed to fetch post details from backend service', ['slug' => $slug, 'status' => $response->status()]);
+                return response()->json(['message' => 'Failed to fetch post details'], 500);
+            }
+        } catch (\Exception $e) {
+            // Log the exception error and return fallback response
+            Log::error('Error fetching post details from backend service: ' . $e->getMessage());
+            return response()->json(['message' => 'Error fetching post details'], 500);
         }
     }
 }

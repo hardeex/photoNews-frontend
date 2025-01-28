@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Arr;
 
 
 class CelebrationController extends Controller
@@ -116,6 +117,113 @@ class CelebrationController extends Controller
         }
     }
 
+    public function listBirthdayPosts(Request $request)
+    {
+        Log::info('Fetching Birthday Posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/birthday';  // Make sure base_url is correct in your config
+        Log::info('API URL for birthday posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make the GET request to the API
+            $response = Http::get($apiUrl, [
+                'per_page' => 12, // 12 items per page
+                'page' => $request->get('page', 1), // Default to page 1 if not provided
+                'order' => 'desc', // You might want to adjust this if not needed in the backend
+            ]);
+
+            // Check if the request was successful
+            if ($response->successful()) {
+                $responseData = $response->json();  // Parse the JSON response
+
+                // Log the raw response data for debugging (you can comment this line after debugging)
+                Log::info('Fetched birthday posts:', ['data' => $responseData]);
+
+                // Extract posts and pagination data
+                $postsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [
+                    'total' => 0,
+                    'per_page' => 12,
+                    'current_page' => 1,
+                    'last_page' => 1,
+                    'next_page_url' => null,
+                    'prev_page_url' => null,
+                ];
+
+                // Debug the response data to inspect before rendering
+                // dd($responseData);  
+
+
+                return view('birthday.lists', [
+                    'postsData' => $postsData,
+                    'pagination' => $pagination
+                ]);
+            } else {
+                // Log if the response is not successful
+                Log::error('Error fetching birthday posts:', ['status' => $response->status()]);
+                return view('birthday.lists', [
+                    'postsData' => [],
+                    'pagination' => ['total' => 0, 'per_page' => 12]
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Handle exceptions if something goes wrong with the request
+            Log::error('Error fetching birthday posts:', ['message' => $e->getMessage()]);
+            return view('birthday.lists', [
+                'postsData' => [],
+                'pagination' => ['total' => 0, 'per_page' => 12]
+            ]);
+        }
+    }
+
+
+    public function showBirthdayDetails(Request $request, $slug)
+    {
+        Log::info('Fetching Birthday post details...', ['slug' => $slug]);
+
+        // Define the API URL for fetching the single post details
+        $apiUrl = config('api.base_url') . '/birthday-posts/' . $slug;
+
+        try {
+            // Make an API call to fetch post details by slug
+            $response = Http::get($apiUrl);
+
+            // Check if the request was successful (HTTP status 2xx)
+            if ($response->successful()) {
+                // Extract the response body as an array
+                $data = $response->json();
+
+                // Check if the 'status' key exists in the response and is 'success'
+                if (isset($data['status']) && $data['status'] === 'success') {
+                    // The post data is available under 'data'
+                    $post = $data['data'] ?? null;
+
+                    // If no post data, return a warning message
+                    if (!$post) {
+                        Log::warning('Post not found for slug: ' . $slug);
+                        return response()->json(['message' => 'Post not found'], 404);
+                    }
+
+
+                    //dd($post);
+                    // Return the view with the post data
+                    return view('birthday.show', compact('post'));
+                } else {
+                    // If the status is not 'success', log the message and return an error
+                    Log::error('Failed to fetch post details from backend: ' . $data['message']);
+                    return response()->json(['message' => 'Failed to fetch post details: ' . $data['message']], 500);
+                }
+            } else {
+                // If the HTTP request fails (non-2xx status), log the error
+                Log::error('Failed to fetch post details from backend service', ['slug' => $slug, 'status' => $response->status()]);
+                return response()->json(['message' => 'Failed to fetch post details'], 500);
+            }
+        } catch (\Exception $e) {
+            // Log the exception error and return fallback response
+            Log::error('Error fetching post details from backend service: ' . $e->getMessage());
+            return response()->json(['message' => 'Error fetching post details'], 500);
+        }
+    }
 
     public function createWedding()
     {

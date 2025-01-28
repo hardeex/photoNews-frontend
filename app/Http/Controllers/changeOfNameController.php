@@ -105,4 +105,121 @@ class changeOfNameController extends Controller
             return back()->withErrors(['error' => 'An error occurred while submitting the change of name.']);
         }
     }
+
+
+    public function listPosts(Request $request)
+    {
+        Log::info('Fetching Missing and Wanted posts...');
+
+        // Set the API URL (adjust as per your config)
+        $apiUrl = config('api.base_url') . '/posts/change-of-name';
+        Log::info('API URL for fetching posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make the API request with parameters for pagination
+            $response = Http::get($apiUrl, [
+                'per_page' => 12,
+                'page' => $request->get('page', 1),
+                'order' => 'desc',
+            ]);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Ensure posts are properly extracted from the API response
+                $postsData = $responseData['data']['posts'] ?? [];
+
+                // Extract pagination details from the API response
+                $pagination = $responseData['data']['pagination'] ?? [
+                    'total' => 0,
+                    'current_page' => 1,
+                    'per_page' => 12,
+                    'last_page' => 1,
+                    'next_page_url' => null,
+                    'prev_page_url' => null,
+                ];
+
+                // Dump the response for debugging (can be removed later)
+                //dd($responseData);
+
+                // Pass posts data and pagination to the view
+                return view('change-of-name.lists', [
+                    'postsData' => $postsData,
+                    'pagination' => $pagination
+                ]);
+            } else {
+                // Handle unsuccessful response from API
+                Log::error('Error fetching Missing and Wanted posts:', ['status' => $response->status()]);
+                return view('change-of-name.lists', [
+                    'postsData' => [],
+                    'pagination' => [
+                        'total' => 0,
+                        'per_page' => 12,
+                        'current_page' => 1,
+                        'last_page' => 1,
+                    ]
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Handle exceptions (e.g., network issues)
+            Log::error('Error fetching Missing and Wanted posts:', ['message' => $e->getMessage()]);
+            return view('change-of-name.lists', [
+                'postsData' => [],
+                'pagination' => [
+                    'total' => 0,
+                    'per_page' => 12,
+                    'current_page' => 1,
+                    'last_page' => 1,
+                ]
+            ]);
+        }
+    }
+
+
+    public function showChangeOfNameDetails(Request $request, $slug)
+    {
+        Log::info('Fetching Change of Name post details...', ['slug' => $slug]);
+    
+        // Define the API URL for fetching single post details
+        $apiUrl = config('api.base_url') . '/posts/change-of-name/' . $slug;
+    
+        try {
+            // Make an API call to fetch post details by slug
+            $response = Http::get($apiUrl);
+    
+            // Check if the request was successful (HTTP status 2xx)
+            if ($response->successful()) {
+                // Extract the response body as an array
+                $data = $response->json();
+    
+                // Check if the 'status' key exists in the response
+                if (isset($data['status']) && $data['status'] === 'success') {
+                    // The post data is available
+                    $post = $data['data']['post'] ?? null;
+    
+                    // If no post data, return a warning message
+                    if (!$post) {
+                        Log::warning('Post not found for slug: ' . $slug);
+                        return response()->json(['message' => 'Post not found'], 404);
+                    }
+    
+                    // Return the view with the post data
+                    return view('change-of-name.show', compact('post'));
+                } else {
+                    // If the status is not 'success', log the message and return an error
+                    Log::error('Failed to fetch post details from backend: ' . $data['message']);
+                    return response()->json(['message' => 'Failed to fetch post details: ' . $data['message']], 500);
+                }
+            } else {
+                // If the HTTP request fails (non-2xx status), log the error
+                Log::error('Failed to fetch post details from backend service', ['slug' => $slug, 'status' => $response->status()]);
+                return response()->json(['message' => 'Failed to fetch post details'], 500);
+            }
+        } catch (\Exception $e) {
+            // Log the exception error and return fallback response
+            Log::error('Error fetching post details from backend service: ' . $e->getMessage());
+            return response()->json(['message' => 'Error fetching post details'], 500);
+        }
+    }
+    
 }

@@ -55,15 +55,19 @@ Route::get('/lists/lost-and-found/posts', [MisplaceAndFoundController::class, 'l
 Route::get('/misplaced/{slug}', [MisplaceAndFoundController::class, 'showPostDetails'])->name('misplaced.details');
 
 
-// missing person routes
+// missing and wanted person routes
 Route::get('/create/missing-person', [MissingPersonController::class, 'createPost'])->name('missing.create');
 Route::post('/submit/missing-and-wanted-person', [MissingPersonController::class, 'submitPost'])->name('missing-person.submit');
-Route::get('/missing-or-wanted/{slug}', [MissingPersonController::class, 'showPostDetails'])->name('missing-wanted.details');
+Route::get('/missing-{slug}', [MissingPersonController::class, 'showPostDetails'])->name('missing-wanted.details');
+Route::get('/lists/missing', [MissingPersonController::class, 'listPosts'])->name('missing-wanted-lists.details');
+
 
 
 // obituary routes
 Route::get('/create/obituary', [ObituaryController::class, 'createPost'])->name('obituary.create');
 Route::post('/submit/obituary', [ObituaryController::class, 'submitPost'])->name('obituary.submit');
+Route::get('/list/obituary/posts', [ObituaryController::class, 'listObituaryPosts'])->name('obituary.listObituaryPosts');
+Route::get('/obituary/{slug}', [ObituaryController::class, 'showObituaryDetails'])->name('obituary.details');
 
 // remebrance controller
 Route::get('/create/remembrance', [RemembranceController::class, 'createPost'])->name('remembrance.create');
@@ -75,6 +79,8 @@ Route::get('/remembrance/{slug}', [RemembranceController::class, 'showRemembranc
 // change of name routes
 Route::get('/create-change-of-name', [changeOfNameController::class, 'createPost'])->name('change-of-name.create');
 Route::post('/submit-change-of-name', [changeOfNameController::class, 'submitPost'])->name('change-of-name.submit');
+Route::get('/lists/change-of-name', [changeOfNameController::class, 'listPosts'])->name('list-change-of-name');
+Route::get('/change-of-name/{slug}', [changeOfNameController::class, 'showChangeOfNameDetails'])->name('change-of-name.details');
 
 
 // caveat routes
@@ -99,6 +105,8 @@ Route::post('/submit-category-seeder', [NewsPostController::class, 'submitCatego
 Route::get('/create/birthday', [CelebrationController::class, 'createBirthday'])->name('create.birthday');
 Route::get('/manage/birthday', [CelebrationController::class, 'manageBirthday'])->name('manage.birthday');
 Route::post('submit/birthday', [celebrationController::class, 'submitBirthday'])->name('submit.birthday');
+Route::get('/posts/birthday/lists', [CelebrationController::class, 'listBirthdayPosts'])->name('list.birthday-posts');
+Route::get('/birthday/{slug}', [CelebrationController::class,'showBirthdayDetails'])->name('birthday.details');
 
 Route::get('/create/wedding', [CelebrationController::class, 'createWedding'])->name('create.wedding');
 Route::get('/manage/wedding', [CelebrationController::class, 'manageWedding'])->name('manage.wedding');

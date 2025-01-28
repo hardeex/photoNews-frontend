@@ -88,7 +88,7 @@
                         </a>
 
                         {{-- Lost and Found --}}
-                        <a href="#"
+                        <a href="{{ route('lists-lost-and-found') }}"
                             class="block rounded-xl border-2 border-purple-200 bg-purple-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
                             <div class="text-center">
                                 <div class="text-3xl font-bold mb-2 text-purple-600">
@@ -101,7 +101,7 @@
                         </a>
 
                         {{-- Obituaries --}}
-                        <a href="#"
+                        <a href="{{ route('obituary.listObituaryPosts') }}"
                             class="block rounded-xl border-2 border-yellow-200 bg-yellow-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
                             <div class="text-center">
                                 <div class="text-3xl font-bold mb-2 text-yellow-600">
@@ -114,20 +114,20 @@
                         </a>
 
                         {{-- Missing Persons --}}
-                        <a href="#"
+                        <a href="{{ route('missing-wanted-lists.details') }}"
                             class="block rounded-xl border-2 border-indigo-200 bg-indigo-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
                             <div class="text-center">
                                 <div class="text-3xl font-bold mb-2 text-indigo-600">
                                     {{ number_format($totalMissingPersonPosts) }}
                                 </div>
                                 <h3 class="text-xs font-medium uppercase tracking-wider text-indigo-600">
-                                    Missing Persons
+                                    Missing &amp; Wanted Persons
                                 </h3>
                             </div>
                         </a>
 
                         {{-- Wanted Persons --}}
-                        <a href="#}"
+                        {{-- <a href="#}"
                             class="block rounded-xl border-2 border-pink-200 bg-pink-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
                             <div class="text-center">
                                 <div class="text-3xl font-bold mb-2 text-pink-600">
@@ -137,10 +137,10 @@
                                     Wanted Persons
                                 </h3>
                             </div>
-                        </a>
+                        </a> --}}
 
                         {{-- Change of Name --}}
-                        <a href="#"
+                        <a href="{{ route('list-change-of-name') }}"
                             class="block rounded-xl border-2 border-teal-200 bg-teal-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
                             <div class="text-center">
                                 <div class="text-3xl font-bold mb-2 text-teal-600">
@@ -153,7 +153,7 @@
                         </a>
 
                         {{-- Birthday  --}}
-                        <a href="#"
+                        <a href="{{ route('list.birthday-posts') }}"
                             class="block rounded-xl border-2 border-cyan-200 bg-gray-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
                             <div class="text-center">
                                 <div class="text-3xl font-bold mb-2 text-brown-600">
@@ -212,7 +212,7 @@
 
             <div class="bg-gray-100 p-4">
                 <h2 class="text-2xl font-bold mb-4 bg-gray-300 p-2 rounded-lg">Latest News</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     @if (count($postsData) > 0)
                         @foreach ($postsData as $post)
                             <div
@@ -321,7 +321,7 @@
 
             <div class="bg-gray-100 p-4">
                 <h2 class="text-2xl font-bold mb-4 bg-gray-300 p-2 rounded-lg">Public Notice</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     @if (count($publicNotice) > 0)
                         @foreach ($publicNotice as $post)
                             <div

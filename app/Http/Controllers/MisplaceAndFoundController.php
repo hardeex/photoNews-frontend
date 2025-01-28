@@ -95,35 +95,66 @@ class MisplaceAndFoundController extends Controller
         }
     }
 
+    public function listLostAndFound()
+    {
+        // Log for debugging
+        Log::info('Fetching published posts...');
 
-    // public function showPostDetails(Request $request, $slug)
-    // {
-    //     $apiUrl = config('api.base_url') . '/misplaced/' . $slug;
+        $apiUrl = config('api.base_url') . '/posts/lost-and-found';
+        Log::info('API URL for published posts:', ['url' => $apiUrl]);
 
-    //     try {
-    //         // Make the API call to fetch post details by slug
-    //         $response = Http::get($apiUrl);
+        try {
+            // Make an API call to the /published/posts endpoint to fetch the posts
+            $response = Http::get($apiUrl, [
+                'per_page' => 100,  // Get the first 100 posts
+            ]);
 
-    //         if ($response->successful()) {
-    //             // Get post data from the API response
-    //             $data = $response->json();
-    //             $post = $data['data'] ?? null;  // The 'post' data from the API response
-    //             // print_r($post);
-    //             // exit();
+            // Check if the response was successful
+            if ($response->successful()) {
+                // Extract posts and pagination data from the response
+                $responseData = $response->json();
 
-    //             dd($post);
-    //         } else {
-    //             $post = null;
-    //         }
-    //     } catch (\Exception $e) {
-    //         // Log error and handle failure
-    //         Log::error('Error fetching post details: ' . $e->getMessage());
-    //         $post = null;
-    //     }
+                // Log the structure of the response for debugging
+                Log::info('Response Data Structure:', [
+                    'keys' => array_keys($responseData),
+                    'data_keys' => isset($responseData['data']) ? array_keys($responseData['data']) : 'No data key'
+                ]);
 
-    //     // Return the view with the post data
-    //     return view('misplace-and-found.show', compact('post'));
-    // }
+                // Extract posts data and pagination info
+                $postsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                // Log the processed posts data
+                Log::info('Processed Posts Data:', [
+                    'posts_count' => count($postsData),
+                    'pagination' => $pagination
+                ]);
+
+                // Optionally, return the posts and pagination to the frontend view
+                return view('misplace-and-found.lists', [
+                    'postsData' => $postsData,
+                    'pagination' => $pagination,
+                ]);
+            } else {
+                // If the response failed, handle the error
+                Log::error('Error fetching published posts: ' . $response->status());
+                $postsData = [];
+                $pagination = [];
+            }
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the request
+            Log::error('Error fetching published posts: ' . $e->getMessage());
+            $postsData = [];
+            $pagination = [];
+        }
+
+        // Return a default response when something goes wrong
+        return view('misplace-and-found.lists', [
+            'postsData' => $postsData,
+            'pagination' => $pagination,
+        ]);
+    }
+
 
 
     public function showPostDetails(Request $request, $slug)

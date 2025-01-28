@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Arr;
 
 class MissingPersonController extends Controller
 {
@@ -121,35 +122,12 @@ class MissingPersonController extends Controller
     }
 
 
-    // public function showPostDetails(Request $request, $slug)
-    // {
-    //     $apiUrl = config('api.base_url') . '/mising-or-wanted/' . $slug;
 
-    //     try {
-    //         $response = Http::get($apiUrl);
-
-    //         if ($response->successful()) {
-    //             $data = $response->json();
-    //             // Access the post data correctly from the nested structure
-    //             $post = $data['data']['post'] ?? null;
-    //             // print_r($post);
-    //             // exit();
-    //             dd($post);
-    //         } else {
-    //             $post = null;
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching post details: ' . $e->getMessage());
-    //         $post = null;
-    //     }
-
-    //     return view('missing.show', compact('post'));
-    // }
 
     public function showPostDetails(Request $request, $slug)
     {
         // Step 1: Construct the API URL and log it
-        $apiUrl = config('api.base_url') . '/mising-or-wanted/' . $slug;
+        $apiUrl = config('api.base_url') . '/missing-or-wanted/' . $slug;
         Log::info('Constructed API URL: ' . $apiUrl);
 
         try {
@@ -173,24 +151,92 @@ class MissingPersonController extends Controller
                 $post = $data['data']['post'] ?? null;
                 Log::info('Post data fetched: ' . json_encode($post));
 
-                // Step 7: If post data is found, dump it using dd()
+                // Step 7: If post data is found, pass it to the view
                 if ($post) {
-                    dd($post); // This will output the post data and stop execution
+                    //dd($post);
+                    return view('missing.show', compact('post'));
                 } else {
+                    // Handle case where post is not found
                     Log::warning('No post data found for slug: ' . $slug);
+                    return view('missing.show', ['post' => null]);
                 }
             } else {
                 // Step 8: Handle unsuccessful response and log the status
                 Log::warning('API request failed with status: ' . $response->status());
-                $post = null;
+                return view('missing.show', ['post' => null]);
             }
         } catch (\Exception $e) {
             // Step 9: Log any exceptions that occur during the request
             Log::error('Error fetching post details: ' . $e->getMessage());
-            $post = null;
+            return view('missing.show', ['post' => null]);
         }
+    }
 
-        // Step 10: Return the view with post data (or null if not found)
-        return view('missing.show', compact('post'));
+    public function listPosts(Request $request)
+    {
+        Log::info('Fetching Missing and Wanted posts...');
+
+        // Set the API URL (adjust as per your config)
+        $apiUrl = config('api.base_url') . '/posts/missing-or-wanted';
+        Log::info('API URL for fetching posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make the API request with parameters for pagination
+            $response = Http::get($apiUrl, [
+                'per_page' => 12,
+                'page' => $request->get('page', 1),
+                'order' => 'desc',
+            ]);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Ensure posts are properly extracted from the API response
+                $postsData = $responseData['data']['posts'] ?? [];
+
+                // Extract pagination details from the API response
+                $pagination = $responseData['data']['pagination'] ?? [
+                    'total' => 0,
+                    'current_page' => 1,
+                    'per_page' => 12,
+                    'last_page' => 1,
+                    'next_page_url' => null,
+                    'prev_page_url' => null,
+                ];
+
+                // Dump the response for debugging (can be removed later)
+                //dd($responseData);  // Remove or comment out after testing
+
+                // Pass posts data and pagination to the view
+                return view('missing.lists', [
+                    'postsData' => $postsData,
+                    'pagination' => $pagination
+                ]);
+            } else {
+                // Handle unsuccessful response from API
+                Log::error('Error fetching Missing and Wanted posts:', ['status' => $response->status()]);
+                return view('missing.lists', [
+                    'postsData' => [],
+                    'pagination' => [
+                        'total' => 0,
+                        'per_page' => 12,
+                        'current_page' => 1,
+                        'last_page' => 1,
+                    ]
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Handle exceptions (e.g., network issues)
+            Log::error('Error fetching Missing and Wanted posts:', ['message' => $e->getMessage()]);
+            return view('missing.lists', [
+                'postsData' => [],
+                'pagination' => [
+                    'total' => 0,
+                    'per_page' => 12,
+                    'current_page' => 1,
+                    'last_page' => 1,
+                ]
+            ]);
+        }
     }
 }

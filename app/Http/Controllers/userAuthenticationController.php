@@ -180,7 +180,7 @@ class userAuthenticationController extends Controller
                     $request->session()->flush();
 
                     // Redirect to the login page or homepage
-                    return redirect()->route('login')->with('success', 'You have successfully logged out.');
+                    return redirect()->route('user.login')->with('success', 'You have successfully logged out.');
                 } else {
                     // If the API logout failed, show an error message
                     return back()->withErrors(['logout_error' => 'Your token has expired. Kindly, login again']);

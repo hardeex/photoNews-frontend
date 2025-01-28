@@ -127,9 +127,9 @@
                                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                             </svg>
                                         </div>
-                                        <span>
+                                        {{-- <span>
                                             By {{ $post['created_by_name'] }}
-                                        </span>
+                                        </span> --}}
                                     </div>
 
                                     <!-- Category -->
@@ -149,7 +149,7 @@
                                     @endif
                                 </div>
 
-
+                                {{-- 
                                 <div class="flex flex-wrap items-center text-sm gap-4">
                                     <span class="text-blue-600 flex items-center">
                                         <i class="fas fa-eye mr-1"></i>
@@ -178,7 +178,7 @@
                                         <span class="dislikes-count">{{ number_format($post['dislikes']) }} </span><span
                                             class="ml-1">dislikes</span>
                                     </button>
-                                </div>
+                                </div> --}}
 
                                 <!-- Optional Divider -->
                                 <hr class="border-gray-200 mb-8">
@@ -420,23 +420,23 @@
 
 
                             <div class="mt-8 flex items-center justify-center gap-6 engagement-buttons">
-                                <button class="flex flex-col items-center gap-2 like-button group"
+                                {{-- <button class="flex flex-col items-center gap-2 like-button group"
                                     data-slug="{{ $post['slug'] }}">
                                     <i
                                         class="fas fa-heart text-2xl text-gray-400 group-hover:text-red-500 transition-colors duration-200"></i>
                                     <span class="text-sm text-gray-600">Like</span>
                                     <span
                                         class="likes-count text-sm text-gray-500">{{ number_format($post['likes']) }}</span>
-                                </button>
+                                </button> --}}
 
-                                <button class="flex flex-col items-center gap-2 dislike-button group"
+                                {{-- <button class="flex flex-col items-center gap-2 dislike-button group"
                                     data-slug="{{ $post['slug'] }}">
                                     <i
                                         class="fas fa-thumbs-down text-2xl text-gray-400 group-hover:text-gray-600 transition-colors duration-200"></i>
                                     <span class="text-sm text-gray-600">Dislike</span>
                                     <span
                                         class="dislikes-count text-sm text-gray-500">{{ number_format($post['dislikes']) }}</span>
-                                </button>
+                                </button> --}}
                             </div>
 
                             <div class="alert-message hidden text-center text-red-500 mt-4">You must be logged in to like

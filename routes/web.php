@@ -45,17 +45,20 @@ Route::get('/fetch-categories', [NewsPostController::class, 'listCategoriesFromA
 // public notice routes
 Route::get('/create/public-notice', [PublicNoticeController::class, 'createPost'])->name('public-notice.create');
 Route::post('/submit/public-notice', [PublicNoticeController::class, 'submitPost'])->name('public-notice.submit');
+Route::get('/lists/public-notice', [PublicNoticeController::class, 'listPublicLists'])->name('lists-public-notice');
+Route::get('/posts/public-notice/{slug}', [PublicNoticeController::class, 'showPublicNoticeDetails'])->name('posts-public-notice-details');
 
 // misplaced and found routes
 Route::get('/create/misplaced-and-found', [MisplaceAndFoundController::class, 'createPost'])->name('misplaced.create');
 Route::post('/submit/misplaced-and-found', [MisplaceAndFoundController::class, 'submitPost'])->name('misplaced-and-found.submit');
+Route::get('/lists/lost-and-found/posts', [MisplaceAndFoundController::class, 'listLostAndFound'])->name('lists-lost-and-found');
 Route::get('/misplaced/{slug}', [MisplaceAndFoundController::class, 'showPostDetails'])->name('misplaced.details');
 
 
 // missing person routes
 Route::get('/create/missing-person', [MissingPersonController::class, 'createPost'])->name('missing.create');
 Route::post('/submit/missing-and-wanted-person', [MissingPersonController::class, 'submitPost'])->name('missing-person.submit');
-Route::get('/missing-or-wanted-adewale/{slug}', [MissingPersonController::class, 'showPostDetails'])->name('missing-wanted.details');
+Route::get('/missing-or-wanted/{slug}', [MissingPersonController::class, 'showPostDetails'])->name('missing-wanted.details');
 
 
 // obituary routes
@@ -65,6 +68,8 @@ Route::post('/submit/obituary', [ObituaryController::class, 'submitPost'])->name
 // remebrance controller
 Route::get('/create/remembrance', [RemembranceController::class, 'createPost'])->name('remembrance.create');
 Route::post('/submit/remembrance', [RemembranceController::class, 'submitPost'])->name('remembrance.submit');
+Route::get('/posts/remembrance', [RemembranceController::class, 'listPosts'])->name('list-remembrance');
+Route::get('/remembrance/{slug}', [RemembranceController::class, 'showRemembranceDetails'])->name('remembrance.details');
 
 
 // change of name routes
@@ -78,7 +83,7 @@ Route::post('/submit/caveat', [CaveatController::class, 'submitPost'])->name('ca
 Route::get('/caveat/{slug}', [CaveatController::class, 'showCaveatDetails'])->name('caveat.details');
 Route::get('/posts/caveat', [CaveatController::class, 'listCaveatPosts'])->name('caveat.posts');
 
-// ctaegory and tag routes
+// cataegory and tag routes
 Route::get('/create-category', [NewsPostController::class, 'createCategory'])->name('create-category');
 Route::post('/submit-category', [NewsPostController::class, 'submitCategory'])->name('submit-category');
 Route::get('/create-tag', [NewsPostController::class, 'createTag'])->name('create-tag');

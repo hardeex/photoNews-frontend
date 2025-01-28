@@ -872,6 +872,8 @@ class UserController extends Controller
 
                 Log::info('Total public notice posts:', ['total' => $totalPublicNoticePosts]);
 
+                // print_r($publicNoticePosts);
+                // exit();
                 // Return both the public notice posts and the total count
                 return [
                     'publicNoticePosts' => $publicNoticePosts,

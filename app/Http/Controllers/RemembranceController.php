@@ -111,4 +111,103 @@ class RemembranceController extends Controller
             return back()->withErrors(['error' => 'An error occurred while submitting the Remembrance post.']);
         }
     }
+
+
+    public function listPosts(Request $request)
+    {
+        Log::info('Fetching Remembrance posts...');
+
+        $apiUrl = config('api.base_url') . '/posts/remembrance';
+        Log::info('API URL for published posts:', ['url' => $apiUrl]);
+
+        try {
+            // Make an API call to the /published/posts endpoint
+            $response = Http::get($apiUrl, [
+                'per_page' => 12,
+                'page' => $request->get('page', 1), // Add current page
+                'order' => 'desc',
+            ]);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                $postsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+                $totalPublishedPosts = $pagination['total'] ?? 0;
+
+                Log::info('Total Published Posts: ' . $totalPublishedPosts);
+
+                //dd($responseData);
+                return view('remembrance.lists', [
+                    'postsData' => $postsData,
+                    'pagination' => $pagination,
+                    'totalPublishedPosts' => $totalPublishedPosts,
+                ]);
+            } else {
+                // If the response failed, handle the error
+                Log::error('Error fetching published posts: ' . $response->status());
+                return view('remembrance.lists', [
+                    'postsData' => [],
+                    'pagination' => [],
+                    'totalPublishedPosts' => 0,
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the request
+            Log::error('Error fetching published posts: ' . $e->getMessage());
+            return view('remembrance.lists', [
+                'postsData' => [],
+                'pagination' => [],
+                'totalPublishedPosts' => 0,
+            ]);
+        }
+    }
+
+    public function showRemembranceDetails(Request $request, $slug)
+    {
+        Log::info('Fetching Remembrance post details...', ['slug' => $slug]);
+
+        // Define the API URL for fetching single post details
+        $apiUrl = config('api.base_url') . '/posts/remembrance/' . $slug;
+
+
+        try {
+            // Make an API call to fetch post details by slug
+            $response = Http::get($apiUrl);
+
+            if ($response->successful()) {
+                // Extract the response body and check for the 'status' key
+                $data = $response->json();
+                $status = $data['status'] ?? null;
+
+                // Check if the response status is 'success'
+                if ($status === 'success') {
+                    $post = $data['data'] ?? null;
+
+                    // Check if post data is found
+                    if (!$post) {
+                        Log::warning('Post not found for slug: ' . $slug);
+                        return response()->json(['message' => 'Post not found'], 404);
+                    }
+
+                    // print_r($post);
+                    // exit();
+                    // dd($posts);
+                    // Return the view with the post data
+                    return view('remembrance.show', compact('post'));
+                } else {
+                    // Handle the case where 'status' is not 'success'
+                    Log::error('Failed to fetch post details from backend: ' . $data['message']);
+                    return response()->json(['message' => 'Failed to fetch post details: ' . $data['message']], 500);
+                }
+            } else {
+                // If the request itself fails (e.g., HTTP status is not 2xx)
+                Log::error('Failed to fetch post details from backend service', ['slug' => $slug, 'status' => $response->status()]);
+                return response()->json(['message' => 'Failed to fetch post details'], 500);
+            }
+        } catch (\Exception $e) {
+            // Log the exception error and return fallback response
+            Log::error('Error fetching post details from backend service: ' . $e->getMessage());
+            return response()->json(['message' => 'Error fetching post details'], 500);
+        }
+    }
 }

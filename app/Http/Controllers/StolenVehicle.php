@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Arr;
+
 
 class StolenVehicle extends Controller
 {
@@ -118,6 +120,87 @@ class StolenVehicle extends Controller
                 'exception_trace' => $e->getTraceAsString(),
             ]);
             return back()->withErrors(['error' => 'An error occurred while submitting the post.']);
+        }
+    }
+
+
+    public function listStolenVehicles(Request $request)
+    {
+        Log::info('Fetching Stolen Vehicles...');
+
+        $apiUrl = config('api.base_url') . '/posts/stolen-vehicle';
+        Log::info('API URL for stolen vehicles:', ['url' => $apiUrl]);
+
+        try {
+            $response = Http::get($apiUrl, [
+                'per_page' => 12,
+                'page' => $request->get('page', 1),
+                'order' => 'desc',
+            ]);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                $postsData = $responseData['data']['posts'] ?? [];
+                $pagination = $responseData['data']['pagination'] ?? [];
+
+                return view('vehicle.lists', [
+                    'posts' => $postsData,
+                    'pagination' => $pagination
+                ]);
+            } else {
+                Log::error('Error fetching stolen vehicles:', ['status' => $response->status()]);
+                return view('vehicle.lists', [
+                    'posts' => [],
+                    'pagination' => ['total' => 0, 'per_page' => 12]
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching stolen vehicles:', ['message' => $e->getMessage()]);
+            return view('vehicle.lists', [
+                'posts' => [],
+                'pagination' => ['total' => 0, 'per_page' => 12]
+            ]);
+        }
+    }
+
+    public function showStolenVehicleDetails(Request $request, $slug)
+    {
+        Log::info('Fetching Stolen Vehicle post details...', ['slug' => $slug]);
+
+        $apiUrl = config('api.base_url') . '/vehicle/' . $slug;
+
+        try {
+            $response = Http::get($apiUrl);
+
+            if ($response->successful()) {
+                $data = $response->json();
+
+                if (isset($data['status']) && $data['status'] === 'success') {
+                    // Changed from $data['post'] to $data['data'] to match API response
+                    $post = $data['data'] ?? null;
+
+                    if (!$post) {
+                        Log::warning('Stolen Vehicle post not found for slug: ' . $slug);
+                        return response()->json(['message' => 'Stolen Vehicle post not found'], 404);
+                    }
+
+                    //dd($post);
+
+                    return view('vehicle.show', compact('post'));
+                }
+
+                Log::error('Failed to fetch stolen vehicle post details from backend: ' . ($data['message'] ?? 'Unknown error'));
+                return response()->json(['message' => 'Failed to fetch stolen vehicle post details'], 500);
+            }
+
+            Log::error('Failed to fetch stolen vehicle post details from backend service', [
+                'slug' => $slug,
+                'status' => $response->status()
+            ]);
+            return response()->json(['message' => 'Failed to fetch stolen vehicle post details'], 500);
+        } catch (\Exception $e) {
+            Log::error('Error fetching stolen vehicle post details from backend service: ' . $e->getMessage());
+            return response()->json(['message' => 'Error fetching stolen vehicle post details'], 500);
         }
     }
 }

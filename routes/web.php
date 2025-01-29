@@ -106,17 +106,23 @@ Route::get('/create/birthday', [CelebrationController::class, 'createBirthday'])
 Route::get('/manage/birthday', [CelebrationController::class, 'manageBirthday'])->name('manage.birthday');
 Route::post('submit/birthday', [celebrationController::class, 'submitBirthday'])->name('submit.birthday');
 Route::get('/posts/birthday/lists', [CelebrationController::class, 'listBirthdayPosts'])->name('list.birthday-posts');
-Route::get('/birthday/{slug}', [CelebrationController::class,'showBirthdayDetails'])->name('birthday.details');
+Route::get('/birthday/{slug}', [CelebrationController::class, 'showBirthdayDetails'])->name('birthday.details');
 
 Route::get('/create/wedding', [CelebrationController::class, 'createWedding'])->name('create.wedding');
 Route::get('/manage/wedding', [CelebrationController::class, 'manageWedding'])->name('manage.wedding');
 Route::post('submit/wedding', [CelebrationController::class, 'submitWedding'])->name('submit.wedding');
+Route::get('/lists/wedding/posts', [celebrationController::class, 'listWeddingPosts'])->name('lists.wedding');
+Route::get('/wedding/{slug}', [CelebrationController::class, 'showWeddingDetails'])->name('wedding.details');
 
 Route::get('/create/dedication', [CelebrationController::class, 'createDedication'])->name('create.dedication');
 Route::get('/manage/dedication', [CelebrationController::class, 'manageDedication'])->name('manage.dedication');
 Route::post('submit/dedication', [CelebrationController::class, 'submitDedication'])->name('submit.dedication');
+Route::get('/lists/dedication', [celebrationController::class, 'listChildDedicationPosts'])->name('list.dedication');
+Route::get('/posts/dedication/{slug}', [celebrationController::class, 'showDedicationDetails'])->name('dedication.details');
 
 
 // stolen vehicles
 Route::get('/create/stolen-vehicle', [StolenVehicle::class, 'create'])->name('create.vehicle');
 Route::post('submit/stolen-vehicle', [StolenVehicle::class, 'submitPost'])->name('submit.vehicle');
+Route::get('/lists/stolen-vehicle', [StolenVehicle::class, 'listStolenVehicles'])->name('list-stolen-vehicles');
+Route::get('/stolen-vehicle/{slug}', [StolenVehicle::class, 'showStolenVehicleDetails'])->name('stolen-vehicles.details');

@@ -166,7 +166,7 @@
                         </a>
 
                         {{-- Wedding --}}
-                        <a href="#"
+                        <a href="{{ route('lists.wedding') }}"
                             class="block rounded-xl border-2 border-orange-200 bg-teal-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
                             <div class="text-center">
                                 <div class="text-3xl font-bold mb-2 text-teal-600">
@@ -179,7 +179,7 @@
                         </a>
 
                         {{-- Child-dedication --}}
-                        <a href="#"
+                        <a href="{{ route('list.dedication') }}"
                             class="block rounded-xl border-2 border-indigo-200 bg-teal-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
                             <div class="text-center">
                                 <div class="text-3xl font-bold mb-2 text-teal-600">
@@ -192,7 +192,7 @@
                         </a>
 
                         {{-- Stolen Vehicle --}}
-                        <a href="#"
+                        <a href="{{ route('list-stolen-vehicles') }}"
                             class="block rounded-xl border-2 border-pink-200 bg-teal-50 p-4 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
                             <div class="text-center">
                                 <div class="text-3xl font-bold mb-2 text-teal-600">

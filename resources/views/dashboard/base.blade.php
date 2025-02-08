@@ -15,6 +15,12 @@
     <!--- including ckeditor library-->
     <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
 
+    <!-- Include additional required libraries in the head section -->
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+
+
+
 
     <style>
         @keyframes fadeIn {
@@ -276,7 +282,7 @@
     </script>
 
 
-  
+
 
 
 

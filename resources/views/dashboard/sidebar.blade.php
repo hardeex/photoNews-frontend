@@ -43,6 +43,15 @@
                     class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create Post</a>
                 <a href="{{ route('create-category-seeder') }}"
                     class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create Category</a>
+                <a href="{{ route('manage-posts') }}" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage
+                    Posts</a>
+                {{-- <form action="{{ route('manage-posts') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">
+                        Manage Posts
+                    </button>
+                </form> --}}
+
                 {{-- <a href="{{ route('create-category') }}"
                     class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create Category</a>
                 <a href="{{ route('create-tag') }}" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create

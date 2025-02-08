@@ -79,10 +79,10 @@ class userAuthenticationController extends Controller
     public function userLogin()
     {
         // Check if the user is already logged in by verifying the session for a valid token
-        if (session()->has('api_token')) {
-            // Redirect to the create-post page if the user is already logged in
-            return redirect()->route('news.create-post');
-        }
+        // if (session()->has('api_token')) {
+        //     // Redirect to the create-post page if the user is already logged in
+        //     return redirect()->route('news.create-post');
+        // }
 
         // If no token exists, show the login page
         return view('user.login');
@@ -152,6 +152,7 @@ class userAuthenticationController extends Controller
 
     public function userLogout(Request $request)
     {
+        Log::info('The logout method is called...');
         // Get the token from the session
         $token = $request->session()->get('api_token');
 

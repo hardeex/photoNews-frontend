@@ -264,43 +264,6 @@ class UserController extends Controller
 
 
 
-    private function listPostsByCategoryName2($categoryName)
-    {
-        Log::info("Fetching posts for category: {$categoryName}");
-
-        $apiUrl = config('api.base_url') . '/category/posts';
-        Log::info('API URL for category posts:', ['url' => $apiUrl]);
-
-        try {
-            $response = Http::get($apiUrl, [
-                'category_name' => $categoryName,
-                'per_page' => 3,
-            ]);
-
-            if ($response->successful()) {
-                $responseData = $response->json();
-                $postsData = $responseData['posts'] ?? [];
-
-                // Ensure creator name is extracted correctly
-                foreach ($postsData as &$post) {
-                    // If created_by is an ID, use the creator field to get the user's name
-                    if (isset($post['creator']['name'])) {
-                        $post['created_by'] = $post['creator']['name'];  // Replace ID with name
-                    }
-                }
-
-                return $postsData;
-            } else {
-                Log::error('Error fetching posts for category ' . $categoryName . ': ' . $response->status());
-                return [];
-            }
-        } catch (\Exception $e) {
-            Log::error('Error fetching posts for category ' . $categoryName . ': ' . $e->getMessage());
-            return [];
-        }
-    }
-
-
     private function listPostsByCategoryName($categoryName)
     {
         $apiUrl = config('api.base_url') . '/category/posts';
@@ -339,89 +302,6 @@ class UserController extends Controller
         } catch (\Exception $e) {
             Log::error('Error fetching posts for category ' . $categoryName . ': ' . $e->getMessage());
             return ['posts' => [], 'pagination' => []];
-        }
-    }
-
-
-
-
-    private function listApprovedLocalPosts()
-    {
-        // Log for debugging
-        Log::info('Fetching approved local posts...');
-
-        $apiUrl = config('api.base_url') . '/posts/local';
-        Log::info('API URL for approved local posts:', ['url' => $apiUrl]);
-
-        try {
-            // Make an API call to fetch approved posts with 'category' = 'music'
-            $response = Http::get($apiUrl, [
-                'per_page' => 3,    // Limit the result to 3 posts
-                'status' => 'approved',
-                'category' => 'local', // Assuming the API allows category filtering
-            ]);
-
-            // Check if the response was successful
-            if ($response->successful()) {
-                $responseData = $response->json();
-
-                // Extract music posts data
-                $localPostsData = $responseData['data']['posts'] ?? [];
-                // print_r($localPostsData);
-                // exit();
-
-                $totalLocalPosts = $pagination['total'] ?? 0;
-                Log::info('The total local posts count is' . $totalLocalPosts);
-                // Return the data
-                return $localPostsData;
-            } else {
-                Log::error('Error fetching approved local posts: ' . $response->status());
-                return [];
-            }
-        } catch (\Exception $e) {
-            Log::error('Error fetching approved local posts: ' . $e->getMessage());
-            return [];
-        }
-    }
-
-
-    private function  listApprovedInternationalPosts()
-    {
-        // Log for debugging
-        Log::info('Fetching approved international posts...');
-
-        $apiUrl = config('api.base_url') . '/posts/international';
-        Log::info('API URL for approved international posts:', ['url' => $apiUrl]);
-
-        try {
-            // Make an API call to fetch approved posts with 'category' = 'international'
-            $response = Http::get($apiUrl, [
-                'per_page' => 3,    // Limit the result to 3 posts
-                'status' => 'approved',
-                'category' => 'international', // Assuming the API allows category filtering
-            ]);
-
-            // Check if the response was successful
-            if ($response->successful()) {
-                $responseData = $response->json();
-
-                // Extract music posts data
-                $internationalPostsData = $responseData['data']['posts'] ?? [];
-                // print_r($localPostsData);
-                // exit();
-
-                $totalInternationalPosts = $pagination['total'] ?? 0;
-                Log::info('The total International Posts' . $totalInternationalPosts);
-
-                // Return the data
-                return $internationalPostsData;
-            } else {
-                Log::error('Error fetching approved local posts: ' . $response->status());
-                return [];
-            }
-        } catch (\Exception $e) {
-            Log::error('Error fetching approved local posts: ' . $e->getMessage());
-            return [];
         }
     }
 
@@ -1514,43 +1394,124 @@ class UserController extends Controller
     }
 
 
-
-    // The main index method to render the welcome view
-    public function index4(Request $request)
+    public function newsletterSubscribe33(Request $request)
     {
-        // Fetch data for pending posts
-        $pendingPosts = $this->listPendingPosts($request);
+        Log::info('Newsletter submission method is called...', [
+            'request_data' => $request->all(), // Log the request data
+        ]);
 
-        // Return the 'welcome' view with the pending posts data
-        return view('welcome', compact('pendingPosts'));
-    }
+        // Validate the incoming request to ensure the email is valid
+        $validated = $request->validate([
+            'email' => 'required|string|email',
+        ]);
 
-    // Method to fetch the pending posts from the API
-    private function listPendingPosts4(Request $request)
-    {
-        $apiUrl = config('api.base_url') . '/pending/posts';
+        // API URL for the backend subscribe endpoint
+        $apiUrl = config('api.base_url') . '/subscribe';
+        Log::info('Connecting to API URL for post creation', [
+            'api_url' => $apiUrl,
+        ]);
 
+        // Prepare the data to send to the external API (just the email)
+        $formData = [
+            'email' => $validated['email'],
+        ];
+
+        // Make the API request to the /subscribe endpoint
         try {
-            // Make the API request
-            $response = Http::get($apiUrl, [
-                'page' => $request->get('page', 1),
-                'per_page' => 10,
-            ]);
+            // Use Laravel's HTTP client (Guzzle) to send the POST request
+            $response = Http::post($apiUrl, $formData);
 
-            // If the API call is successful, extract the data
+            // Check if the request was successful
             if ($response->successful()) {
-                $data = $response->json();
-                $postsData = $data['data'] ?? []; // Posts data from the API response
-                $pagination = $data['pagination'] ?? []; // Pagination data
-
-                return compact('postsData', 'pagination');
+                Log::info('Newsletter subscription successful', [
+                    'response' => $response->json(),
+                ]);
+                return response()->json([
+                    'message' => 'Successfully subscribed to the newsletter!',
+                ], 201); // 201: Resource created
+            } else {
+                Log::error('Error during subscription API call', [
+                    'error' => $response->body(),
+                ]);
+                return response()->json([
+                    'message' => 'Failed to subscribe to the newsletter. Please try again later.',
+                ], 500); // 500: Server error
             }
         } catch (\Exception $e) {
-            // If there's an error in fetching the data, log the error
-            Log::error('Error fetching pending posts: ' . $e->getMessage());
+            // Catch any errors and log them
+            Log::error('Exception during subscription API call', [
+                'error' => $e->getMessage(),
+            ]);
+            return response()->json([
+                'message' => 'An error occurred. Please try again later.',
+                'error' => $e->getMessage(),
+            ], 500); // 500: Server error
         }
-
-        // Return empty arrays if something goes wrong
-        return ['postsData' => [], 'pagination' => []];
     }
+
+    public function newsletterSubscribe(Request $request)
+    {
+        Log::info('Newsletter submission method is called...', [
+            'request_data' => $request->all(),
+        ]);
+
+        // Validate the incoming request
+        $validated = $request->validate([
+            'email' => 'required|string|email',
+        ]);
+
+        $apiUrl = config('api.base_url') . '/subscribe';
+        Log::info('Connecting to API URL for post creation', [
+            'api_url' => $apiUrl,
+        ]);
+
+        $formData = [
+            'email' => $validated['email'],
+        ];
+
+        try {
+            $response = Http::post($apiUrl, $formData);
+
+            // Check if the response indicates a duplicate email
+            if (
+                $response->status() === 409 ||
+                str_contains(strtolower($response->body()), 'already') ||
+                str_contains(strtolower($response->body()), 'duplicate')
+            ) {
+                return response()->json([
+                    'message' => 'This email is already subscribed to our newsletter.',
+                    'type' => 'info'  // Adding a type field to differentiate the response
+                ], 409);  // Using 409 Conflict for duplicate resources
+            }
+
+            if ($response->successful()) {
+                Log::info('Newsletter subscription successful', [
+                    'response' => $response->json(),
+                ]);
+                return response()->json([
+                    'message' => 'Successfully subscribed to the newsletter!',
+                    'type' => 'success'
+                ], 201);
+            } else {
+                Log::error('Error during subscription API call', [
+                    'error' => $response->body(),
+                ]);
+                return response()->json([
+                    'message' => 'Failed to subscribe to the newsletter. Please try again later.',
+                    'type' => 'error'
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            Log::error('Exception during subscription API call', [
+                'error' => $e->getMessage(),
+            ]);
+            return response()->json([
+                'message' => 'An error occurred. Please try again later.',
+                'error' => $e->getMessage(),
+                'type' => 'error'
+            ], 500);
+        }
+    }
+
+
 }

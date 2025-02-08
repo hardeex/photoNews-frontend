@@ -41,6 +41,10 @@ Route::post('/approve/post/{slug}', [NewsPostController::class, 'approvePost'])-
 Route::delete('/delete/post/{slug}', [NewsPostController::class, 'deletePost'])->name('admin.delete-post');
 Route::get('/published/posts', [NewsPostController::class, 'listPublishedPosts'])->name('posts.published');
 Route::get('/fetch-categories', [NewsPostController::class, 'listCategoriesFromAPI']);
+Route::get('/manage/posts', [NewsPostController::class, 'managePosts'])->name('manage-posts');
+Route::get('/posts/edit/{slug}', [NewsPostController::class, 'fetchPostForEdit'])->name('fetch.post.edit');
+Route::put('/posts/edit/{slug}', [NewsPostController::class, 'updatePost'])->name('update.post');
+//Route::get('/posts/{slug}/delete', [NewsPostController::class, 'deleteUserPosts'])->name('delete-posts');
 
 // public notice routes
 Route::get('/create/public-notice', [PublicNoticeController::class, 'createPost'])->name('public-notice.create');
@@ -126,3 +130,7 @@ Route::get('/create/stolen-vehicle', [StolenVehicle::class, 'create'])->name('cr
 Route::post('submit/stolen-vehicle', [StolenVehicle::class, 'submitPost'])->name('submit.vehicle');
 Route::get('/lists/stolen-vehicle', [StolenVehicle::class, 'listStolenVehicles'])->name('list-stolen-vehicles');
 Route::get('/stolen-vehicle/{slug}', [StolenVehicle::class, 'showStolenVehicleDetails'])->name('stolen-vehicles.details');
+
+
+// newsletter routes
+Route::post('/newsletter/subscribe', [UserController::class, 'newsletterSubscribe'])->name('newsltter.subscribe');

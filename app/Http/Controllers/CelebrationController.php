@@ -440,6 +440,13 @@ class CelebrationController extends Controller
     }
 
 
+
+    public function createDedication()
+    {
+        return view("dedication.create");
+    }
+
+
     public function submitDedication(Request $request)
     {
         Log::info('Child Dedication Post submission method is called...', [

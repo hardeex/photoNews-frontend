@@ -172,10 +172,11 @@ class ObituaryController extends Controller
     }
 
     public function showObituaryDetails(Request $request, $slug)
-    { Log::info('Fetching Public notice post details...', ['slug' => $slug]);
+    {
+        Log::info('Fetching Obituary post details...', ['slug' => $slug]);
 
         // Define the API URL for fetching single post details
-        $apiUrl = config('api.base_url') . '/posts/public-notice/' . $slug;
+        $apiUrl = config('api.base_url') . '/obituary/' . $slug;
 
         try {
             // Make an API call to fetch post details by slug
@@ -188,33 +189,32 @@ class ObituaryController extends Controller
 
                 // Check if the 'status' key exists in the response
                 if (isset($data['status']) && $data['status'] === 'success') {
-                    // The post data is available
-                    $post = $data['post'] ?? null;
+                    // The post data is available under the 'data' key
+                    $post = $data['data']['post'] ?? null;
 
                     // If no post data, return a warning message
                     if (!$post) {
-                        Log::warning('Post not found for slug: ' . $slug);
-                        return response()->json(['message' => 'Post not found'], 404);
+                        Log::warning('Obituary post not found for slug: ' . $slug);
+                        return response()->json(['message' => 'Obituary post not found'], 404);
                     }
 
-                    //dd($data);
-
+                    //dd($post);
                     // Return the view with the post data
-                    return view('public-notice.show', compact('post'));
+                    return view('obituary.show', compact('post'));
                 } else {
                     // If the status is not 'success', log the message and return an error
-                    Log::error('Failed to fetch post details from backend: ' . $data['message']);
-                    return response()->json(['message' => 'Failed to fetch post details: ' . $data['message']], 500);
+                    Log::error('Failed to fetch obituary post details from backend: ' . $data['message']);
+                    return response()->json(['message' => 'Failed to fetch obituary post details: ' . $data['message']], 500);
                 }
             } else {
                 // If the HTTP request fails (non-2xx status), log the error
-                Log::error('Failed to fetch post details from backend service', ['slug' => $slug, 'status' => $response->status()]);
-                return response()->json(['message' => 'Failed to fetch post details'], 500);
+                Log::error('Failed to fetch obituary post details from backend service', ['slug' => $slug, 'status' => $response->status()]);
+                return response()->json(['message' => 'Failed to fetch obituary post details'], 500);
             }
         } catch (\Exception $e) {
             // Log the exception error and return fallback response
-            Log::error('Error fetching post details from backend service: ' . $e->getMessage());
-            return response()->json(['message' => 'Error fetching post details'], 500);
+            Log::error('Error fetching obituary post details from backend service: ' . $e->getMessage());
+            return response()->json(['message' => 'Error fetching obituary post details'], 500);
         }
     }
 }

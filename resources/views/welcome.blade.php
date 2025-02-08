@@ -22,9 +22,162 @@
                 </form>
             </section>
 
+
+
+
+
             <!--- START OF TEST CONTAINER--->
 
             <!--- END OF TEST CONTAINER-->
+
+
+            <section>
+                <!-- Newspaper Front Page Layout -->
+                <div class="max-w-7xl mx-auto bg-gray-100 p-4 md:p-8">
+                    <!-- Newspaper Header -->
+                    <div class="text-center border-b-4 border-black pb-4 mb-4 md:mb-6">
+                        <h1 class="text-3xl md:text-6xl font-serif font-bold tracking-tight">Today's Headline</h1>
+                        <div class="mt-2 flex flex-col md:flex-row justify-between items-center text-xs md:text-sm">
+                            <p>{{ \Carbon\Carbon::now()->format('l, F d, Y') }}</p>
+                            <p class="mt-1 md:mt-0">Total Posts: {{ $totalPublishedPosts }}</p>
+                        </div>
+                    </div>
+
+                    @if (count($postsData) > 0)
+                        <!-- Grid Container -->
+                        <div class="grid grid-cols-1 md:grid-cols-6 gap-4 md:gap-6">
+                            <!-- Main Content Section -->
+                            <div class="col-span-1 md:col-span-4 md:border-r border-gray-300 md:pr-6">
+                                <!-- Main Story -->
+                                @php $mainStory = $postsData[0]; @endphp
+                                <div class="mb-6">
+                                    <a href="{{ route('post.details', $mainStory['slug'] ?? '#') }}" class="block group">
+                                        <div class="relative overflow-hidden">
+                                            <img src="{{ $mainStory['featured_image'] ?? 'https://picsum.photos/seed/main/800/400' }}"
+                                                alt="{{ ucwords(strtolower($mainStory['title'])) }}"
+                                                class="w-full h-48 md:h-80 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                                            @if (isset($mainStory['category_names']) || (isset($mainStory['category']) && isset($mainStory['category']['name'])))
+                                                <span
+                                                    class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                                                    {{ isset($mainStory['category_names'])
+                                                        ? ucwords(strtolower($mainStory['category_names']))
+                                                        : ucwords(strtolower($mainStory['category']['name'])) }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <h2
+                                            class="text-2xl md:text-4xl font-serif font-bold leading-tight mb-2 md:mb-3 mt-3 md:mt-4 group-hover:text-blue-600">
+                                            {{ $mainStory['title'] }}
+                                        </h2>
+                                    </a>
+                                    <p class="text-base md:text-lg text-gray-700 mb-2 line-clamp-3 md:line-clamp-none">
+                                        {{ strip_tags(strlen($mainStory['meta_description'] ?? '') > 200 ? substr($mainStory['meta_description'], 0, 200) . '...' : $mainStory['meta_description'] ?? $mainStory['content']) }}
+                                    </p>
+                                    <div
+                                        class="flex flex-col md:flex-row md:justify-between md:items-center space-y-2 md:space-y-0">
+                                        <p class="text-xs md:text-sm text-gray-600">By {{ $mainStory['created_by'] }}</p>
+                                        <div class="flex items-center text-xs md:text-sm text-gray-500">
+                                            <span class="mr-3">
+                                                <i class="fas fa-eye mr-1"></i>
+                                                {{ $mainStory['views'] }} views
+                                            </span>
+                                            <span>
+                                                <i class="fas fa-share mr-1"></i>
+                                                {{ $mainStory['shares'] }} shares
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Secondary Stories -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                                    @foreach (array_slice($postsData, 1, 2) as $story)
+                                        <div class="border-t border-gray-300 pt-4">
+                                            <a href="{{ route('post.details', $story['slug'] ?? '#') }}"
+                                                class="block group">
+                                                <div class="relative overflow-hidden">
+                                                    <img src="{{ $story['featured_image'] ?? 'https://picsum.photos/seed/' . $loop->iteration . '/400/200' }}"
+                                                        alt="{{ ucwords(strtolower($story['title'])) }}"
+                                                        class="w-full h-40 md:h-48 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                                                    @if (isset($story['category_names']) || (isset($story['category']) && isset($story['category']['name'])))
+                                                        <span
+                                                            class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                                                            {{ isset($story['category_names'])
+                                                                ? ucwords(strtolower($story['category_names']))
+                                                                : ucwords(strtolower($story['category']['name'])) }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                                <h3
+                                                    class="text-lg md:text-xl font-serif font-bold mb-2 mt-3 group-hover:text-blue-600 line-clamp-2">
+                                                    {{ $story['title'] }}
+                                                </h3>
+                                            </a>
+                                            <p class="text-sm text-gray-700 line-clamp-2 md:line-clamp-3">
+                                                {{ strip_tags(strlen($story['meta_description'] ?? '') > 100 ? substr($story['meta_description'], 0, 100) . '...' : $story['meta_description'] ?? $story['content']) }}
+                                            </p>
+                                            <div class="flex items-center text-xs text-gray-500 mt-2">
+                                                <i class="fas fa-eye mr-1"></i>
+                                                {{ $story['views'] }} views
+                                                <span class="mx-2">•</span>
+                                                {{ \Carbon\Carbon::parse($story['created_at'])->diffForHumans() }}
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <!-- Sidebar Stories -->
+                            <div class="col-span-1 md:col-span-2 mt-6 md:mt-0">
+                                @foreach (array_slice($postsData, 3, 6) as $story)
+                                    <div class="mb-4 md:mb-6 pb-4 md:pb-6 border-b border-gray-300 last:border-b-0">
+                                        <a href="{{ route('post.details', $story['slug'] ?? '#') }}" class="block group">
+                                            <h4
+                                                class="text-base md:text-lg font-serif font-bold mb-2 group-hover:text-blue-600 line-clamp-2">
+                                                {{ $story['title'] }}
+                                            </h4>
+                                        </a>
+                                        <p class="text-sm text-gray-700 mb-2 line-clamp-2">
+                                            {{ strip_tags(strlen($story['meta_description'] ?? '') > 80 ? substr($story['meta_description'], 0, 80) . '...' : $story['meta_description'] ?? $story['content']) }}
+                                        </p>
+                                        <div class="flex flex-wrap items-center text-xs text-gray-600 gap-2">
+                                            <span>{{ \Carbon\Carbon::parse($story['created_at'])->format('M d, Y') }}</span>
+                                            <span class="hidden md:inline">•</span>
+                                            <span><i class="fas fa-eye mr-1"></i>{{ $story['views'] }} views</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+
+
+                        <!-- Bottom Section -->
+                        <div class="mt-6 md:mt-8 border-t-2 border-black pt-4">
+                            <div
+                                class="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0 text-xs md:text-sm text-gray-600">
+                                <span><i class="fas fa-newspaper mr-1"></i>Total Posts: {{ $totalPublishedPosts }}</span>
+                                <span class="hidden md:inline"><i class="fas fa-calendar mr-1"></i>Latest Updates</span>
+                                <a href="{{ route('news') }}" class="text-blue-600 hover:text-blue-800">
+                                    View All Posts <i class="fas fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <!-- No posts message -->
+                        <div class="text-center py-8 text-gray-500">
+                            <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto text-gray-400 mb-4" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <p class="text-base md:text-lg font-medium">No published posts available.</p>
+                        </div>
+                    @endif
+                </div>
+            </section>
+
+
 
 
             <section class="py-8 px-4 bg-gray-50">
@@ -207,7 +360,7 @@
                 </div>
             </section>
 
-
+            @include('base.ereport-banner')
 
 
             <div class="bg-gray-100 p-4">
@@ -730,7 +883,8 @@
                                     <div class="flex mb-6">
                                         @if ($post['featured_image'])
                                             <img src="{{ $post['featured_image'] }}"
-                                                alt="Music News {{ $index + 1 }}" class="w-24 h-24 object-cover mr-4">
+                                                alt="Music News {{ $index + 1 }}"
+                                                class="w-24 h-24 object-cover mr-4">
                                         @else
                                             <img src="/images/news-image.jpeg" alt="Music News {{ $index + 1 }}"
                                                 class="w-24 h-24 object-cover mr-4">
@@ -764,7 +918,8 @@
 
                                         @if ($post['featured_image'])
                                             <img src="{{ $post['featured_image'] }}"
-                                                alt="Music News {{ $index + 1 }}" class="w-24 h-24 object-cover mr-4">
+                                                alt="Music News {{ $index + 1 }}"
+                                                class="w-24 h-24 object-cover mr-4">
                                         @else
                                             <img src="/images/news-image.jpeg" alt="Music News {{ $index + 1 }}"
                                                 class="w-24 h-24 object-cover mr-4">
@@ -1288,7 +1443,7 @@
                                         <p><span class="font-medium">Contact:</span> {{ $post['phone_number'] }}</p>
                                     </div>
                                     <div class="mt-4">
-                                        <a href="{{ url('/posts/' . $post['slug']) }}"
+                                        <a href="{{ route('missing-wanted.details', $post['slug'] ?? '#') }}"
                                             class="inline-block bg-amber-600 text-white px-4 py-2 rounded-md text-sm hover:bg-amber-700 transition">
                                             View Details
                                         </a>
@@ -1407,79 +1562,6 @@
                         <div class="absolute left-0 top-0 h-full w-1/4 bg-red-500 rounded-full"></div>
                         <div class="absolute right-0 top-0 text-xs font-semibold text-red-500 mr-2">Live</div>
                     </div>
-
-
-
-
-
-                    {{-- <form class="mb-6">
-                <div class="relative">
-                    <input type="text" placeholder="Search categories..."
-                        class="w-full p-2 pl-10 pr-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
-                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </form>
-
-            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2">
-                @php
-                    $categories = [
-                        'Politics',
-                        'Art & Entertainment',
-                        'Business',
-                        'Communication',
-                        'Automobile',
-                        'Agriculture & Farming',
-                        'Travel',
-                        'Government',
-                        'Health & Medicine',
-                        'Home & Estate',
-                        'IT & Computers',
-                        'Legal Services',
-                        'Business Service',
-                        'Engineering',
-                        'Finance Technology',
-                        'Energy & Utilities',
-                        'Education & Learning',
-                        'Car Dealer',
-                        'Insurance - General',
-                        'Security & Emergency',
-                        'Pet Supply',
-                        'Schools',
-                        'Sports',
-                        'Online Influencers',
-                        'Personal Care',
-                        'Tourism & Hospitality',
-                        'Fashion & Clothing',
-                        'Food & Restaurant',
-                        'Companies',
-                        'Phone/Laptop',
-                        'Religion & Spirituality',
-                        'Shopping',
-                        'Transportation',
-                        'Non-Profit Organization',
-                        'Online Courses',
-                    ];
-                @endphp
-
-                @foreach ($categories as $category)
-                    <div class="bg-gray-100 p-2 rounded flex flex-col items-center justify-center text-center h-20">
-                        <svg class="w-6 h-6 text-red-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                        </svg>
-                        <a href="#">
-                            <span class="text-xs">{{ $category }}</span>
-                        </a>
-                    </div>
-                @endforeach --}}
-
 
                     @if (count($categoriesData) > 0)
                         <div
@@ -1650,7 +1732,7 @@
                     </a>
                     <div class="p-4 pt-0 mt-auto">
                         <div class="flex flex-col space-y-2">
-                            <a href="{{ url('/posts/' . $post['slug'] . '/condolence') }}"
+                            <a href="{{ route('obituary.details', ['slug' => $post['slug']]) }}"
                                 class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded text-center transition duration-300">
                                 Send Condolence
                             </a>
@@ -1852,31 +1934,33 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach ($listChangeOfNamePostsData['changeOfNamePostsData'] as $post)
                         <div class="bg-white p-6 rounded-lg shadow-lg">
-                            <img class="w-full h-48 object-cover rounded-t-lg mb-4" src="{{ $post['featured_image'] }}"
-                                alt={{ $post['new_name'] }}>
+                            <a href="{{ route('change-of-name.details', ['slug' => $post['slug']]) }}">
+                                <img class="w-full h-48 object-cover rounded-t-lg mb-4"
+                                    src="{{ $post['featured_image'] }}" alt={{ $post['new_name'] }}>
 
-                            <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $post['old_name'] }} →
-                                {{ $post['new_name'] }}</h2>
+                                <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $post['old_name'] }} →
+                                    {{ $post['new_name'] }}</h2>
 
-                            <div class="text-gray-600 text-sm mb-4">
-                                <p class="text-sm">I, formally {{ $post['old_name'] }}, now {{ $post['new_name'] }}.
-                                    All former documents remains
-                                    valid. Authority and general public take note</p>
-                            </div>
+                                <div class="text-gray-600 text-sm mb-4">
+                                    <p class="text-sm">I, formally {{ $post['old_name'] }}, now
+                                        {{ $post['new_name'] }}.
+                                        All former documents remains
+                                        valid. Authority and general public take note</p>
+                                </div>
 
-                            <div class="text-gray-700 mb-4">
-                                {!! $post['meta_description'] !!}
-                            </div>
+                                <div class="text-gray-700 mb-4">
+                                    {!! $post['meta_description'] !!}
+                                </div>
 
-                            <div class="flex items-center justify-between">
-                                <span
-                                    class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($post['created_at'])->format('M d, Y') }}</span>
-                                @if ($post['is_featured'])
+                                <div class="flex items-center justify-between">
                                     <span
-                                        class="text-xs font-bold text-blue-500 bg-blue-100 px-2 py-1 rounded-full">Featured</span>
-                                @endif
-                            </div>
-                        </div>
+                                        class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($post['created_at'])->format('M d, Y') }}</span>
+                                    @if ($post['is_featured'])
+                                        <span
+                                            class="text-xs font-bold text-blue-500 bg-blue-100 px-2 py-1 rounded-full">Featured</span>
+                                    @endif
+                                </div>
+                        </div></a>
                     @endforeach
                 </div>
 
@@ -1922,10 +2006,15 @@
                         <p class="text-xs text-gray-600">
                             {{ $post['meta_description'] }}
                         </p>
+                        <a href="{{ route('post.details', ['slug' => $post['slug']]) }}"
+                            class="inline-block mt-2 text-blue-500 text-xs font-semibold hover:underline">
+                            Read More
+                        </a>
                     </div>
                 </div>
             @endforeach
         </div>
+
         <!-- Pagination -->
         <div class="mt-8 flex justify-center">
             @if (isset($listPrideOfNigeriaPostsData['pagination']) && $listPrideOfNigeriaPostsData['pagination']['last_page'] > 1)
@@ -2269,7 +2358,7 @@
                                                     {{ \Carbon\Carbon::parse($post['created_at'])->format('M j, Y') }}</p>
                                             </div>
                                         </div>
-                                        <button
+                                        <a href="{{ route('birthday.details', $post['slug']) }}"
                                             class="flex items-center justify-center mt-6 bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-2 rounded-lg hover:from-pink-600 hover:to-purple-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                                             <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor">
@@ -2277,7 +2366,7 @@
                                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                             </svg>
                                             Send Wishes
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -2400,6 +2489,12 @@
                             <div class="mt-4 text-xs text-gray-500">
                                 Posted: {{ \Carbon\Carbon::parse($post['created_at'])->format('F j, Y') }}
                             </div>
+
+                            <a href="{{ route('stolen-vehicles.details', $post['slug']) }}"
+                                class="inline-block mt-2 px-4 py-2 text-white text-xs font-semibold bg-blue-600 rounded-full hover:bg-blue-700 hover:scale-105 transition duration-300 ease-in-out transform">
+                                Read More
+                            </a>
+
                         </div>
                     </div>
                 @endforeach

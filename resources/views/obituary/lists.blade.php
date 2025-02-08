@@ -12,7 +12,7 @@
                         <div class="p-4">
                             <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $post['title'] }}</h2>
                             <p class="text-sm text-gray-600 mb-4">{!! Str::limit(strip_tags($post['content']), 150) !!}</p>
-                            <a href="{{ route('posts-public-notice-details', ['slug' => $post['slug']]) }}"
+                            <a href="{{ route('obituary.details', ['slug' => $post['slug']]) }}"
                                 class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Read More
                                 &rarr;</a>
                         </div>

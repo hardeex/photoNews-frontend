@@ -66,53 +66,7 @@ class NewsPostController extends Controller
         if ($response->successful()) {
             return $response->json(); // Return the categories data as an array
         } else {
-            // Optionally handle failure and return an empty array or error
-            return [];
-        }
-    }
-
-
-    //     public function createPost()
-    // {
-    //     $jwtToken = session('api_token');
-    //     if (empty($jwtToken)) {
-    //         return redirect()->route('user.login')->with('error', 'Please log in first');
-    //     }
-
-    //     // Fetch categories from the new API endpoint
-    //     $categories = $this->fetchData('get-categories', $jwtToken);
-
-    //     // Fetch tags
-    //     $tags = $this->fetchData('get-tags', $jwtToken);
-
-    //     // Pass the categories and tags to the view
-    //     return view('news.create-post', compact('categories', 'tags'));
-    // }
-
-
-    private function fetchData($endpoint, $jwtToken)
-    {
-        $apiUrl = config('api.base_url') . '/category-seeder' . $endpoint;
-        try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $jwtToken,
-            ])->get($apiUrl);
-
-            // Log the response from the API
-            Log::info('API response for fetching ' . $endpoint, [
-                'status_code' => $response->status(),
-                'response_body' => $response->body(),
-            ]);
-
-            if ($response->successful()) {
-                // print_r($response);
-                // exit();
-                return $response->json()['data'] ?? [];
-            } else {
-                return [];
-            }
-        } catch (\Exception $e) {
-            Log::error('Error fetching ' . $endpoint . ': ' . $e->getMessage());
+            //  handle failure and return an empty array or error
             return [];
         }
     }
@@ -459,69 +413,6 @@ class NewsPostController extends Controller
     }
 
 
-    // public function listCategoriesFromAPI(Request $request)
-    // {
-    //     Log::info('Fetching categories from external API...');
-
-    //     // API URL for category listing
-    //     $apiUrl = config('api.base_url') . '/categories/public';
-    //     Log::info('Connecting to API URL for category listing', [
-    //         'api_url' => $apiUrl,
-    //     ]);
-
-    //     // Optional: Prepare any query parameters (e.g., for sorting)
-    //     $params = [
-    //         'sort_by' => $request->get('sort_by', 'name'),
-    //         'sort_order' => $request->get('sort_order', 'asc'),
-    //     ];
-
-    //     // Log the query parameters being sent
-    //     Log::info('Sending query parameters', [
-    //         'params' => $params,
-    //     ]);
-
-    //     // Make the GET request to the external API
-    //     try {
-    //         $response = Http::get($apiUrl, $params);
-
-    //         // Log the response from the external API
-    //         if ($response->successful()) {
-    //             Log::info('Categories successfully fetched from external API', [
-    //                 'response_data' => $response->json(),
-    //             ]);
-
-    //             // Handle successful response
-    //             $categories = $response->json()['data'];  // Extract categories from response
-
-    //             // print_r($categories);
-    //             // exit();
-
-    //             // Return the categories to the view or frontend
-    //             return response()->json([
-    //                 'status' => 'success',
-    //                 'message' => 'Categories fetched successfully!',
-    //                 'data' => $categories,
-    //             ], 200);
-    //         } else {
-    //             // Log the error response from the API
-    //             Log::error('Error fetching categories from external API', [
-    //                 'status_code' => $response->status(),
-    //                 'error_message' => $response->json()['message'] ?? 'An error occurred.',
-    //             ]);
-
-    //             return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
-    //         }
-    //     } catch (\Exception $e) {
-    //         // Log the exception error with stack trace
-    //         Log::error('API request failed with exception', [
-    //             'exception_message' => $e->getMessage(),
-    //             'exception_trace' => $e->getTraceAsString(),
-    //         ]);
-
-    //         return back()->withErrors(['error' => 'An error occurred while fetching categories.']);
-    //     }
-    // }
-
     // tags methods
 
     public function createTag()
@@ -678,7 +569,7 @@ class NewsPostController extends Controller
         }
     }
 
-   
+
 
     public function submitPost(Request $request)
     {
@@ -805,6 +696,325 @@ class NewsPostController extends Controller
         }
     }
 
+
+
+
+
+    // public function managePosts(Request $request)
+    // {
+    //     Log::info('Manage Posts method is called...', [
+    //         'request_data' => $request->all(),
+    //     ]);
+
+    //     // Get the JWT token from session
+    //     $jwtToken = session('api_token');
+
+    //     if (empty($jwtToken)) {
+    //         Log::warning('JWT token missing or expired');
+    //         return redirect()->route('user.login')->with('error', 'Please log in first');
+    //     }
+
+    //     $apiUrl = config('api.base_url') . '/user/posts';
+
+    //     try {
+    //         $response = Http::withHeaders([
+    //             'Authorization' => 'Bearer ' . $jwtToken,
+    //         ])->post($apiUrl, $request->all());
+
+    //         if ($response->successful()) {
+    //             Log::info('Posts fetched successfully', [
+    //                 'response_data' => $response->json(),
+    //             ]);
+
+    //             // Get the data from response
+    //             $responseData = $response->json();
+
+    //             // Pass both message and posts data to view
+    //             return view('posts.mypost', [
+    //                 'message' => $responseData['message'],
+    //                 'posts' => $responseData['posts']
+    //             ]);
+    //         } else {
+    //             Log::error('Error returned from external API', [
+    //                 'status_code' => $response->status(),
+    //                 'error_message' => $response->json()['message'] ?? 'An error occurred.',
+    //             ]);
+
+    //             return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::error('API request failed', [
+    //             'exception_message' => $e->getMessage(),
+    //             'exception_trace' => $e->getTraceAsString(),
+    //         ]);
+
+    //         return back()->withErrors(['error' => 'An error occurred while fetching posts.']);
+    //     }
+    // }
+
+
+
+    public function managePosts(Request $request)
+    {
+        Log::info('Manage Posts method is called...', [
+            'request_data' => $request->all(),
+        ]);
+
+        // Get the JWT token from session
+        $jwtToken = session('api_token');
+
+        if (empty($jwtToken)) {
+            Log::warning('JWT token missing or expired');
+            return redirect()->route('user.login')->with('error', 'Please log in first');
+        }
+
+        // New API URL for GET request
+        $apiUrl = config('api.base_url') . '/user/posts';
+
+        try {
+            // Make the GET request with the JWT token in the Authorization header
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $jwtToken,
+            ])->get($apiUrl, $request->all());
+
+            if ($response->successful()) {
+                Log::info('Posts fetched successfully', [
+                    'response_data' => $response->json(),
+                ]);
+
+                // Get the data from the response
+                $responseData = $response->json();
+
+                // Pass the data to the view
+                return view('posts.mypost', [
+                    'message' => $responseData['message'],
+                    'posts' => $responseData['posts']
+                ]);
+            } else {
+                Log::error('Error returned from external API', [
+                    'status_code' => $response->status(),
+                    'error_message' => $response->json()['message'] ?? 'An error occurred.',
+                ]);
+
+                return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
+            }
+        } catch (\Exception $e) {
+            Log::error('API request failed', [
+                'exception_message' => $e->getMessage(),
+                'exception_trace' => $e->getTraceAsString(),
+            ]);
+
+            return back()->withErrors(['error' => 'An error occurred while fetching posts.']);
+        }
+    }
+
+    public function fetchPostForEdit($slug)
+    {
+        Log::info('Fetching post for edit with slug: ' . $slug);
+        $user = session('user');
+        if (!$user) {
+            return redirect()->route('login')->withErrors(['error' => 'You must be logged in to edit a post.']);
+        }
+
+        $jwtToken = session('api_token');
+        if (empty($jwtToken)) {
+            Log::warning('JWT token missing or expired');
+            return redirect()->route('login')->with('error', 'Please log in first');
+        }
+
+        Log::info('Post slug: ', ['slug' => $slug]);
+        try {
+            $response = Http::withToken($jwtToken)
+                ->get(config('api.base_url') . '/posts/edit/' . $slug);
+
+            Log::info('API response:', ['response' => $response->json()]);
+
+            if ($response->successful()) {
+                Log::error('API request failed', [
+                    'status_code' => $response->status(),
+                    'error_message' => $response->json()['message'] ?? 'Unknown error',
+                ]);
+                $post = $response->json()['post'];
+
+                //dd($post);
+                return view('posts.edit', [
+                    'post' => $post,
+                    'user' => $user
+                ]);
+            }
+
+            // Handle specific error cases
+            $statusCode = $response->status();
+            $errorMessage = $response->json()['message'] ?? 'An error occurred';
+
+            if ($statusCode === 403) {
+                return redirect()->route('manage-posts')->with('error', 'You are not authorized to edit this post');
+            }
+
+            if ($statusCode === 404) {
+                return redirect()->route('manage-posts')->with('error', 'Post not found');
+            }
+
+            return redirect()->route('manage-posts')->with('error', $errorMessage);
+        } catch (\Exception $e) {
+            Log::error('Error fetching post for edit', [
+                'error' => $e->getMessage(),
+                'slug' => $slug
+            ]);
+            return redirect()->route('manage-posts')->with('error', 'An error occurred while fetching the post');
+        }
+    }
+
+    // public function updatePost(Request $request, $slug)
+    // {
+    //     $user = session('user');
+    //     if (!$user) {
+    //         return redirect()->route('login')->withErrors(['error' => 'Login required']);
+    //     }
+
+    //     Log::info('Updating post started', ['slug' => $slug, 'request_data' => $request->all()]);
+
+    //     // Ensure the 'allow_comments' field is boolean
+    //     $request_data = $request->all();
+    //     $request_data['allow_comments'] = filter_var($request_data['allow_comments'], FILTER_VALIDATE_BOOLEAN);
+
+    //     try {
+    //         $response = Http::withToken(session('api_token'))
+    //             ->put(config('api.base_url') . '/posts/update/' . $slug, $request_data);
+
+    //         // Log the API request response
+    //         Log::info('API response for post update', ['response' => $response->json()]);
+
+    //         if ($response->successful()) {
+    //             Log::info('Post updated successfully', ['slug' => $slug]);
+    //             return redirect()
+    //                 ->route('manage.posts')
+    //                 ->with('success', 'Post updated successfully');
+    //         }
+
+    //         // If response is not successful, log the error message
+    //         Log::error('API response error for post update', ['message' => $response->json()['message'] ?? 'No message']);
+
+    //         return back()
+    //             ->withInput()
+    //             ->with('error', $response->json()['message'] ?? 'Error updating post');
+    //     } catch (\Exception $e) {
+    //         // Log exception details
+    //         Log::error('Post update failed', [
+    //             'error_message' => $e->getMessage(),
+    //             'slug' => $slug,
+    //             'request_data' => $request_data,
+    //         ]);
+
+    //         return back()
+    //             ->withInput()
+    //             ->with('error', 'Failed to update post');
+    //     }
+    // }
+
+
+    public function updatePost(Request $request, $slug)
+    {
+        $user = session('user');
+        if (!$user) {
+            return redirect()->route('login')->withErrors(['error' => 'Login required']);
+        }
+
+        $request_data = $request->all();
+        $checkboxFields = [
+            'is_featured',
+            'is_breaking',
+            'hot_gist',
+            'event',
+            'top_topic',
+            'pride_of_nigeria',
+            'allow_comments'
+        ];
+
+        foreach ($checkboxFields as $field) {
+            $request_data[$field] = isset($request_data[$field]) ?
+                filter_var($request_data[$field], FILTER_VALIDATE_BOOLEAN) :
+                false;
+        }
+
+        try {
+            $response = Http::withToken(session('api_token'))
+                ->put(config('api.base_url') . '/posts/update/' . $slug, $request_data);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                return redirect()
+                    ->route('manage.posts')
+                    ->with('success', $responseData['message'] ?? 'Post updated successfully');
+            }
+
+            $errorResponse = $response->json();
+            $errorMessage = $errorResponse['message'] ?? 'Update failed';
+            $validationErrors = $errorResponse['errors'] ?? [];
+
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'error' => $errorMessage,
+                    'validation_errors' => $validationErrors
+                ]);
+        } catch (\Exception $e) {
+            Log::error('Post update exception', [
+                'error_message' => $e->getMessage(),
+                'slug' => $slug,
+            ]);
+
+            return back()
+                ->withInput()
+                ->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+
+   
+
+    public function deletePost($slug)
+    {
+        Log::info('The delete method for newsPosts is called with slug');
+        $user = session('user');
+        $jwtToken = session('api_token');
+
+        if (!$user || empty($jwtToken)) {
+            Log::warning('User not authenticated or JWT token missing');
+            return response()->json(['error' => 'Authentication required'], 401);
+        }
+
+        Log::info('Deleting post', ['slug' => $slug, 'user_id' => $user['id']]);
+
+        try {
+            $response = Http::withToken($jwtToken)
+                ->delete(config('api.base_url') . '/posts/delete/' . $slug);
+
+            Log::info('API response for deleting post', [
+                'status' => $response->status(),
+                'response' => $response->json()
+            ]);
+
+            if ($response->successful()) {
+                return response()->json([
+                    'message' => 'Post deleted successfully',
+                    'slug' => $slug
+                ], 200);
+            }
+
+            $errorMessage = $response->json()['message'] ?? 'Failed to delete post';
+            return response()->json(['error' => $errorMessage], $response->status());
+        } catch (\Exception $e) {
+            Log::error('Error deleting post', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json([
+                'error' => 'Error occurred while deleting the post'
+            ], 500);
+        }
+    }
+
     public function showPostDetails(Request $request, $slug)
     {
         $apiUrl = config('api.base_url') . '/post/' . $slug;  // API endpoint for single post
@@ -832,7 +1042,7 @@ class NewsPostController extends Controller
 
 
 
- 
+
     public function listPendingPosts()
     {
         $jwtToken = session('api_token'); // Retrieve the JWT token from the session
@@ -1021,7 +1231,7 @@ class NewsPostController extends Controller
     }
 
 
-    public function deletePost($slug)
+    public function deletePost2($slug)
     {
         $jwtToken = session('api_token'); // Retrieve the JWT token from the session
         Log::info('JWT Token:', ['token' => $jwtToken]); // Log the token

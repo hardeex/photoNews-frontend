@@ -15,6 +15,12 @@ class UserController extends Controller
 
     public function dashboard()
     {
+        return view('editor.dashboard');
+    }
+
+
+    public function userDashboard()
+    {
         return view('user.dashboard');
     }
 
@@ -1512,6 +1518,4 @@ class UserController extends Controller
             ], 500);
         }
     }
-
-
 }

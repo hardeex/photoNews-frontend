@@ -305,6 +305,17 @@
             </div>
         </div> --}}
 
+
+        <!-- Live Video -->
+        <div class="menu-item">
+            <a href="{{route('youtube-link')}}"
+                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white">
+                <i class="fas fa-video mr-2"></i> Live Video
+            </a>
+        </div>
+
+
+
         <!-- Help -->
         <div class="menu-item">
             <a href="#"

@@ -1,13 +1,11 @@
 <li><a href="#" class="text-blue-600 font-semibold">Home</a></li>
-        
+
 <li class="relative">
     <button onclick="toggleDropdown('celebrationDropdown')"
-        class="flex items-center hover:text-green-600 focus:outline-none" aria-expanded="false"
-        aria-haspopup="true">
+        class="flex items-center hover:text-green-600 focus:outline-none" aria-expanded="false" aria-haspopup="true">
         Celebration
         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 9l-7 7-7-7" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
     </button>
     <div id="celebrationDropdown"
@@ -41,12 +39,10 @@
 
 <li class="relative">
     <button onclick="toggleDropdown('memorialDropdown')"
-        class="flex items-center hover:text-green-600 focus:outline-none" aria-expanded="false"
-        aria-haspopup="true">
+        class="flex items-center hover:text-green-600 focus:outline-none" aria-expanded="false" aria-haspopup="true">
         In Memoriam
         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 9l-7 7-7-7" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
     </button>
     <div id="memorialDropdown"
@@ -71,12 +67,10 @@
 
 <li class="relative">
     <button onclick="toggleDropdown('legalNoticesDropdown')"
-        class="flex items-center hover:text-green-600 focus:outline-none" aria-expanded="false"
-        aria-haspopup="true">
-         Notices
+        class="flex items-center hover:text-green-600 focus:outline-none" aria-expanded="false" aria-haspopup="true">
+        Notices
         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 9l-7 7-7-7" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
     </button>
     <div id="legalNoticesDropdown"
@@ -109,13 +103,11 @@
 
 
 <li class="relative">
-    <button onclick="toggleDropdown('findDropdown')"
-        class="flex items-center hover:text-green-600 focus:outline-none" aria-expanded="false"
-        aria-haspopup="true">
+    <button onclick="toggleDropdown('findDropdown')" class="flex items-center hover:text-green-600 focus:outline-none"
+        aria-expanded="false" aria-haspopup="true">
         Find
         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 9l-7 7-7-7" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
     </button>
     <div id="findDropdown"
@@ -144,40 +136,80 @@
     </div>
 </li>
 {{-- <li><a href="#" class="hover:text-blue-600">Marketplace</a></li> --}}
-
-
 <li class="relative">
     <button onclick="toggleDropdown('accountDropdown')"
-        class="flex items-center hover:text-green-600 focus:outline-none" aria-expanded="false"
-        aria-haspopup="true">
+        class="flex items-center hover:text-green-600 focus:outline-none" aria-expanded="false" aria-haspopup="true">
         Account
         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 9l-7 7-7-7" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
     </button>
     <div id="accountDropdown"
         class="absolute hidden bg-white shadow-lg mt-2 rounded-md w-40 z-50 transition-all duration-200 ease-in-out"
         aria-label="Account dropdown">
         <ul class="flex flex-col py-1">
-            <li>
-                <a href="{{ route('user.login') }}"
-                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
-                    Login
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('user.register') }}"
-                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
-                    Register
-                </a>
-            </li>
-            <li>
-                <a href="#"
-                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
-                    Profile
-                </a>
-            </li>
+            @if (session('api_token')) <!-- Check if the user is logged in -->
+                @php
+                    $userRole = session('user')['role'] ?? ''; // Get the user role from the session
+                @endphp
+
+                <!-- Role-based dashboard links -->
+                @if ($userRole == 'admin')
+                    <li>
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
+                            Admin Dashboard
+                        </a>
+                    </li>
+                @elseif($userRole == 'editor')
+                    <li>
+                        <a href="{{ route('editor.dashboard') }}"
+                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
+                            Editor Dashboard
+                        </a>
+                    </li>
+                @else
+                    <li>
+                        <a href="{{ route('user.dashboard') }}"
+                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
+                            User Dashboard
+                        </a>
+                    </li>
+                @endif
+
+                <!-- Common Profile and Logout links -->
+                {{-- <li>
+                    <a href="{{ route('user.profile') }}"
+                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
+                        Profile
+                    </a>
+                </li> --}}
+                <li>
+                    <a href="#"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
+                        Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('user.logout') }}" method="POST"
+                        style="display:none;">
+                        @csrf
+                    </form>
+                </li>
+            @else
+                <!-- Login and Register links when not logged in -->
+                <li>
+                    <a href="{{ route('user.login') }}"
+                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
+                        Login
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('user.register') }}"
+                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
+                        Register
+                    </a>
+                </li>
+            @endif
         </ul>
     </div>
 </li>

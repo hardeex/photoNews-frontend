@@ -127,18 +127,24 @@ class userAuthenticationController extends Controller
                         'user' => $responseData['data']['user'],
                     ]);
 
-                    // Check if the user is an admin
-                    if ($responseData['data']['user']['role'] == 'admin') {
-                        // Redirect to the admin dashboard if the user is an admin
+                    // Get user role
+                    $userRole = $responseData['data']['user']['role'];
+
+                    // Redirect based on user role
+                    if ($userRole == 'admin') {
                         return redirect()->route('admin.dashboard')->with('success', 'Login successful! Welcome back, Admin.');
                     }
+
+                    if ($userRole == 'editor') {
+                        return redirect()->route('editor.dashboard')->with('success', 'Login successful! Welcome back, Editor.');
+                    }
+
+                    // If the user is neither an admin nor an editor, redirect to the user dashboard
+                    return redirect()->route('user.dashboard')->with('success', 'Login successful! Welcome back.');
                 } else {
                     // If no token returned, handle accordingly
                     return back()->withErrors(['login_error' => 'Authentication failed.']);
                 }
-
-                // Redirect to the user dashboard if the user is not an admin
-                return redirect()->route('news.create-post')->with('success', 'Login successful! Welcome back.');
             } else {
                 // If API login failed, show the error message
                 return back()->withErrors(['login_error' => $response->json()['message'] ?? 'Login failed.']);

@@ -26,7 +26,11 @@ Route::get('/admin/dashboard', [userAuthenticationController::class, 'adminDashb
 
 // User routes
 Route::get('/', [UserController::class, 'index'])->name('welcome');
-Route::get('/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
+Route::get('/editor/dashboard', [UserController::class, 'dashboard'])->name('editor.dashboard');
+Route::get('/user/dashboard', [UserController::class, 'userDashboard'])->name('user.dashboard');
+Route::get('/live/videos', [NewsPostController::class, 'youtubeLink'])->name('youtube-link');
+Route::post('/posts/youtube/link', [NewsPostController::class, 'submitYoutubeLink'])->name('submit-youtube-link');
+Route::get('/get/youtube/links', [NewsPostController::class, 'getLiveVideos'])->name('get-live-videos');
 
 // News routes
 Route::get('/create-post', [NewsPostController::class, 'createPost'])->name('news.create-post');

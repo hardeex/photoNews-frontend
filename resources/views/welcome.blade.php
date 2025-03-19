@@ -620,7 +620,168 @@
                 </div>
             </section>
 
+
+            {{-- <section class="max-w-6xl mx-auto px-4 py-8">
+                <div class="bg-gray-200 p-2 mb-4">
+                    <h2 class="text-2xl font-bold">Topics</h2>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mb-6 overflow-x-auto whitespace-nowrap">
+                    @foreach (['Gold Market', 'Nigeria\'s Inflation Rate Eases to 33.40%', 'Adekunle Gold', 'Nigeria and Guinea Strengthen Ties', 'Nigeria\'s Economic Activity Declines Again'] as $topic)
+                        <span
+                            class="bg-purple-200 text-purple-800 text-xs px-3 py-1 rounded-full">{{ $topic }}</span>
+                    @endforeach
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2">
+                        <div class="bg-black aspect-w-16 aspect-h-9 relative">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-white bg-red-600 p-2 rounded-full">
+                                    <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M8 5v10l7-5-7-5z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="absolute top-4 right-4 bg-white text-black px-2 py-1 text-sm rounded">
+                                No live event at the moment
+                            </div>
+                            <!-- Conditionally render the button for admin and editor -->
+                            @if (session('api_token'))
+                                <!-- Check if the user is logged in -->
+                                @php
+                                    $userRole = session('user')['role'] ?? ''; // Get the user role from the session
+                                @endphp
+
+                                <!-- Role-based Button for Admin and Editor -->
+                                @if ($userRole == 'admin' || $userRole == 'editor')
+                                    <div class="text-center mt-4">
+                                        <a href="{{ route('youtube-link') }}"
+                                            class="bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-blue-600">
+                                            Upload Video
+                                        </a>
+                                    </div>
+                                @endif
+                            @endif
+                        </div>
+
+
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-red-600 p-4 text-white text-center font-bold">
+                            ADVERTISE HERE!
+                        </div>
+                        <div class="bg-gray-200 p-4 text-center">
+                            <p class="font-semibold">ADVERTISE HERE !!</p>
+                        </div>
+                        <div class="bg-blue-600 p-4 text-white text-center">
+                            <p class="font-bold">ADVERTIZE YOUR BUSINESS HERE!</p>
+                        </div>
+
+
+                    </div>
+                </div>
+            </section> --}}
+
+
             <section class="max-w-6xl mx-auto px-4 py-8">
+                <div class="bg-gray-200 p-2 mb-4">
+                    <h2 class="text-2xl font-bold">Topics</h2>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mb-6 overflow-x-auto whitespace-nowrap">
+                    @foreach (['Gold Market', 'Nigeria\'s Inflation Rate Eases to 33.40%', 'Adekunle Gold', 'Nigeria and Guinea Strengthen Ties', 'Nigeria\'s Economic Activity Declines Again'] as $topic)
+                        <span
+                            class="bg-purple-200 text-purple-800 text-xs px-3 py-1 rounded-full">{{ $topic }}</span>
+                    @endforeach
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2">
+                        <!-- Video Content Area -->
+                        <div class="bg-gradient-to-r from-gray-900 to-black rounded-lg overflow-hidden shadow-lg">
+                            <!-- Video Header with Title and Status -->
+                            <div
+                                class="bg-gradient-to-r from-purple-800 to-blue-800 p-3 flex justify-between items-center">
+                                <h3 class="text-white font-bold">Featured Video</h3>
+                                <div
+                                    class="bg-black bg-opacity-50 text-white px-3 py-1 text-sm rounded-full flex items-center">
+                                    <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+                                    No live event at the moment
+                                </div>
+                            </div>
+
+                            <!-- Video Player Area -->
+                            <div class="aspect-w-16 aspect-h-9 relative">
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+                                    <!-- Play Button -->
+                                    <div
+                                        class="text-white bg-red-600 p-3 rounded-full cursor-pointer hover:bg-red-700 transition-transform duration-300 transform hover:scale-110 mb-6">
+                                        <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M8 5v10l7-5-7-5z" />
+                                        </svg>
+                                    </div>
+
+                                    <!-- Video Upload Section - Only visible to admins/editors -->
+                                    @if (session('api_token'))
+                                        @php
+                                            $userRole = session('user')['role'] ?? '';
+                                        @endphp
+
+                                        @if ($userRole == 'admin' || $userRole == 'editor')
+                                            <div class="mt-4 w-full max-w-sm">
+                                                <p class="text-gray-300 mb-3">You're logged in as: <span
+                                                        class="font-bold text-white">{{ $userRole }}</span></p>
+                                                <a href="{{ route('youtube-link') }}"
+                                                    class="flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-red-600 text-white px-6 py-3 rounded-lg font-bold shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 w-full">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                                        </path>
+                                                    </svg>
+                                                    Upload New Video
+                                                </a>
+                                            </div>
+                                        @else
+                                            <div class="text-white mt-4">
+                                                <p>Check back later for upcoming videos and live events.</p>
+                                            </div>
+                                        @endif
+                                    @else
+                                        <!-- Message for non-logged in users -->
+                                        <div class="text-white mt-4">
+                                            <p>Check back later for upcoming videos and live events.</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Video Footer with Info -->
+                            <div class="bg-gray-800 p-3 text-gray-300 text-sm">
+                                <p>Stay tuned for breaking news and live broadcasts</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-red-600 p-4 text-white text-center font-bold">
+                            ADVERTISE HERE!
+                        </div>
+                        <div class="bg-gray-200 p-4 text-center">
+                            <p class="font-semibold">ADVERTISE HERE !!</p>
+                        </div>
+                        <div class="bg-blue-600 p-4 text-white text-center">
+                            <p class="font-bold">ADVERTIZE YOUR BUSINESS HERE!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+            {{-- <section class="max-w-6xl mx-auto px-4 py-8">
                 <div class="bg-gray-200 p-2 mb-4">
                     <h2 class="text-2xl font-bold">Topics</h2>
                 </div>
@@ -757,7 +918,7 @@
                         </div>
                     `;
                 }
-            </script>
+            </script> --}}
 
             @include('base.ereport-banner')
 

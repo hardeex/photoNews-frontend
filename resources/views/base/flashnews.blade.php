@@ -1,9 +1,5 @@
 <div class="bg-red-600 text-white py-3 overflow-hidden relative">
-    {{-- <div class="flex items-center absolute left-0 top-0 bottom-0 bg-red-700 px-4 z-10">
-        <span class="font-bold text-base md:text-lg whitespace-nowrap">FLASH NEWS</span>
-        <i class="fas fa-newspaper ml-2 text-lg"></i>
-    </div> --}}
-
+    
     <div class="flash-news-container ml-36 md:ml-44">
         <div class="flash-news-scroll">
             {{-- Priority 1: Breaking News --}}

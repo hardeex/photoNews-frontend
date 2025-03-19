@@ -73,7 +73,7 @@
                         Notice</a></li>
 
 
-                <li class="relative group">
+                {{-- <li class="relative group">
                     <a href="#" class="hover:text-green-600">Account</a>
                     <div class="absolute hidden bg-white shadow-lg mt-2 rounded-md w-40 group-hover:block">
                         <ul class="flex flex-col">
@@ -85,7 +85,54 @@
                             </li>
                         </ul>
                     </div>
+                </li> --}}
+
+                <li class="relative group">
+                    <a href="#" class="hover:text-green-600">Account</a>
+                    <div class="absolute hidden bg-white shadow-lg mt-2 rounded-md w-40 group-hover:block">
+                        <ul class="flex flex-col">
+                            @if (session('api_token'))
+                                <!-- Check if the user is logged in -->
+                                <!-- Check user role and show the appropriate dashboard link -->
+                                @php
+                                    $userRole = session('user')['role'] ?? ''; // Assuming the role is stored in the 'user' session data
+                                @endphp
+
+                                @if ($userRole == 'admin')
+                                    <li><a href="{{ route('admin.dashboard') }}"
+                                            class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Admin Dashboard</a>
+                                    </li>
+                                @elseif($userRole == 'editor')
+                                    <li><a href="{{ route('editor.dashboard') }}"
+                                            class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Editor Dashboard</a>
+                                    </li>
+                                @else
+                                    <li><a href="{{ route('user.dashboard') }}"
+                                            class="block px-4 py-2 text-gray-700 hover:bg-gray-200">User Dashboard</a>
+                                    </li>
+                                @endif
+
+                                <li>
+                                    <a href="#"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-green-600 transition-colors duration-200">
+                                        Logout
+                                    </a>
+                                    <form id="logout-form" action="{{ route('user.logout') }}" method="POST"
+                                        style="display:none;">
+                                        @csrf
+                                    </form>
+                                </li>
+                            @else
+                                <li><a href="{{ route('user.login') }}"
+                                        class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Login</a></li>
+                                <li><a href="{{ route('user.register') }}"
+                                        class="block px-4 py-2 text-gray-700 hover:bg-gray-200">Register</a></li>
+                            @endif
+                        </ul>
+                    </div>
                 </li>
+
 
 
             </ul>
@@ -106,7 +153,7 @@
             @yield('content')
         </div>
 
-       @include('base.widget')
+        @include('base.widget')
         <footer class="bg-gray-800 text-gray-300">
             <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8">

@@ -808,7 +808,7 @@ class NewsPostController extends Controller
         }
     }
 
-    public function fetchPostForEdit($slug)
+    public function fetchPostForEdit2($slug)
     {
         Log::info('Fetching post for edit with slug: ' . $slug);
         $user = session('user');
@@ -865,55 +865,157 @@ class NewsPostController extends Controller
         }
     }
 
-    // public function updatePost(Request $request, $slug)
-    // {
-    //     $user = session('user');
-    //     if (!$user) {
-    //         return redirect()->route('login')->withErrors(['error' => 'Login required']);
-    //     }
 
-    //     Log::info('Updating post started', ['slug' => $slug, 'request_data' => $request->all()]);
 
-    //     // Ensure the 'allow_comments' field is boolean
-    //     $request_data = $request->all();
-    //     $request_data['allow_comments'] = filter_var($request_data['allow_comments'], FILTER_VALIDATE_BOOLEAN);
+    public function fetchPostForEdit($slug)
+    {
+        Log::info('Fetching post for edit with slug: ' . $slug);
+        $user = session('user');
+        if (!$user) {
+            return redirect()->route('login')->withErrors(['error' => 'You must be logged in to edit a post.']);
+        }
 
-    //     try {
-    //         $response = Http::withToken(session('api_token'))
-    //             ->put(config('api.base_url') . '/posts/update/' . $slug, $request_data);
+        $jwtToken = session('api_token');
+        if (empty($jwtToken)) {
+            Log::warning('JWT token missing or expired');
+            return redirect()->route('login')->with('error', 'Please log in first');
+        }
 
-    //         // Log the API request response
-    //         Log::info('API response for post update', ['response' => $response->json()]);
+        Log::info('Post slug: ', ['slug' => $slug]);
+        try {
+            $response = Http::withToken($jwtToken)
+                ->get(config('api.base_url') . '/posts/edit/' . $slug);
 
-    //         if ($response->successful()) {
-    //             Log::info('Post updated successfully', ['slug' => $slug]);
-    //             return redirect()
-    //                 ->route('manage.posts')
-    //                 ->with('success', 'Post updated successfully');
-    //         }
+            Log::info('API response:', ['response' => $response->json()]);
 
-    //         // If response is not successful, log the error message
-    //         Log::error('API response error for post update', ['message' => $response->json()['message'] ?? 'No message']);
+            if ($response->successful()) {
+                $post = $response->json()['post'];
 
-    //         return back()
-    //             ->withInput()
-    //             ->with('error', $response->json()['message'] ?? 'Error updating post');
-    //     } catch (\Exception $e) {
-    //         // Log exception details
-    //         Log::error('Post update failed', [
-    //             'error_message' => $e->getMessage(),
-    //             'slug' => $slug,
-    //             'request_data' => $request_data,
-    //         ]);
+                return view('posts.edit', [
+                    'post' => $post,
+                    'user' => $user
+                ]);
+            }
 
-    //         return back()
-    //             ->withInput()
-    //             ->with('error', 'Failed to update post');
-    //     }
-    // }
+            // Move the error log here where it actually is an error
+            Log::error('API request failed', [
+                'status_code' => $response->status(),
+                'error_message' => $response->json()['message'] ?? 'Unknown error',
+            ]);
+
+            // Handle specific error cases
+            $statusCode = $response->status();
+            $errorMessage = $response->json()['message'] ?? 'An error occurred';
+
+            if ($statusCode === 403) {
+                return redirect()->route('manage-posts')->with('error', 'You are not authorized to edit this post');
+            }
+
+            if ($statusCode === 404) {
+                return redirect()->route('manage-posts')->with('error', 'Post not found');
+            }
+
+            return redirect()->route('manage-posts')->with('error', $errorMessage);
+        } catch (\Exception $e) {
+            Log::error('Error fetching post for edit', [
+                'error' => $e->getMessage(),
+                'slug' => $slug
+            ]);
+            return redirect()->route('manage-posts')->with('error', 'An error occurred while fetching the post');
+        }
+    }
 
 
     public function updatePost(Request $request, $slug)
+    {
+        $user = session('user');
+        if (!$user) {
+            return redirect()->route('login')->withErrors(['error' => 'Login required']);
+        }
+
+        // Create a new array for the request data
+        $request_data = $request->except('featured_image');
+
+        // Handle checkbox fields
+        $checkboxFields = [
+            'is_featured',
+            'is_breaking',
+            'hot_gist',
+            'event',
+            'top_topic',
+            'pride_of_nigeria',
+            'allow_comments'
+        ];
+
+        foreach ($checkboxFields as $field) {
+            $request_data[$field] = isset($request_data[$field]) ?
+                filter_var($request_data[$field], FILTER_VALIDATE_BOOLEAN) :
+                false;
+        }
+
+        // Handle file upload separately
+        if ($request->hasFile('featured_image')) {
+            // Validate the file
+            $validator = Validator::make($request->all(), [
+                'featured_image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048'
+            ]);
+
+            if ($validator->fails()) {
+                return back()
+                    ->withInput()
+                    ->withErrors($validator);
+            }
+
+            // Create multipart form data
+            $request_data = collect($request_data)->toArray();
+            $request_data['featured_image'] = fopen($request->file('featured_image')->getPathname(), 'r');
+        }
+
+        try {
+            // Use multipart request if there's a file
+            if ($request->hasFile('featured_image')) {
+                $response = Http::withToken(session('api_token'))
+                    ->attach(
+                        'featured_image',
+                        file_get_contents($request->file('featured_image')->getPathname()),
+                        $request->file('featured_image')->getClientOriginalName()
+                    )
+                    ->put(config('api.base_url') . '/posts/update/' . $slug, $request_data);
+            } else {
+                $response = Http::withToken(session('api_token'))
+                    ->put(config('api.base_url') . '/posts/update/' . $slug, $request_data);
+            }
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                return redirect()
+                    ->route('manage.posts')
+                    ->with('success', $responseData['message'] ?? 'Post updated successfully');
+            }
+
+            $errorResponse = $response->json();
+            $errorMessage = $errorResponse['message'] ?? 'Update failed';
+            $validationErrors = $errorResponse['errors'] ?? [];
+
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'error' => $errorMessage,
+                    'validation_errors' => $validationErrors
+                ]);
+        } catch (\Exception $e) {
+            Log::error('Post update exception', [
+                'error_message' => $e->getMessage(),
+                'slug' => $slug,
+            ]);
+
+            return back()
+                ->withInput()
+                ->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function updatePost2(Request $request, $slug)
     {
         $user = session('user');
         if (!$user) {
@@ -971,7 +1073,7 @@ class NewsPostController extends Controller
     }
 
 
-   
+
 
     public function deletePost($slug)
     {

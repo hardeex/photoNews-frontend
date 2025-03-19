@@ -129,9 +129,12 @@
                                 Featured Image
                             </div>
                             <div style="padding: 1.5rem;">
+                                {{-- <input type="file" name="featured_image" id="featured_image"
+                                    style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 4px; transition: all 0.15s ease-in-out;"
+                                    accept="image/*"> --}}
                                 <input type="file" name="featured_image" id="featured_image"
                                     style="width: 100%; padding: 0.625rem; border: 1px solid #d1d5db; border-radius: 4px; transition: all 0.15s ease-in-out;"
-                                    accept="image/*">
+                                    accept="image/jpeg,image/png,image/jpg,image/gif,image/webp">
                                 @if ($post['featured_image'])
                                     <img src="{{ $post['featured_image'] }}"
                                         style="max-width: 100%; border-radius: 4px; margin-top: 1rem;" alt="Featured Image">

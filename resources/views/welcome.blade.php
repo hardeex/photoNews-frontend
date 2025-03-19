@@ -31,7 +31,7 @@
             <!--- END OF TEST CONTAINER-->
 
 
-            <section>
+            {{-- <section>
                 <!-- Newspaper Front Page Layout -->
                 <div class="max-w-7xl mx-auto bg-gray-100 p-4 md:p-8">
                     <!-- Newspaper Header -->
@@ -175,8 +175,268 @@
                         </div>
                     @endif
                 </div>
-            </section>
+            </section> --}}
 
+
+            <section>
+                <!-- Newspaper Front Page Layout -->
+                <div class="max-w-7xl mx-auto bg-gray-100 p-4 md:p-8">
+                    <!-- Newspaper Header -->
+                    <div class="text-center border-b-4 border-black pb-4 mb-4 md:mb-6">
+                        <h1 class="text-3xl md:text-6xl font-serif font-bold tracking-tight">Today's Headline</h1>
+                        <div class="mt-2 flex flex-col md:flex-row justify-between items-center text-xs md:text-sm">
+                            <p>{{ \Carbon\Carbon::now()->format('l, F d, Y') }}</p>
+                            <p class="mt-1 md:mt-0">Total Posts: {{ $totalPublishedPosts }}</p>
+                        </div>
+                    </div>
+
+                    @if (count($postsData) > 0)
+                        <!-- Grid Container -->
+                        <div class="grid grid-cols-1 md:grid-cols-6 gap-4 md:gap-6">
+                            <!-- Main Content Section -->
+                            <div class="col-span-1 md:col-span-4 md:border-r border-gray-300 md:pr-6">
+                                <!-- Main Story -->
+                                @php $mainStory = $postsData[0]; @endphp
+                                <div class="mb-6">
+                                    <a href="{{ route('post.details', $mainStory['slug'] ?? '#') }}" class="block group">
+                                        <div class="relative overflow-hidden rounded-lg shadow-lg">
+                                            <img src="{{ $mainStory['featured_image'] ?? 'https://picsum.photos/seed/main/800/400' }}"
+                                                alt="{{ ucwords(strtolower($mainStory['title'])) }}"
+                                                class="w-full h-48 md:h-80 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                                                loading="eager">
+
+                                            @php
+                                                $categoryName = isset($mainStory['category_names'])
+                                                    ? ucwords(strtolower($mainStory['category_names']))
+                                                    : (isset($mainStory['category']['name'])
+                                                        ? ucwords(strtolower($mainStory['category']['name']))
+                                                        : null);
+                                            @endphp
+
+                                            @if ($categoryName)
+                                                <span
+                                                    class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                                                    {{ $categoryName }}
+                                                </span>
+                                            @endif
+
+                                            @if ($mainStory['featured'] ?? false)
+                                                <span
+                                                    class="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                                                    Featured
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <h2
+                                            class="text-2xl md:text-4xl font-serif font-bold leading-tight mb-2 md:mb-3 mt-3 md:mt-4 group-hover:text-blue-600 transition-colors duration-200">
+                                            {{ $mainStory['title'] }}
+                                        </h2>
+                                    </a>
+                                    <p class="text-base md:text-lg text-gray-700 mb-2 line-clamp-3 md:line-clamp-none">
+                                        {{ strip_tags(strlen($mainStory['meta_description'] ?? '') > 200 ? substr($mainStory['meta_description'], 0, 200) . '...' : $mainStory['meta_description'] ?? $mainStory['content']) }}
+                                    </p>
+                                    <div
+                                        class="flex flex-col md:flex-row md:justify-between md:items-center space-y-2 md:space-y-0">
+                                        <p class="text-xs md:text-sm text-gray-600">By {{ $mainStory['created_by'] }}</p>
+                                        <div class="flex items-center text-xs md:text-sm text-gray-500">
+                                            <span class="mr-3">
+                                                <i class="fas fa-eye mr-1"></i>
+                                                {{ $mainStory['views'] }} views
+                                            </span>
+                                            <span class="mr-3">
+                                                <i class="fas fa-share mr-1"></i>
+                                                {{ $mainStory['shares'] }} shares
+                                            </span>
+                                            <span>
+                                                <i class="fas fa-clock mr-1"></i>
+                                                @php
+                                                    $wordCount = str_word_count(
+                                                        strip_tags($mainStory['content'] ?? ''),
+                                                    );
+                                                    $readingTime = max(1, ceil($wordCount / 200));
+                                                @endphp
+                                                {{ $readingTime }} min read
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Secondary Stories -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                                    @foreach (array_slice($postsData, 1, 2) as $story)
+                                        <div
+                                            class="border-t border-gray-300 pt-4 hover:bg-gray-50 transition-colors duration-200 rounded-lg p-2">
+                                            <a href="{{ route('post.details', $story['slug'] ?? '#') }}"
+                                                class="block group">
+                                                <div class="relative overflow-hidden rounded-lg shadow-md">
+                                                    <img src="{{ $story['featured_image'] ?? 'https://picsum.photos/seed/' . $loop->iteration . '/400/200' }}"
+                                                        alt="{{ ucwords(strtolower($story['title'])) }}"
+                                                        class="w-full h-40 md:h-48 object-cover transform group-hover:scale-105 transition-transform duration-300"
+                                                        loading="lazy">
+
+                                                    @php
+                                                        $categoryName = isset($story['category_names'])
+                                                            ? ucwords(strtolower($story['category_names']))
+                                                            : (isset($story['category']['name'])
+                                                                ? ucwords(strtolower($story['category']['name']))
+                                                                : null);
+                                                    @endphp
+
+                                                    @if ($categoryName)
+                                                        <span
+                                                            class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                                                            {{ $categoryName }}
+                                                        </span>
+                                                    @endif
+
+                                                    @if ($story['featured'] ?? false)
+                                                        <span
+                                                            class="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                                                            Featured
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                                <h3
+                                                    class="text-lg md:text-xl font-serif font-bold mb-2 mt-3 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2">
+                                                    {{ $story['title'] }}
+                                                </h3>
+                                            </a>
+                                            <p class="text-sm text-gray-700 line-clamp-2 md:line-clamp-3">
+                                                {{ strip_tags(strlen($story['meta_description'] ?? '') > 100 ? substr($story['meta_description'], 0, 100) . '...' : $story['meta_description'] ?? $story['content']) }}
+                                            </p>
+                                            <div class="flex items-center text-xs text-gray-500 mt-2">
+                                                <span class="mr-2">
+                                                    <i class="fas fa-eye mr-1"></i>{{ $story['views'] }} views
+                                                </span>
+                                                <span class="mx-2">•</span>
+                                                <span>
+                                                    {{ \Carbon\Carbon::parse($story['created_at'])->diffForHumans() }}
+                                                </span>
+                                                <span class="mx-2">•</span>
+                                                <span>
+                                                    <i class="fas fa-clock mr-1"></i>
+                                                    @php
+                                                        $wordCount = str_word_count(
+                                                            strip_tags($story['content'] ?? ''),
+                                                        );
+                                                        $readingTime = max(1, ceil($wordCount / 200));
+                                                    @endphp
+                                                    {{ $readingTime }} min
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <!-- Sidebar Stories -->
+                            <div class="col-span-1 md:col-span-2 mt-6 md:mt-0 bg-gray-50 rounded-lg p-4">
+                                <h3 class="text-lg font-serif font-bold mb-4 pb-2 border-b border-gray-300">Latest Updates
+                                </h3>
+                                @foreach (array_slice($postsData, 3, 6) as $story)
+                                    <div
+                                        class="mb-4 md:mb-6 pb-4 md:pb-6 border-b border-gray-300 last:border-b-0 hover:bg-white transition-colors duration-200 rounded p-2">
+                                        <a href="{{ route('post.details', $story['slug'] ?? '#') }}" class="block group">
+                                            <div class="flex items-start">
+                                                <div class="w-20 h-20 flex-shrink-0 mr-3 overflow-hidden rounded">
+                                                    <img src="{{ $story['featured_image'] ?? 'https://picsum.photos/seed/sidebar' . $loop->iteration . '/200/200' }}"
+                                                        alt="{{ ucwords(strtolower($story['title'])) }}"
+                                                        class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                                                        loading="lazy">
+                                                </div>
+                                                <div class="flex-grow">
+                                                    <h4
+                                                        class="text-base md:text-lg font-serif font-bold mb-1 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2">
+                                                        {{ $story['title'] }}
+                                                    </h4>
+                                                    <p class="text-sm text-gray-700 mb-1 line-clamp-2">
+                                                        {{ strip_tags(strlen($story['meta_description'] ?? '') > 80 ? substr($story['meta_description'], 0, 80) . '...' : $story['meta_description'] ?? $story['content']) }}
+                                                    </p>
+                                                    <div class="flex flex-wrap items-center text-xs text-gray-600 gap-2">
+                                                        <span>{{ \Carbon\Carbon::parse($story['created_at'])->format('M d, Y') }}</span>
+                                                        <span class="hidden md:inline">•</span>
+                                                        <span><i class="fas fa-eye mr-1"></i>{{ $story['views'] }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endforeach
+
+                                <!-- Sidebar Newsletter -->
+                                <div class="mt-6 bg-blue-50 rounded-lg p-4 shadow-sm">
+                                    <h4 class="text-lg font-serif font-bold mb-2">Stay Updated</h4>
+                                    <p class="text-sm text-gray-700 mb-3">Subscribe to our newsletter for the latest
+                                        updates.</p>
+                                    <form action="{{ route('newsltter.subscribe') ?? '#' }}" method="POST"
+                                        class="space-y-2">
+                                        @csrf
+                                        <input type="email" name="email" placeholder="Your email address" required
+                                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                        <button type="submit"
+                                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200">
+                                            Subscribe
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Trending Tags -->
+                        <div class="mt-8 pt-4 border-t-2 border-black">
+                            <h3 class="text-lg font-serif font-bold mb-3">Trending Topics</h3>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach (['Politics', 'Technology', 'Health', 'Sports', 'Entertainment', 'Business'] as $tag)
+                                    <a href="{{ route('news', strtolower($tag)) ?? '#' }}"
+                                        class="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm rounded-full transition-colors duration-200">
+                                        #{{ $tag }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- Bottom Section -->
+                        <div class="mt-6 md:mt-8 border-t-2 border-black pt-4">
+                            <div
+                                class="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0 text-xs md:text-sm text-gray-600">
+                                <span><i class="fas fa-newspaper mr-1"></i>Total Posts: {{ $totalPublishedPosts }}</span>
+                                <span class="hidden md:inline"><i class="fas fa-calendar mr-1"></i>Last Updated:
+                                    {{ \Carbon\Carbon::now()->format('g:i A') }}</span>
+                                <a href="{{ route('news') }}"
+                                    class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200">
+                                    View All Posts <i class="fas fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <!-- No posts message -->
+                        <div class="text-center py-12 text-gray-500 bg-gray-50 rounded-lg">
+                            <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto text-gray-400 mb-4" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <p class="text-base md:text-lg font-medium mb-2">No published posts available.</p>
+                            <p class="text-sm text-gray-400">Check back later for updates or subscribe to our newsletter.
+                            </p>
+
+                            <!-- Newsletter signup when no posts -->
+                            <form action="{{ route('newsletter.subscribe') ?? '#' }}" method="POST"
+                                class="mt-6 max-w-md mx-auto">
+                                @csrf
+                                <div class="flex">
+                                    <input type="email" name="email" placeholder="Your email address" required
+                                        class="flex-grow px-3 py-2 text-sm border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <button type="submit"
+                                        class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-r-md transition-colors duration-200">
+                                        Subscribe
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    @endif
+                </div>
+            </section>
 
 
 
@@ -359,6 +619,145 @@
                     </div>
                 </div>
             </section>
+
+            <section class="max-w-6xl mx-auto px-4 py-8">
+                <div class="bg-gray-200 p-2 mb-4">
+                    <h2 class="text-2xl font-bold">Topics</h2>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mb-6 overflow-x-auto whitespace-nowrap">
+                    @foreach (['Gold Market', 'Nigeria\'s Inflation Rate Eases to 33.40%', 'Adekunle Gold', 'Nigeria and Guinea Strengthen Ties', 'Nigeria\'s Economic Activity Declines Again'] as $topic)
+                        <span
+                            class="bg-purple-200 text-purple-800 text-xs px-3 py-1 rounded-full">{{ $topic }}</span>
+                    @endforeach
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2">
+                        <!-- Video Container -->
+                        <div id="video-container" class="bg-black aspect-w-16 aspect-h-9 relative rounded-lg">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-white bg-red-600 p-2 rounded-full">
+                                    <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M8 5v10l7-5-7-5z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="absolute top-4 right-4 bg-white text-black px-2 py-1 text-sm rounded">
+                                No live event at the moment
+                            </div>
+                        </div>
+
+                        <!-- Admin Link Button (Only for Authenticated Admins) -->
+                        @if (session()->has('user') && session('user')['role'] === 'admin')
+                            <button id="add-youtube-btn"
+                                class="mt-4 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                                Click Here to Add YouTube Link
+                            </button>
+                        @endif
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-red-600 p-4 text-white text-center font-bold">ADVERTISE HERE!</div>
+                        <div class="bg-gray-200 p-4 text-center">
+                            <p class="font-semibold">ADVERTISE HERE !!</p>
+                        </div>
+                        <div class="bg-blue-600 p-4 text-white text-center">
+                            <p class="font-bold">ADVERTIZE YOUR BUSINESS HERE!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popup Modal (Hidden by Default) -->
+                <div id="youtube-modal"
+                    class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                        <h3 class="text-lg font-bold mb-4">Add YouTube Video</h3>
+                        <input type="url" id="youtube-input" placeholder="Paste YouTube link here"
+                            class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-purple-500 mb-4">
+                        <div class="flex justify-end gap-2">
+                            <button id="cancel-btn"
+                                class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
+                            <button id="save-btn"
+                                class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- JavaScript -->
+            <script>
+                // Safely check if user is admin
+                const user = @json(session('user')); // Convert session('user') to JSON safely
+                const isAdmin = user && user.role === 'admin' ? true : false;
+
+                const videoContainer = document.getElementById('video-container');
+                const addButton = document.getElementById('add-youtube-btn');
+                const modal = document.getElementById('youtube-modal');
+                const youtubeInput = document.getElementById('youtube-input');
+                const saveBtn = document.getElementById('save-btn');
+                const cancelBtn = document.getElementById('cancel-btn');
+
+                // Load saved YouTube link from localStorage (if exists)
+                const savedLink = localStorage.getItem('youtubeLink');
+                if (savedLink) {
+                    updateVideo(savedLink);
+                }
+
+                // Show modal if admin clicks the button
+                if (isAdmin && addButton) {
+                    addButton.addEventListener('click', () => {
+                        modal.classList.remove('hidden');
+                    });
+                }
+
+                // Close modal on cancel
+                cancelBtn.addEventListener('click', () => {
+                    modal.classList.add('hidden');
+                    youtubeInput.value = '';
+                });
+
+                // Save and update video on save
+                saveBtn.addEventListener('click', () => {
+                    const url = youtubeInput.value.trim();
+                    if (url && isValidYoutubeUrl(url)) {
+                        const embedUrl = convertToEmbedUrl(url);
+                        localStorage.setItem('youtubeLink', embedUrl);
+                        updateVideo(embedUrl);
+                        modal.classList.add('hidden');
+                        youtubeInput.value = '';
+                    } else {
+                        alert('Please enter a valid YouTube URL.');
+                    }
+                });
+
+                // Convert YouTube URL to embed format
+                function convertToEmbedUrl(url) {
+                    const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+                    const match = url.match(regExp);
+                    return match ? `https://www.youtube.com/embed/${match[1]}?rel=0` : url;
+                }
+
+                // Validate YouTube URL
+                function isValidYoutubeUrl(url) {
+                    return /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/.test(url);
+                }
+
+                // Update video container with iframe
+                function updateVideo(embedUrl) {
+                    videoContainer.innerHTML = `
+                        <div class="relative w-full" style="padding-bottom: 56.25%;">
+                            <iframe 
+                                class="absolute top-0 left-0 w-full h-full rounded-lg" 
+                                src="${embedUrl}" 
+                                frameborder="0" 
+                                allowfullscreen
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                            </iframe>
+                        </div>
+                    `;
+                }
+            </script>
 
             @include('base.ereport-banner')
 
@@ -698,7 +1097,7 @@
                     <!-- end of the breaking news section -->
 
                     <!-- Music News Section -->
-                    <div class="px-4 sm:px-6 lg:px-8">
+                    {{-- <div class="px-4 sm:px-6 lg:px-8">
                         <h4 class="text-lg sm:text-xl lg:text-2xl font-semibold mb-4 sm:mb-6">Music News</h4>
 
                         @if (count($musicPostsData['posts']) > 0)
@@ -771,6 +1170,141 @@
                                 <p class="text-gray-600">No music news available at the moment.</p>
                             </div>
                         @endif
+                    </div> --}}
+
+                    <div class="px-4 sm:px-6 lg:px-8 bg-gray-50 rounded-lg shadow-sm">
+                        <div class="flex justify-between items-center mb-4 sm:mb-6 border-b border-gray-200 pb-3">
+                            <h4 class="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-800">Music News</h4>
+                            <a href="{{ route('news') ?? '#' }}"
+                                class="text-blue-600 text-sm font-medium hover:text-blue-800 transition-colors duration-200">
+                                View All <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+
+                        @if (count($musicPostsData['posts']) > 0)
+                            <div class="space-y-4 sm:space-y-5">
+                                @foreach ($musicPostsData['posts'] as $index => $post)
+                                    <a href="{{ route('post.details', $post['slug'] ?? '#') }}"
+                                        class="block group hover:shadow-lg transition-all duration-300 rounded-lg overflow-hidden transform hover:-translate-y-1">
+                                        <div
+                                            class="bg-white rounded-lg border border-gray-100 h-full flex flex-col sm:flex-row">
+                                            <!-- Featured Image with aspect ratio container -->
+                                            <div class="relative sm:w-1/3 overflow-hidden">
+                                                @if ($post['featured_image'])
+                                                    <img src="{{ $post['featured_image'] }}"
+                                                        alt="Music News: {{ $post['title'] ?? 'Untitled' }}"
+                                                        class="w-full h-32 sm:h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                                @else
+                                                    <img src="/images/news-image.jpeg"
+                                                        alt="Music News: {{ $post['title'] ?? 'Untitled' }}"
+                                                        class="w-full h-32 sm:h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                                @endif
+
+                                                <!-- Category/Tag Badge -->
+                                                <div class="absolute top-0 right-0 m-2">
+                                                    <span
+                                                        class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">Music</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="p-4 sm:p-5 sm:w-2/3 flex flex-col">
+                                                <!-- Post Title -->
+                                                <h5
+                                                    class="font-semibold text-lg sm:text-xl text-gray-800 line-clamp-2 mb-2 group-hover:text-blue-600 transition-colors duration-200">
+                                                    {{ $post['title'] ?? 'Untitled' }}
+                                                </h5>
+
+                                                <!-- Post Date -->
+                                                <div class="mb-3">
+                                                    <span
+                                                        class="inline-block text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                                        {{ \Carbon\Carbon::parse($post['created_at'])->format('M d, Y') }}
+                                                        <span class="hidden sm:inline">--</span>
+                                                        <span class="block sm:inline text-xs mt-1 sm:mt-0">
+                                                            ({{ \Carbon\Carbon::parse($post['created_at'])->diffForHumans() }})
+                                                        </span>
+                                                    </span>
+                                                </div>
+
+                                                <!-- Post Excerpt -->
+                                                <p
+                                                    class="text-gray-600 text-sm sm:text-base mb-4 line-clamp-2 sm:line-clamp-3 flex-grow">
+                                                    {!! \Illuminate\Support\Str::limit(strip_tags($post['content']), 150) !!}
+                                                </p>
+
+                                                <!-- Engagement Metrics -->
+                                                <div
+                                                    class="flex flex-wrap items-center text-xs sm:text-sm text-gray-500 gap-2 sm:gap-4 mt-auto pt-2 border-t border-gray-100">
+                                                    <span class="flex items-center">
+                                                        <i class="fas fa-eye mr-1"></i>
+                                                        <span class="whitespace-nowrap">{{ $post['views'] }} views</span>
+                                                    </span>
+                                                    <span class="flex items-center">
+                                                        <i class="fas fa-share mr-1"></i>
+                                                        <span class="whitespace-nowrap">{{ $post['shares'] }}
+                                                            shares</span>
+                                                    </span>
+                                                    <span class="flex items-center">
+                                                        <i class="fas fa-heart mr-1"></i>
+                                                        <span class="whitespace-nowrap">{{ $post['likes'] }} likes</span>
+                                                    </span>
+
+                                                    <!-- Read More -->
+                                                    <span class="ml-auto flex items-center text-blue-600 font-medium">
+                                                        Read more
+                                                        <i
+                                                            class="fas fa-chevron-right ml-1 text-xs transition-transform duration-300 group-hover:translate-x-1"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+
+                            <!-- View All Button for mobile -->
+                            <div class="text-center mt-6 mb-2 sm:hidden">
+                                <a href="{{ route('news') ?? '#' }}"
+                                    class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                                    View All Music News
+                                </a>
+                            </div>
+                        @else
+                            <div class="bg-white rounded-lg border border-gray-200 text-center py-8 px-4">
+                                <div class="mx-auto w-16 h-16 text-gray-400 mb-4">
+                                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <p class="text-gray-600 mb-3">No music news available at the moment.</p>
+                                <p class="text-gray-500 text-sm">Check back later for updates on the latest music trends
+                                    and releases.</p>
+
+                                <!-- Subscribe for updates -->
+                                <div class="mt-4">
+                                    <button
+                                        class="text-blue-600 border border-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors duration-200">
+                                        <i class="fas fa-bell mr-1"></i> Get notified when new music news arrives
+                                    </button>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Music News Quick Links -->
+                        <div class="mt-6 pt-4 border-t border-gray-200">
+                            <h5 class="text-sm font-medium text-gray-700 mb-3">Popular Categories</h5>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach (['Artists', 'Albums', 'Concerts', 'Reviews', 'Interviews'] as $category)
+                                    <a href="{{ route('news', strtolower($category)) ?? '#' }}"
+                                        class="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs rounded-full transition-colors duration-200">
+                                        {{ $category }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                     <!-- End of Music News Section -->
 
@@ -2360,8 +2894,8 @@
                                         </div>
                                         <a href="{{ route('birthday.details', $post['slug']) }}"
                                             class="flex items-center justify-center mt-6 bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-2 rounded-lg hover:from-pink-600 hover:to-purple-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-                                            <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
+                                            <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                             </svg>
@@ -2378,8 +2912,8 @@
                     <button
                         class="inline-flex items-center px-6 py-3 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                         See more birthdays
-                        <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
+                        <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
@@ -2562,7 +3096,7 @@
         </div>
     </section>
 
-    <section class="container mx-auto px-4 py-8">
+    {{-- <section class="container mx-auto px-4 py-8">
         <div class="bg-blue-600 text-white p-4 mb-6">
             <h2 class="text-2xl font-bold">Naming Ceremony/Child Dedication</h2>
         </div>
@@ -2604,8 +3138,61 @@
             <button class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 transition">See
                 more</button>
         </div>
-    </section>
+    </section> --}}
 
+
+
+    <section class="container mx-auto px-4 py-8">
+        <div class="bg-blue-600 text-white p-4 mb-6 rounded-lg">
+            <h2 class="text-2xl font-bold">Naming Ceremony/Child Dedication</h2>
+        </div>
+
+        @if (count($childDedicationPostsData) > 0)
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+                @foreach ($childDedicationPostsData as $post)
+                    <div
+                        class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300 border border-gray-200">
+                        <div class="relative">
+                            <img src="{{ $post['featured_image'] }}" alt="{{ $post['title'] }}"
+                                class="w-full h-48 object-cover">
+                            <div
+                                class="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm hover:bg-blue-100 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-800 mb-2 text-lg">{{ $post['title'] }}</h4>
+                            <p class="text-gray-700"><span class="font-medium">Parents:</span>
+                                {{ $post['parents_names'] }}</p>
+                            <p class="mt-2 text-gray-700"><span class="font-medium">Date:</span>
+                                {{ \Carbon\Carbon::parse($post['dedication_date'])->format('F j, Y') }}</p>
+                            <div class="mt-3 text-gray-500 text-sm">
+                                <span>Posted on {{ \Carbon\Carbon::parse($post['created_at'])->format('F j, Y') }}</span>
+                            </div>
+                            <button
+                                class="mt-4 w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300 font-medium">
+                                Send Regards
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <div class="text-center mt-8">
+                <button
+                    class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition duration-300 font-medium">
+                    See More Dedications
+                </button>
+            </div>
+        @else
+            <div class="bg-gray-100 p-8 rounded-lg text-center">
+                <p class="text-gray-600">No Child Dedication posts found.</p>
+            </div>
+        @endif
+    </section>
 
 
     {{-- <section class="container mx-auto px-4 py-8">

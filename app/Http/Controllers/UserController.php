@@ -166,6 +166,13 @@ class UserController extends Controller
 
         $totalCaveatPostsData = $listCaveatPostsData['totalCaveatPosts'] ?? 0;
 
+
+        // handling the display of the youtube video
+
+        $recentVideo = $this->getLiveVideos();
+
+
+
         // Pass both sets of posts data to the view
         return view('welcome', compact(
             'postsData',
@@ -226,9 +233,105 @@ class UserController extends Controller
             'totalChangeOfNamePosts',
 
 
-            'totalCaveatPostsData'
+            'totalCaveatPostsData',
+
+            'recentVideo'
 
         ));
+    }
+
+
+    // Private method to get live videos
+    // private function getLiveVideos()
+    // {
+    //     $jwtToken = session('api_token'); // Retrieve the JWT token from the session
+    //     Log::info('JWT Token:', ['token' => $jwtToken]); // Log the token
+
+    //     if (empty($jwtToken)) {
+    //         return []; // If the JWT token is not available, return an empty array
+    //     }
+
+    //     // Define the API endpoint to get live videos
+    //     $apiUrl = config('api.base_url') . '/recent/youtube/video';
+    //     Log::info('API URL:', ['url' => $apiUrl]); // Log the API URL
+
+    //     try {
+    //         // Make an API call to the /live/videos endpoint to fetch live videos
+    //         $response = Http::withHeaders([
+    //             'Authorization' => 'Bearer ' . $jwtToken,
+    //         ])->get($apiUrl);
+
+    //         // Check if the response was successful
+    //         if ($response->successful()) {
+    //             $responseData = $response->json();
+
+    //             // Check if videos were returned successfully
+    //             if (isset($responseData['video']) && count($responseData['video']) > 0) {
+    //                 Log::info('Live videos fetched successfully.', ['videos' => $responseData['video']]);
+    //                 return $responseData['video']; // Return the videos
+    //             } else {
+    //                 Log::error('No videos found.');
+    //                 return []; // Return an empty array if no videos are found
+    //             }
+    //         } else {
+    //             // Handle failure (e.g., unauthorized or bad request)
+    //             if ($response->status() == 403) {
+    //                 return redirect()->route('user.login')->with('error', 'Access denied. Please log in again.');
+    //             }
+    //             Log::error('API call failed', ['status' => $response->status(), 'response' => $response->json()]);
+    //             return []; // Return an empty array if the API call fails
+    //         }
+    //     } catch (\Exception $e) {
+    //         // Handle any errors that occur during the request
+    //         Log::error('Error fetching live videos: ' . $e->getMessage());
+    //         return []; // Return an empty array if an exception occurs
+    //     }
+    // }
+
+
+    // Private method to get live videos
+    private function getLiveVideos()
+    {
+        // Define the API endpoint to get live videos
+        $apiUrl = config('api.base_url') . '/recent/youtube/video';
+        Log::info('API URL:', ['url' => $apiUrl]); // Log the API URL
+
+        try {
+            // Make an API call to the endpoint without requiring authentication
+            // Only use authentication if it's available
+            $request = Http::timeout(10);
+
+            // Add the token to the request if it exists
+            if (session('api_token')) {
+                $request = $request->withHeaders([
+                    'Authorization' => 'Bearer ' . session('api_token'),
+                ]);
+            }
+
+            $response = $request->get($apiUrl);
+
+            // Check if the response was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                // Check if videos were returned successfully
+                if (isset($responseData['video']) && count($responseData['video']) > 0) {
+                    Log::info('Live videos fetched successfully.', ['videos' => $responseData['video']]);
+                    return $responseData['video']; // Return the videos
+                } else {
+                    Log::error('No videos found.');
+                    return []; // Return an empty array if no videos are found
+                }
+            } else {
+                // Handle failure (e.g., unauthorized or bad request)
+                Log::error('API call failed', ['status' => $response->status(), 'response' => $response->json()]);
+                return []; // Return an empty array if the API call fails
+            }
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the request
+            Log::error('Error fetching live videos: ' . $e->getMessage());
+            return []; // Return an empty array if an exception occurs
+        }
     }
 
 

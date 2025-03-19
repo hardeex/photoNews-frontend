@@ -302,7 +302,7 @@
                 @endif
             </div> --}}
 
-            <div
+            {{-- <div
                 class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:shadow-xl">
                 <div class="bg-gradient-to-r from-green-500 to-emerald-600 p-4">
                     <div class="flex items-center">
@@ -313,7 +313,7 @@
                 <ul class="divide-y divide-gray-200">
                     @forelse ($videos as $video)
                         <li class="p-4 hover:bg-gray-50">
-                            <div class="flex" onclick="openModal('{{ $video['video_url'] }}')">
+                            <div class="flex">
                                 <div class="flex-shrink-0 relative mr-3">
                                     <div
                                         class="bg-gray-900 rounded overflow-hidden w-20 h-12 flex items-center justify-center">
@@ -331,11 +331,11 @@
                                     <div class="flex items-center text-xs text-gray-500 mt-1">
                                         <span
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                {{ $video['category'] == 'news'
-                                    ? 'bg-blue-100 text-blue-800'
-                                    : ($video['category'] == 'tutorials'
-                                        ? 'bg-purple-100 text-purple-800'
-                                        : 'bg-gray-100 text-gray-800') }} mr-2">
+                                            {{ $video['category'] == 'news'
+                                                ? 'bg-blue-100 text-blue-800'
+                                                : ($video['category'] == 'tutorials'
+                                                    ? 'bg-purple-100 text-purple-800'
+                                                    : 'bg-gray-100 text-gray-800') }} mr-2">
                                             {{ ucfirst($video['category']) }}
                                         </span>
                                         <span class="flex items-center">
@@ -364,34 +364,109 @@
                         </a>
                     </div>
                 @endif
+            </div> --}}
+
+
+            <div
+                class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:shadow-xl">
+                <div class="bg-gradient-to-r from-green-500 to-emerald-600 p-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-history text-white mr-2"></i>
+                        <h5 class="text-lg font-semibold text-white m-0">Recently Added Videos</h5>
+                    </div>
+                </div>
+                <ul class="divide-y divide-gray-200">
+                    @forelse ($videos as $video)
+                        <li class="p-4 hover:bg-gray-50">
+                            <div class="flex">
+                                <div class="flex-shrink-0 relative mr-3">
+                                    <div
+                                        class="bg-gray-900 rounded overflow-hidden w-20 h-12 flex items-center justify-center">
+                                        <i class="fas fa-play text-white"></i>
+                                    </div>
+                                    @if ($video['featured'])
+                                        <span
+                                            class="absolute -top-2 -left-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                                            <i class="fas fa-star"></i>
+                                        </span>
+                                    @endif
+                                </div>
+                                <div>
+                                    <h6 class="font-semibold truncate max-w-xs">{{ $video['title'] }}</h6>
+                                    <div class="flex items-center text-xs text-gray-500 mt-1">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                            {{ $video['category'] == 'news'
+                                                ? 'bg-blue-100 text-blue-800'
+                                                : ($video['category'] == 'tutorials'
+                                                    ? 'bg-purple-100 text-purple-800'
+                                                    : 'bg-gray-100 text-gray-800') }} mr-2">
+                                            {{ ucfirst($video['category']) }}
+                                        </span>
+                                        <span class="flex items-center">
+                                            <i class="far fa-clock mr-1"></i>
+                                            {{ \Carbon\Carbon::parse($video['created_at'])->diffForHumans() }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Video Play Button -->
+                                    <div class="mt-3">
+                                        <button class="text-blue-500 hover:underline"
+                                            @click="openModal('{{ $video['youtube_url'] }}')">
+                                            Watch Video
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    @empty
+                        <li class="py-12 text-center">
+                            <div>
+                                <i class="fas fa-video text-4xl text-gray-300 mb-3"></i>
+                                <h5 class="text-gray-500 font-medium">No videos added yet</h5>
+                                <p class="text-sm text-gray-400 mt-1">Videos you add will appear here</p>
+                            </div>
+                        </li>
+                    @endforelse
+                </ul>
+
+                @if (!empty($videos) && count($videos) > 0)
+                    <div class="p-4 bg-gray-50 border-t border-gray-200">
+                        <a href="#"
+                            class="block w-full py-2 px-4 bg-green-100 hover:bg-green-200 text-green-700 text-center rounded-md font-medium transition-colors duration-300">
+                            <i class="fas fa-th-list mr-2"></i>View All Videos
+                        </a>
+                    </div>
+                @endif
             </div>
 
-            <!-- Modal (Hidden by default) -->
-            <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
-                <div class="bg-white rounded-xl w-4/5 md:w-3/5 lg:w-2/5 p-4">
-                    <div class="flex justify-end">
-                        <button id="closeModal" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            <!-- Video Modal -->
+            <div x-data="{ open: false, videoUrl: '' }" x-show="open" @keydown.escape.window="open = false" x-transition
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                style="display: none;">
+                <div class="bg-white rounded-lg p-4 max-w-4xl w-full">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xl font-semibold text-gray-800">Watch Video</h3>
+                        <button @click="open = false" class="text-gray-500 hover:text-gray-800">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
-                    <div class="relative pt-56.25%"> <!-- Aspect ratio 16:9 -->
-                        <iframe id="modalVideo" class="absolute top-0 left-0 w-full h-full" frameborder="0"
+                    <div class="mt-4">
+                        <iframe x-bind:src="videoUrl" class="w-full h-96" frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
+
             <script>
+                // This script ensures the modal is hidden by default
                 function openModal(videoUrl) {
-                    // Open the modal and set the video URL to iframe
-                    document.getElementById('videoModal').classList.remove('hidden');
-                    document.getElementById('modalVideo').src = videoUrl;
+                    let modal = document.querySelector('[x-data]');
+                    modal.__x.$data.open = true;
+                    modal.__x.$data.videoUrl = videoUrl;
                 }
-
-                // Close modal event
-                document.getElementById('closeModal').addEventListener('click', function() {
-                    document.getElementById('videoModal').classList.add('hidden');
-                    document.getElementById('modalVideo').src = ''; // Stop video when closing
-                });
             </script>
-
 
         </div>
     </div>

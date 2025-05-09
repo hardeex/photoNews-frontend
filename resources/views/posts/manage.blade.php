@@ -126,7 +126,7 @@
                                 {{-- </form> --}}
 
 
-                                <form action="{{ route('admin.delete-post', ['slug' => $post['slug']]) }}"
+                                {{-- <form action="{{ route('admin.delete-post', ['slug' => $post['slug']]) }}"
                                     method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
@@ -140,7 +140,7 @@
                                                 clip-rule="evenodd" />
                                         </svg>
                                     </button>
-                                </form>
+                                </form> --}}
                             </td>
                         </tr>
                     @endforeach

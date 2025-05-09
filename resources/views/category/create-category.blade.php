@@ -93,7 +93,7 @@
                                                         class="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
                                                         Edit
                                                     </a>
-                                                    <form action="#" method="POST" class="inline"
+                                                    {{-- <form action="#" method="POST" class="inline"
                                                         onsubmit="return confirm('Are you sure you want to delete this category?')">
                                                         @csrf
                                                         @method('DELETE')
@@ -101,7 +101,7 @@
                                                             class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200">
                                                             Delete
                                                         </button>
-                                                    </form>
+                                                    </form> --}}
                                                     <a href="#"
                                                         class="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200">
                                                         Manage

@@ -121,7 +121,7 @@
                                                     <span>Edit</span>
                                                 </a>
                                                 <!-- Delete Button -->
-                                                <form action="#" method="POST" class="inline">
+                                                {{-- <form action="#" method="POST" class="inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"
@@ -134,7 +134,7 @@
                                                         </svg>
                                                         <span>Delete</span>
                                                     </button>
-                                                </form>
+                                                </form> --}}
                                             </div>
                                         </td>
                                     </tr>
@@ -393,16 +393,16 @@
                                 </svg>
                                 <span>Edit</span>
                             </a>
-                            <form action="#" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-800 font-medium text-sm flex items-center space-x-1">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 2L4 6M2 6h16m-3-6h-4l-1 4H7L6 2H2" />
-                                    </svg>
-                                    <span>Delete</span>
-                                </button>
-                            </form>
+                            // <form action="#" method="POST" class="inline">
+                            //     @csrf
+                            //     @method('DELETE')
+                            //     <button type="submit" class="text-red-600 hover:text-red-800 font-medium text-sm flex items-center space-x-1">
+                            //         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            //             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 2L4 6M2 6h16m-3-6h-4l-1 4H7L6 2H2" />
+                            //         </svg>
+                            //         <span>Delete</span>
+                            //     </button>
+                            // </form>
                         </div>
                     </td>
                 </tr>

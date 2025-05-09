@@ -48,7 +48,6 @@ Route::get('/fetch-categories', [NewsPostController::class, 'listCategoriesFromA
 Route::get('/manage/posts', [NewsPostController::class, 'managePosts'])->name('manage-posts');
 Route::get('/posts/edit/{slug}', [NewsPostController::class, 'fetchPostForEdit'])->name('fetch.post.edit');
 Route::put('/posts/edit/{slug}', [NewsPostController::class, 'updatePost'])->name('update.post');
-//Route::get('/posts/{slug}/delete', [NewsPostController::class, 'deleteUserPosts'])->name('delete-posts');
 
 // public notice routes
 Route::get('/create/public-notice', [PublicNoticeController::class, 'createPost'])->name('public-notice.create');

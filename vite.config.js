@@ -4,7 +4,7 @@ import laravel from 'laravel-vite-plugin';
 export default defineConfig({
 
     server: {
-        host: 'photoNews-frontend.test', 
+        host: 'photonews-frontend.test', 
         port: 5173,
       },
 

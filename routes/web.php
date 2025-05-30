@@ -137,3 +137,9 @@ Route::get('/stolen-vehicle/{slug}', [StolenVehicle::class, 'showStolenVehicleDe
 
 // newsletter routes
 Route::post('/newsletter/subscribe', [UserController::class, 'newsletterSubscribe'])->name('newsltter.subscribe');
+
+// upload photo news
+Route::get('/upload/photo/news', [NewsPostController::class, 'uploadPhoto'])->name('upload-photo');
+Route::post('/admin/upload-photo-news', [NewsPostController::class, 'uploadPhotoNews'])->name('admin.upload-photo-news');
+Route::get('/manage/photos', [NewsPostController::class, 'showAllImages'])->name('manage-photos');
+Route::get('/news/latest-image', [NewsPostController::class, 'showLatestImage'])->name('news.latest-image');

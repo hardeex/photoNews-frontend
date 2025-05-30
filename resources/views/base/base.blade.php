@@ -139,8 +139,10 @@
         </nav>
     </header>
     <div class="exchange-rate fixed top-16 left-0 right-0 z-40">
+        
 
         @include('base.exchange-rate')
+        
 
         <br><br><br>
 
@@ -347,8 +349,7 @@
                         fetch(apiUrl, {
                                 method: 'POST', // Changed to POST as per the backend route
                                 headers: {
-                                    'Content-Type': 'application/json',
-                                    // You might want to add CSRF token if needed
+                                    'Content-Type': 'application/json',                                   
                                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                                 }
                             })

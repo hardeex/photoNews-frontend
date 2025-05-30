@@ -171,6 +171,7 @@ class UserController extends Controller
 
         $recentVideo = $this->getLiveVideos();
 
+         $image = $this->fetchLatestImage();
 
 
         // Pass both sets of posts data to the view
@@ -235,11 +236,36 @@ class UserController extends Controller
 
             'totalCaveatPostsData',
 
-            'recentVideo'
+            'recentVideo',
+
+            'image',
 
         ));
     }
 
+
+    private function fetchLatestImage()
+{
+    Log::info('Fetching latest image...');
+
+    $apiUrl = config('api.base_url') . '/latest-image';
+    Log::info('API URL for latest image:', ['url' => $apiUrl]);
+
+    try {
+        $response = Http::get($apiUrl);
+
+        if ($response->successful()) {
+            $responseData = $response->json();
+            return $responseData['data'] ?? null;
+        } else {
+            Log::error('Error fetching latest image: ' . $response->status());
+            return null;
+        }
+    } catch (\Exception $e) {
+        Log::error('Exception fetching latest image: ' . $e->getMessage());
+        return null;
+    }
+}
 
    
 
@@ -420,7 +446,7 @@ class UserController extends Controller
         try {
             // Make an API call to fetch the approved posts with 'hot_gist' = true
             $response = Http::get($apiUrl, [
-                'per_page' => 100,
+                'per_page' => 11,
                 'hot_gist' => true,
             ]);
 
@@ -461,7 +487,7 @@ class UserController extends Controller
         try {
             // Make an API call to fetch the approved posts with 'hot_gist' = true
             $response = Http::get($apiUrl, [
-                'per_page' => 100,
+                'per_page' => 10,
                 'event' => true,
             ]);
 
@@ -542,7 +568,7 @@ class UserController extends Controller
         try {
             // Make an API call to fetch the approved posts with 'caveat' = true
             $response = Http::get($apiUrl, [
-                'per_page' => 10,
+                'per_page' => 8,
                 'event' => true,
             ]);
 
@@ -581,7 +607,7 @@ class UserController extends Controller
         try {
             // Make an API call to fetch the approved posts with 'caveat' = true
             $response = Http::get($apiUrl, [
-                'per_page' => 10,
+                'per_page' => 8,
                 'event' => true,
             ]);
 
@@ -620,7 +646,7 @@ class UserController extends Controller
         try {
             // Make an API call to fetch the approved child dedication posts
             $response = Http::get($apiUrl, [
-                'per_page' => 10,
+                'per_page' => 4,
                 'event' => true,
             ]);
 
@@ -659,7 +685,7 @@ class UserController extends Controller
         try {
             // Make an API call to fetch the approved stolen vehicle posts
             $response = Http::get($apiUrl, [
-                'per_page' => 10,
+                'per_page' => 4,
                 'event' => true,
             ]);
 
@@ -750,7 +776,7 @@ class UserController extends Controller
         try {
             // Make an API call to fetch the approved posts with 'top_topic' = true
             $response = Http::get($apiUrl, [
-                'per_page' => 100,
+                'per_page' => 10,
                 'event' => true,
             ]);
 
@@ -849,7 +875,7 @@ class UserController extends Controller
         try {
             // Make an API call to the /published/posts endpoint to fetch the 10 most recent posts
             $response = Http::get($apiUrl, [
-                'per_page' => 12,
+                'per_page' => 9,
                 'order' => 'desc',
 
             ]);
@@ -1132,7 +1158,7 @@ class UserController extends Controller
         try {
             // Make an API call to the  endpoint to fetch the posts
             $response = Http::get($apiUrl, [
-                'per_page' => 100,
+                'per_page' => 10,
             ]);
 
             // Check if the response was successful
@@ -1188,7 +1214,7 @@ class UserController extends Controller
         try {
             // Make an API call to the endpoint to fetch posts
             $response = Http::get($apiUrl, [
-                'per_page' => 100,
+                'per_page' => 8,
             ]);
 
             // Check if the response was successful
@@ -1251,7 +1277,7 @@ class UserController extends Controller
         try {
             $response = Http::get($apiUrl, [
                 'option' => 'missing',
-                'per_page' => $request->get('per_page', 100),
+                'per_page' => $request->get('per_page', 6),
             ]);
 
             if ($response->successful()) {
@@ -1276,7 +1302,7 @@ class UserController extends Controller
         try {
             $response = Http::get($apiUrl, [
                 'option' => 'wanted',
-                'per_page' => $request->get('per_page', 100),
+                'per_page' => $request->get('per_page', 6),
             ]);
 
             if ($response->successful()) {
@@ -1309,7 +1335,7 @@ class UserController extends Controller
         try {
             // Prepare query parameters (pagination and filters)
             $queryParams = [
-                'per_page' => $request->get('per_page', 10),  // Default to 10 posts per page if not provided
+                'per_page' => $request->get('per_page', 8),  // Default to 10 posts per page if not provided
             ];
 
             // Add any additional filters to the query parameters
@@ -1389,7 +1415,7 @@ class UserController extends Controller
         try {
             // Prepare query parameters (pagination and filters)
             $queryParams = [
-                'per_page' => $request->get('per_page', 10),  // Default to 10 posts per page if not provided
+                'per_page' => $request->get('per_page', 6),  // Default to 10 posts per page if not provided
             ];
 
             // Add any additional filters to the query parameters

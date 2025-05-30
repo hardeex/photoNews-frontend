@@ -56,153 +56,16 @@
         <div class="menu-item">
             <a href="#"
                 class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-bullhorn mr-2"></i> Public Notice</span>
+                <span><i class="fas fa-bullhorn mr-2"></i> Upload Headline Image</span>
                 <i class="fas fa-chevron-down text-xs"></i>
             </a>
             <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
+                <a href="{{route('upload-photo')}}" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Upload</a>
+                <a href="{{route('manage-photos')}}" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
             </div>
         </div>
 
-        <!-- Misplaced & Found -->
-        <div class="menu-item">
-            <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-search-location mr-2"></i> Misplaced & Found</span>
-                <i class="fas fa-chevron-down text-xs"></i>
-            </a>
-            <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
-            </div>
-        </div>
-
-        <!-- Loss of Documents -->
-        <div class="menu-item">
-            <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-file-alt mr-2"></i> Loss of Documents</span>
-                <i class="fas fa-chevron-down text-xs"></i>
-            </a>
-            <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
-            </div>
-        </div>
-
-        <!-- Missing Person -->
-        <div class="menu-item">
-            <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-user-missing mr-2"></i> Missing Person</span>
-                <i class="fas fa-chevron-down text-xs"></i>
-            </a>
-            <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
-            </div>
-        </div>
-
-        <!-- Wanted Person -->
-        <div class="menu-item">
-            <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-exclamation-circle mr-2"></i> Wanted Person</span>
-                <i class="fas fa-chevron-down text-xs"></i>
-            </a>
-            <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
-            </div>
-        </div>
-
-        <!-- Obituary -->
-        <div class="menu-item">
-            <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-burn mr-2"></i> Obituary</span>
-                <i class="fas fa-chevron-down text-xs"></i>
-            </a>
-            <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
-            </div>
-        </div>
-
-        <!-- Remembrance -->
-        <div class="menu-item">
-            <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-heart mr-2"></i> Remembrance</span>
-                <i class="fas fa-chevron-down text-xs"></i>
-            </a>
-            <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
-            </div>
-        </div>
-
-        <!-- Change of Name -->
-        <div class="menu-item">
-            <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-id-card mr-2"></i> Change of Name</span>
-                <i class="fas fa-chevron-down text-xs"></i>
-            </a>
-            <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
-            </div>
-        </div>
-
-        <!-- Pride of Nigeria -->
-        <div class="menu-item">
-            <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-globe-africa mr-2"></i> Pride of Nigeria</span>
-                <i class="fas fa-chevron-down text-xs"></i>
-            </a>
-            <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Create</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Manage</a>
-            </div>
-        </div>
-
-        <!-- Profile Menu -->
-        <div class="menu-item">
-            <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-user-circle mr-2"></i> Profile</span>
-                <i class="fas fa-chevron-down text-xs"></i>
-            </a>
-            <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Edit</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Password</a>
-            </div>
-        </div>
-
-        <!-- Settings Menu -->
-        <div class="menu-item">
-            <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white flex justify-between items-center">
-                <span><i class="fas fa-cogs mr-2"></i> Settings</span>
-                <i class="fas fa-chevron-down text-xs"></i>
-            </a>
-            <div class="submenu pl-4 bg-green-700">
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">General</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Notifications</a>
-                <a href="#" class="block py-2 px-4 text-sm hover:bg-green-500 rounded">Security</a>
-            </div>
-        </div>
-
-        <!-- Help -->
-        <div class="menu-item">
-            <a href="#"
-                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-green-500 hover:text-white">
-                <i class="fas fa-question-circle mr-2"></i> Help
-            </a>
-        </div>
+       
 
         <!-- Logout -->
         <div class="menu-item">

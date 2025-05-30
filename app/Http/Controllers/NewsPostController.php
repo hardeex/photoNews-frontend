@@ -27,6 +27,170 @@ class NewsPostController extends Controller
         ]);
     }
 
+
+    public function uploadPhoto()
+    {
+        return view('admin.upload-photo');
+    }
+
+
+    // public function uploadPhotoNews(Request $request)
+    // {
+    //     Log::info('Uploading news headline image...');
+
+    //     // Validate the request
+    //     $validated = $request->validate([
+    //         'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //     ]);
+
+    //     $apiUrl = config('api.base_url') . '/upload-photo-news';
+    //     Log::info('API URL for image upload:', ['url' => $apiUrl]);
+
+    //     try {
+    //         // Get JWT token from session or authentication mechanism
+    //         $token = session('api_token'); 
+
+    //         if (!$token) {
+    //             Log::error('No JWT token found in session');
+    //             return redirect()->route('admin.upload-photo-news')
+    //                 ->with('error', 'You must be logged in to upload images');
+    //         }
+
+    //         // Make API call to upload image
+    //         $response = Http::withToken($token)
+    //             ->attach('image', file_get_contents($request->file('image')->getRealPath()), $request->file('image')->getClientOriginalName())
+    //             ->post($apiUrl);
+
+    //         if ($response->successful()) {
+    //             $responseData = $response->json();
+    //             Log::info('Image uploaded successfully', ['response' => $responseData]);
+
+    //             return redirect()->route('upload-photo')
+    //                 ->with('success', $responseData['message'])
+    //                 ->with('image_url', $responseData['data']['image_url']);
+    //         } else {
+    //             Log::error('Error uploading image: ' . $response->status());
+    //             return redirect()->route('admin.upload-photo-news')
+    //                 ->with('error', 'Failed to upload image: ' . ($response->json()['message'] ?? 'Unknown error'));
+    //         }
+    //     } catch (\Exception $e) {
+    //         Log::error('Error uploading image: ' . $e->getMessage());
+    //         return redirect()->route('admin.upload-photo-news')
+    //             ->with('error', 'An error occurred during image upload: ' . $e->getMessage());
+    //     }
+    // }
+
+
+    public function uploadPhotoNews(Request $request)
+    {
+        Log::info('Uploading news headline image...');
+
+        $validated = $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10048',
+        ]);
+
+        $apiUrl = config('api.base_url') . '/upload-photo-news';
+        Log::info('API URL for image upload:', ['url' => $apiUrl]);
+
+        try {
+            $token = session('api_token');
+            if (!$token) {
+                Log::error('No JWT token found in session');
+                return redirect()->route('admin.upload-photo-news')
+                    ->with('error', 'You must be logged in to upload images');
+            }
+
+            $response = Http::withToken($token)
+                ->attach('image', file_get_contents($request->file('image')->getRealPath()), $request->file('image')->getClientOriginalName())
+                ->post($apiUrl);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                Log::info('Image uploaded successfully', ['response' => $responseData]);
+                return redirect()->route('upload-photo')
+                    ->with('success', $responseData['message'])
+                    ->with('image_url', $responseData['data']['image_url']);
+            } else {
+                Log::error('Error uploading image: ' . $response->status());
+                return redirect()->route('admin.upload-photo-news')
+                    ->with('error', 'Failed to upload image: ' . ($response->json()['message'] ?? 'Unknown error'));
+            }
+        } catch (\Exception $e) {
+            Log::error('Error uploading image: ' . $e->getMessage());
+            return redirect()->route('admin.upload-photo-news')
+                ->with('error', 'An error occurred during image upload: ' . $e->getMessage());
+        }
+    }
+
+    public function showLatestImage()
+    {
+        Log::info('Fetching latest image...');
+
+        $apiUrl = config('api.base_url') . '/latest-image';
+        Log::info('API URL for latest image:', ['url' => $apiUrl]);
+
+        try {
+            $response = Http::get($apiUrl);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                $image = $responseData['data'] ?? null;
+                return view('welcome', [
+                    'image' => $image,
+                ]);
+            } else {
+                Log::error('Error fetching latest image: ' . $response->status());
+                return view('news.latest-image', [
+                    'image' => null,
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching latest image: ' . $e->getMessage());
+            return view('news.latest-image', [
+                'image' => null,
+            ]);
+        }
+    }
+
+    public function showAllImages()
+    {
+        Log::info('Fetching all images for admin...');
+
+        $apiUrl = config('api.base_url') . '/images';
+        Log::info('API URL for all images:', ['url' => $apiUrl]);
+
+        try {
+            $token = session('api_token');
+            if (!$token) {
+                Log::error('No JWT token found in session');
+                return redirect()->route('admin.images')
+                    ->with('error', 'You must be logged in to view images');
+            }
+
+            $response = Http::withToken($token)->get($apiUrl);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                $images = $responseData['data'] ?? [];
+                return view('admin.manage-photo', [
+                    'images' => $images,
+                ]);
+            } else {
+                Log::error('Error fetching all images: ' . $response->status());
+                return view('admin.manage-photo', [
+                    'images' => [],
+                ])->with('error', $response->json()['message'] ?? 'Failed to fetch images');
+            }
+        } catch (\Exception $e) {
+            Log::error('Error fetching all images: ' . $e->getMessage());
+            return view('admin.manage-photo', [
+                'images' => [],
+            ])->with('error', 'An error occurred while fetching images');
+        }
+    }
+
+
+
     public function createPost()
     {
         $jwtToken = session('api_token');

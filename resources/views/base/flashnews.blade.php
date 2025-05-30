@@ -123,7 +123,7 @@
         }
 
         .flash-news-scroll.animated {
-            animation: tickerScroll 300s linear infinite;
+            animation: tickerScroll 900s linear infinite;
         }
 
         .flash-news-scroll.paused {
@@ -145,7 +145,7 @@
 
         @media (max-width: 768px) {
             .flash-news-scroll.animated {
-                animation-duration: 360s;
+                animation-duration: 900s;
             }
             .flash-news-scroll a {
                 font-size: 1.125rem;
@@ -160,7 +160,7 @@
 
         @media (prefers-reduced-motion: reduce) {
             .flash-news-scroll.animated {
-                animation-duration: 480s;
+                animation-duration: 900s;
             }
         }
     </style>

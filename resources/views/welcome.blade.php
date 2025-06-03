@@ -29,6 +29,7 @@
             @include('homepage.live-video')
             @include('base.ereport-banner')
             @include('homepage.latest')
+            @include('banner.editor')
             @include('homepage.public-notice')
             @include('homepage.annocement')
             @include('homepage.edirect-banner')

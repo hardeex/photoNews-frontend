@@ -5,7 +5,8 @@
         <div class="border-b-4 border-black py-2 px-4">
             <div class="text-center">
                 <h1 class="text-2xl sm:text-4xl lg:text-6xl font-bold text-black font-serif tracking-wider">
-                    THE ESSENTIAL NEWS
+                    THE ESSENTIAL NEW <br>
+                    <span>essentialnews.ng</span>
                 </h1>
                 <div class="flex justify-between items-center text-xs sm:text-sm text-gray-700 mt-1">
                     <span>{{ date('l, F j, Y') }}</span>
@@ -21,10 +22,11 @@
                 <span class="text-sm sm:text-base font-bold tracking-wide">BREAKING NEWS</span>
             </div>
             
+             
             <div class="relative bg-black">
                 <img src="{{ $image['image_url'] }}" 
                      alt="Breaking News" 
-                     class="w-full h-[100vh] sm:h-[100vh] lg:h-[100vh] object-cover">
+                     class="w-full h-full sm:h-full lg:h-full object-cover">
             </div>
             {{-- <div class="relative bg-black flex justify-center items-center overflow-hidden">
     <img src="{{ $image['image_url'] }}" 

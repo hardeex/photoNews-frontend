@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-
-
+use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
 
 class userAuthenticationController extends Controller
 {
@@ -198,10 +198,168 @@ class userAuthenticationController extends Controller
     }
 
 
-    public function adminDashboard()
+    public function adminDashboard(Request $request)
     {
+         $token = $request->session()->get('api_token');
+         if(!$token){
+            return redirect()->route('user.login');
+         }
+
         return view('admin.dashboard');
     }
+
+
+
+    // Handle forgot password submission
+    public function forgotPasswordSubmit(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|string|email',
+        ]);
+
+        $apiUrl = config('api.base_url') . '/forgot-password';
+        Log::info('Connecting to API URL: ' . $apiUrl);
+
+        try {
+            $response = Http::post($apiUrl, ['email' => $validated['email']]);
+
+            Log::info('API Response Status: ' . $response->status());
+            Log::info('API Response Body: ' . $response->body());
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+                // Session::put('email');
+                return redirect()->route('user.login')->with('success', $responseData['message']);
+            } else {
+                return back()->withErrors(['forgot_error' => $response->json()['message'] ?? 'Failed to send reset link.']);
+            }
+        } catch (\Exception $e) {
+            Log::error('Exception occurred during forgot password: ' . $e->getMessage());
+            return back()->withErrors(['forgot_error' => 'An error occurred: ' . $e->getMessage()]);
+        }
+    }
+
+    // Show reset password form
+    public function resetPassword(Request $request)
+    {
+        return view('user.reset-password', [
+            'token' => $request->query('token'),
+            'email' => $request->query('email'),
+        ]);
+    }
+
+    // Handle reset password submission
+    public function resetPasswordSubmit(Request $request)
+{
+    Log::info('The Reset Password method is called');
+    Log::debug('[Reset Password] Validating input...', $request->all());
+
+    // Step 1: Validate the request
+    $validated = $request->validate([
+        'email' => 'required|string|email',
+        'token' => 'required|string',
+        'password' => 'required|string|min:8|confirmed',
+    ]);
+
+    Log::debug('[Reset Password] Validation passed');
+    $apiUrl = config('api.base_url') . '/reset-password';
+    Log::info('[Reset Password] API URL: ' . $apiUrl);
+    Log::debug('[Reset Password] Request Payload:', $validated);
+
+    try {
+          Log::debug('[Reset Password] Sending request to API');
+        // Step 2: Call the external API
+        //$response = Http::post($apiUrl, $validated);
+        $response = Http::post($apiUrl, [
+    'email' => $validated['email'],
+    'token' => $validated['token'],
+    'password' => $validated['password'],
+    'password_confirmation' => $request->input('password_confirmation'),
+]);
+
+        Log::debug('[Reset Password] Got response');
+
+        Log::info('[Reset Password] API Response Status: ' . $response->status());
+        Log::debug('[Reset Password] API Raw Response: ' . $response->body());
+
+        if ($response->successful()) {
+            $responseData = $response->json();
+            Log::info('[Reset Password] Success: ' . ($responseData['message'] ?? 'No message provided.'));
+            return redirect()->route('user.login')->with('success', $responseData['message']);
+        } else {
+            $error = $response->json()['message'] ?? 'Failed to reset password.';
+            Log::warning('[Reset Password] API Error: ' . $error);
+            return back()->withErrors(['reset_error' => $error]);
+        }
+    } catch (\Exception $e) {
+         Log::error('[Reset Password] Exception caught: ' . $e->getMessage());
+        // Step 3: Catch and log exceptions
+        Log::error('[Reset Password] Exception: ' . $e->getMessage());
+        return back()->withErrors(['reset_error' => 'An error occurred: ' . $e->getMessage()]);
+    }
+}
+
+
+
+
+    // Handle editor application
+    public function requestEditor(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'full_name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|exists:users,email',
+                'phone' => 'required|string|max:20',
+                'experience' => 'required|string|in:none,beginner,intermediate,advanced,professional',
+                'category' => 'required|string',
+                'motivation' => 'required|string',
+                'sample' => 'required|string',
+                'terms' => 'required|accepted',
+            ]);
+
+            $user = User::where('email', $validated['email'])->first();
+
+            if ($user->role !== 'user') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Only users with the "user" role can apply to become an editor.',
+                ], 403);
+            }
+
+            // Update user role to editor (assuming immediate approval)
+            $user->update([
+                'role' => 'editor',
+            ]);
+
+            // Optionally store application details somewhere or notify admins
+            Log::info('Editor application approved:', [
+                'user_id' => $user->id,
+                'email' => $validated['email'],
+                'details' => $validated,
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Editor application approved. Your role has been updated to editor.',
+            ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed.',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            Log::error('Error in requestEditor: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to process editor application.',
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+            ], 500);
+        }
+    }
+
+
+
 
     // End of the class
 }

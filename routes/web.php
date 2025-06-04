@@ -21,8 +21,14 @@ Route::post('/register', [userAuthenticationController::class, 'userRegisterSubm
 Route::get('/login', [userAuthenticationController::class, 'userLogin'])->name('user.login');
 Route::post('/login', [userAuthenticationController::class, 'userLoginSubmit'])->name('user.login.submit');
 Route::get('/forgot-password', [userAuthenticationController::class, 'forgotPassword'])->name('password.request');
+Route::post('/send-forgot-password-request', [userAuthenticationController::class, 'forgotPasswordSubmit'])->name('user.forgot-password.submit');
 Route::post('/reset-password', [userAuthenticationController::class, 'resetPassword'])->name('password.email');
+Route::get('/reset-password', [userAuthenticationController::class, 'resetPassword'])->name('user.reset-password');
+Route::post('/reset-password', [userAuthenticationController::class, 'resetPasswordSubmit'])->name('user.reset-password.submit');
 Route::post('/logout', [userAuthenticationController::class, 'userLogout'])->name('user.logout');
+
+Route::get('/request-editor', [userAuthenticationController::class, 'requestEditor'])->name('user.request-editor');
+
 
 // Admin routes
 Route::get('/admin/dashboard', [userAuthenticationController::class, 'adminDashboard'])->name('admin.dashboard');

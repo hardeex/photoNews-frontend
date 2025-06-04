@@ -109,7 +109,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('password.email') }}" class="space-y-6">
+                    <form method="POST" action="{{ route('user.forgot-password.submit') }}" class="space-y-6">
                         @csrf
 
                         <div>
@@ -138,7 +138,7 @@
                         </div>
 
                         <div>
-                            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200">
+                            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200 relative z-50">
                                 Send Password Reset Link
                             </button>
                         </div>

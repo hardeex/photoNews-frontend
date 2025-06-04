@@ -173,7 +173,7 @@
                                    name="name" 
                                    value="{{ old('name') }}" 
                                    required
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-200"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-200 relative z-50"
                                    placeholder="Choose a unique username">
                         </div>
 
@@ -192,7 +192,7 @@
                                    name="email" 
                                    value="{{ old('email') }}" 
                                    required
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-200"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-200 relative z-50"
                                    placeholder="your@email.com">
                         </div>
 

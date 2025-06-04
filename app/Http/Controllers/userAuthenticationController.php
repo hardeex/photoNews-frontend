@@ -69,20 +69,9 @@ class userAuthenticationController extends Controller
     }
 
 
-    // login methods
-    // public function userLogin()
-    // {
-    //     return view('user.login');
-    // }
-
-
     public function userLogin()
     {
-        // Check if the user is already logged in by verifying the session for a valid token
-        // if (session()->has('api_token')) {
-        //     // Redirect to the create-post page if the user is already logged in
-        //     return redirect()->route('news.create-post');
-        // }
+        
 
         // If no token exists, show the login page
         return view('user.login');
@@ -201,6 +190,11 @@ class userAuthenticationController extends Controller
             // If no token is found, the user is already logged out
             return redirect()->route('user.login')->with('info', 'You are already logged out.');
         }
+    }
+
+    public function forgotPassword()
+    {
+        return view('user.forgot-password');
     }
 
 

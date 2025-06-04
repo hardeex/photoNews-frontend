@@ -13,12 +13,15 @@ use App\Http\Controllers\ObituaryController;
 use App\Http\Controllers\RemembranceController;
 use App\Http\Controllers\changeOfNameController;
 use App\Http\Controllers\StolenVehicle;
+use Illuminate\Routing\RouteUrlGenerator;
 
 // Authentication routes
 Route::get('/register', [userAuthenticationController::class, 'userRegister'])->name('user.register');
 Route::post('/register', [userAuthenticationController::class, 'userRegisterSubmit'])->name('user.register.submit');
 Route::get('/login', [userAuthenticationController::class, 'userLogin'])->name('user.login');
 Route::post('/login', [userAuthenticationController::class, 'userLoginSubmit'])->name('user.login.submit');
+Route::get('/forgot-password', [userAuthenticationController::class, 'forgotPassword'])->name('password.request');
+Route::post('/reset-password', [userAuthenticationController::class, 'resetPassword'])->name('password.email');
 Route::post('/logout', [userAuthenticationController::class, 'userLogout'])->name('user.logout');
 
 // Admin routes

@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto">
         <div class="text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-4">
-                Become an Editor at <span class="text-yellow-300">EssentialNews.ng</span>
+                Become a <span class="text-orange-300">Columnist</span>, <span class="text-green-300"> Reporter</span> or an Editor at <span class="text-yellow-300">EssentialNews.ng</span>
             </h2>
             <p class="text-xl mb-8 text-blue-100 max-w-3xl mx-auto">
                 Join our community of contributors and help share important stories that matter to Nigeria

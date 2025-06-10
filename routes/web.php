@@ -27,7 +27,11 @@ Route::get('/reset-password', [userAuthenticationController::class, 'resetPasswo
 Route::post('/reset-password', [userAuthenticationController::class, 'resetPasswordSubmit'])->name('user.reset-password.submit');
 Route::post('/logout', [userAuthenticationController::class, 'userLogout'])->name('user.logout');
 
-Route::get('/request-editor', [userAuthenticationController::class, 'requestEditor'])->name('user.request-editor');
+Route::post('/request-editor', [userAuthenticationController::class, 'requestEditorSubmit'])->name('user.request-editor');
+Route::get('/manage-editor', [userAuthenticationController::class, 'manageEditor'])->name('manage-editor');
+Route::post('/approve-editor/{id}', [UserAuthenticationController::class, 'approveEditor'])->name('editor.approve');
+Route::post('/reject-editor/{id}', [UserAuthenticationController::class, 'rejectEditor'])->name('editor.reject');
+
 
 
 // Admin routes

@@ -18,11 +18,17 @@ class UserController extends Controller
         return view('editor.dashboard');
     }
 
+public function userDashboard(Request $request)
+{
+    $token = session('api_token');
+    $user = session('user');
 
-    public function userDashboard()
-    {
-        return view('user.dashboard');
+    if (!$token || !$user) {
+        return redirect()->route('user.login')->withErrors(['message' => 'Please login first.']);
     }
+
+    return view('user.dashboard', compact('user'));
+}
 
 
 
@@ -41,6 +47,8 @@ class UserController extends Controller
 
         // Fetch the posts that are approved and hot_gist is true
         $hotGistsPostsData = $this->listHotGistsPosts();
+        // dd($hotGistsPostsData);
+        // exit();
 
 
         // Fetch the posts that are approved and event is true
@@ -461,6 +469,9 @@ class UserController extends Controller
                 // print_r($hotGistsPostsData);
                 // exit();
 
+                // dd($hotGistsPostsData);
+                // exit();
+
                 $totalHotGistPosts = $pagination['total'] ?? 0;
                 Log::info('The Hot Gists' . $totalHotGistPosts);
                 //Return the data
@@ -568,8 +579,10 @@ class UserController extends Controller
         try {
             // Make an API call to fetch the approved posts with 'caveat' = true
             $response = Http::get($apiUrl, [
-                'per_page' => 8,
+                'per_page' => 28,
                 'event' => true,
+                'sort' => 'desc',
+                'sort_by' => 'created_at',
             ]);
 
             // Check if the response was successful

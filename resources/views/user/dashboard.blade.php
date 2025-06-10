@@ -233,35 +233,39 @@
                 </div>
             </div>
 
-            <!-- Success Stories -->
-            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Real Stories, Real Impact</h2>
-                <div class="grid md:grid-cols-3 gap-6">
-                    <div class="border-l-4 border-green-400 pl-4">
-                        <h4 class="font-semibold text-gray-800 mb-2">Missing Child Found in Lagos</h4>
-                        <p class="text-sm text-gray-600 mb-2">
-                            "Thanks to a community editor's quick report, 8-year-old Kemi was reunited with her family within 6 hours."
-                        </p>
-                        <span class="text-xs text-green-600 font-medium">Editor: Adebayo M. - Lagos</span>
+
+              <!-- How It Works -->
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8 mb-8">
+                <h2 class="text-2xl font-bold mb-6 text-center">How It Works</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl">📝</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">1. Apply to be an Editor</h3>
+                        <p class="text-blue-100">Fill out our simple application form below. No experience required - we'll train you!</p>
                     </div>
-                    <div class="border-l-4 border-blue-400 pl-4">
-                        <h4 class="font-semibold text-gray-800 mb-2">Stolen Vehicle Recovery</h4>
-                        <p class="text-sm text-gray-600 mb-2">
-                            "A timely report helped police recover a stolen commercial bus and arrest the thieves in Kano."
-                        </p>
-                        <span class="text-xs text-blue-600 font-medium">Editor: Fatima A. - Kano</span>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl">✅</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">2. Get Approved</h3>
+                        <p class="text-blue-100">Our team reviews your application quickly. Most approvals happen within 24 hours.</p>
                     </div>
-                    <div class="border-l-4 border-purple-400 pl-4">
-                        <h4 class="font-semibold text-gray-800 mb-2">Community Development Alert</h4>
-                        <p class="text-sm text-gray-600 mb-2">
-                            "Local reporting exposed a fake charity scam, protecting hundreds of families from fraud."
-                        </p>
-                        <span class="text-xs text-purple-600 font-medium">Editor: Chidi E. - Abuja</span>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl">🚀</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">3. Start Reporting</h3>
+                        <p class="text-blue-100">Begin sharing stories that matter to your community and help make Nigeria better informed.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Content Categories Grid -->
+              <!-- Editor Application Form -->
+            @include('editor.request')
+
+              <!-- Content Categories Grid -->
             <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">What You Can Report</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -318,33 +322,37 @@
                 </div>
             </div>
 
-            <!-- How It Works -->
-            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8 mb-8">
-                <h2 class="text-2xl font-bold mb-6 text-center">How It Works</h2>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span class="text-2xl">📝</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">1. Apply to be an Editor</h3>
-                        <p class="text-blue-100">Fill out our simple application form below. No experience required - we'll train you!</p>
+
+            <!-- Success Stories -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Real Stories, Real Impact</h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="border-l-4 border-green-400 pl-4">
+                        <h4 class="font-semibold text-gray-800 mb-2">Missing Child Found in Lagos</h4>
+                        <p class="text-sm text-gray-600 mb-2">
+                            "Thanks to a community editor's quick report, 8-year-old Kemi was reunited with her family within 6 hours."
+                        </p>
+                        <span class="text-xs text-green-600 font-medium">Editor: Adebayo M. - Lagos</span>
                     </div>
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span class="text-2xl">✅</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">2. Get Approved</h3>
-                        <p class="text-blue-100">Our team reviews your application quickly. Most approvals happen within 24 hours.</p>
+                    <div class="border-l-4 border-blue-400 pl-4">
+                        <h4 class="font-semibold text-gray-800 mb-2">Stolen Vehicle Recovery</h4>
+                        <p class="text-sm text-gray-600 mb-2">
+                            "A timely report helped police recover a stolen commercial bus and arrest the thieves in Kano."
+                        </p>
+                        <span class="text-xs text-blue-600 font-medium">Editor: Fatima A. - Kano</span>
                     </div>
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span class="text-2xl">🚀</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">3. Start Reporting</h3>
-                        <p class="text-blue-100">Begin sharing stories that matter to your community and help make Nigeria better informed.</p>
+                    <div class="border-l-4 border-purple-400 pl-4">
+                        <h4 class="font-semibold text-gray-800 mb-2">Community Development Alert</h4>
+                        <p class="text-sm text-gray-600 mb-2">
+                            "Local reporting exposed a fake charity scam, protecting hundreds of families from fraud."
+                        </p>
+                        <span class="text-xs text-purple-600 font-medium">Editor: Chidi E. - Abuja</span>
                     </div>
                 </div>
             </div>
+
+          
+          
 
             <!-- Quick Actions -->
             <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
@@ -364,8 +372,7 @@
                 </div>
             </div>
 
-            <!-- Editor Application Form -->
-            @include('editor.request')
+          
         </div>
     </div>
 @endsection

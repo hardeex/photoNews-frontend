@@ -12,7 +12,8 @@
                     </div>
                 </div>
 
-                <form action="/request-editor" method="POST" class="max-w-4xl mx-auto">
+                @include('feedback')
+                <form action="{{route('user.request-editor')}}" method="POST" class="max-w-4xl mx-auto">
                     @csrf
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
@@ -30,7 +31,8 @@
                             </label>
                             <input type="email" id="email" name="email"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                placeholder="your.email@example.com" required>
+                                placeholder="your.email@example.com" value="{{ $user['email'] ?? '' }}"
+readonly required>
                         </div>
 
                         <div>
@@ -68,6 +70,7 @@
                             required>
                             <option value="">Select a category you're most interested in</option>
                             <option value="breaking-news">Breaking News & Current Events</option>
+                            <option value="columnist">Columnist</option>
                             <option value="missing-persons">Missing Persons & Safety Alerts</option>
                             <option value="community">Community Development</option>
                             <option value="politics">Politics & Governance</option>

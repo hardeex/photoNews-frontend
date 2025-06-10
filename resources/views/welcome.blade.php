@@ -7,20 +7,7 @@
 
 
         <main class="container mx-auto px-4 py-8">
-            <section class="bg-purple-700 text-white p-4 md:p-8 rounded-lg mb-8">
-                <h1 class="text-2xl md:text-3xl font-bold mb-4">EXPLORE THE WORLD WITH US</h1>
-                <form action="#" method="GET" class="flex">
-                    <input type="text" name="query" placeholder="Search news, birthday, obituary..."
-                        class="flex-grow p-2 rounded-l-lg text-black">
-                    <button type="submit" class="bg-pink-500 p-2 rounded-r-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </button>
-                </form>
-            </section>
+          @include('homepage.search')
 
 
             @include('headline-photo')

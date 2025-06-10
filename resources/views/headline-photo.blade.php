@@ -5,7 +5,7 @@
         <div class="border-b-4 border-black py-2 px-4">
             <div class="text-center">
                 <h1 class="text-2xl sm:text-4xl lg:text-6xl font-bold text-black font-serif tracking-wider">
-                    THE ESSENTIAL NEW <br>
+                    {{-- THE ESSENTIAL NEW <br> --}}
                     <span>essentialnews.ng</span>
                 </h1>
                 <div class="flex justify-between items-center text-xs sm:text-sm text-gray-700 mt-1">

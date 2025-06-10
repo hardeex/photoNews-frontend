@@ -735,7 +735,7 @@ class NewsPostController extends Controller
 
 
 
-    public function submitPost(Request $request)
+    public function submitPostOKAY(Request $request)
     {
         Log::info('News Posr submission method is called...', [
             'request_data' => $request->all(),
@@ -861,60 +861,115 @@ class NewsPostController extends Controller
     }
 
 
+    public function submitPost(Request $request)
+{
+    Log::info('News Post submission method is called...', [
+        'request_data' => $request->all(),
+    ]);
 
+    // Validate the incoming form data
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'slug' => 'required|string|max:255',
+        'content' => 'required',
+        'featured_image' => 'nullable|image|max:2048',
+        'is_featured' => 'boolean',
+        'is_draft' => 'boolean',
+        'is_scheduled' => 'boolean',
+        'scheduled_time' => 'nullable|date_format:Y-m-d\TH:i',
+        'allow_comments' => 'nullable|boolean',
+        'meta_title' => 'nullable|string|max:255',
+        'meta_description' => 'nullable|string|max:155',
+        'review_feedback' => 'nullable|string',
+        'is_breaking' => 'boolean',
+        'event' => 'nullable|boolean',
+        'top_topic' => 'nullable|boolean',
+        'hot_gist' => 'nullable|boolean',
+        'caveat' => 'nullable|boolean',
+        'pride_of_nigeria' => 'nullable|boolean',
+        'category_id' => 'nullable',
+    ]);
 
+    // Get the JWT token from session (after login)
+    $jwtToken = session('api_token');
 
-    // public function managePosts(Request $request)
-    // {
-    //     Log::info('Manage Posts method is called...', [
-    //         'request_data' => $request->all(),
-    //     ]);
+    // If the JWT token is missing or expired, redirect to the login page
+    if (empty($jwtToken)) {
+        Log::warning('JWT token missing or expired');
+        return redirect()->route('user.login')->with('error', 'Please log in first');
+    }
 
-    //     // Get the JWT token from session
-    //     $jwtToken = session('api_token');
+    // Prepare the form data
+    $formData = [
+        'title' => $validated['title'],
+        'slug' => $validated['slug'],
+        'content' => $validated['content'],
+        'is_featured' => $validated['is_featured'] ?? false,
+        'is_draft' => $validated['is_draft'] ?? false,
+        'is_scheduled' => $validated['is_scheduled'] ?? false,
+        'scheduled_time' => $validated['scheduled_time'] ?? null,
+        'allow_comments' => $validated['allow_comments'] ?? true,
+        'meta_title' => $validated['meta_title'] ?? null,
+        'meta_description' => $validated['meta_description'] ?? null,
+        'review_feedback' => $validated['review_feedback'] ?? null,
+        'is_breaking' => $validated['is_breaking'] ?? false,
+        'event' => $validated['event'] ?? false,
+        'top_topic' => $validated['top_topic'] ?? false,
+        'hot_gist' => $validated['hot_gist'] ?? false,
+        'caveat' => $validated['caveat'] ?? false,
+        'pride_of_nigeria' => $validated['pride_of_nigeria'] ?? false,
+        'category_id' => $validated['category_id'],
+    ];
 
-    //     if (empty($jwtToken)) {
-    //         Log::warning('JWT token missing or expired');
-    //         return redirect()->route('user.login')->with('error', 'Please log in first');
-    //     }
+    Log::info('Request Payload:', $formData);
 
-    //     $apiUrl = config('api.base_url') . '/user/posts';
+    // API URL for post submission
+    $apiUrl = config('api.base_url') . '/submit-post';
+    Log::info('Connecting to API URL for post creation', [
+        'api_url' => $apiUrl,
+    ]);
 
-    //     try {
-    //         $response = Http::withHeaders([
-    //             'Authorization' => 'Bearer ' . $jwtToken,
-    //         ])->post($apiUrl, $request->all());
+    try {
+        // Initialize the HTTP client with headers
+        $httpClient = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $jwtToken,
+        ]);
 
-    //         if ($response->successful()) {
-    //             Log::info('Posts fetched successfully', [
-    //                 'response_data' => $response->json(),
-    //             ]);
+        // Conditionally attach the file only if it exists
+        if ($request->hasFile('featured_image')) {
+            $httpClient->attach(
+                'featured_image',
+                file_get_contents($request->file('featured_image')->getRealPath()),
+                $request->file('featured_image')->getClientOriginalName()
+            );
+        }
 
-    //             // Get the data from response
-    //             $responseData = $response->json();
+        // Send the request
+        $response = $httpClient->post($apiUrl, $formData);
 
-    //             // Pass both message and posts data to view
-    //             return view('posts.mypost', [
-    //                 'message' => $responseData['message'],
-    //                 'posts' => $responseData['posts']
-    //             ]);
-    //         } else {
-    //             Log::error('Error returned from external API', [
-    //                 'status_code' => $response->status(),
-    //                 'error_message' => $response->json()['message'] ?? 'An error occurred.',
-    //             ]);
-
-    //             return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('API request failed', [
-    //             'exception_message' => $e->getMessage(),
-    //             'exception_trace' => $e->getTraceAsString(),
-    //         ]);
-
-    //         return back()->withErrors(['error' => 'An error occurred while fetching posts.']);
-    //     }
-    // }
+        // Log the response from the external API
+        if ($response->successful()) {
+            Log::info('Post successfully created through external API', [
+                'response_data' => $response->json(),
+            ]);
+            return redirect()->back()->with('success', 'Post created successfully!');
+        } else {
+            // Handle API errors
+            Log::error('Error returned from external API', [
+                'status_code' => $response->status(),
+                'error_message' => $response->json()['message'] ?? 'An error occurred.',
+            ]);
+            return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
+        }
+    } catch (\Exception $e) {
+        // Log any exceptions during the API call
+        Log::error('API request failed', [
+            'exception_message' => $e->getMessage(),
+            'exception_trace' => $e->getTraceAsString(),
+        ]);
+        return back()->withErrors(['error' => 'An error occurred while submitting the post.']);
+    }
+}
 
 
 

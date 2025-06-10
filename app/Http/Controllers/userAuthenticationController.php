@@ -53,6 +53,13 @@ class userAuthenticationController extends Controller
             if ($response->successful()) {
                 $responseData = $response->json();
 
+                   // Save token and user in session
+    session([
+        'api_token' => $responseData['token'] ?? null,
+        'user' => $responseData['user'] ?? null,
+    ]);
+
+
                 // Flash a success message to the session and redirect the user
                 return redirect()->route('user.login')->with('success', $responseData['message']);
             } else {
@@ -302,61 +309,125 @@ class userAuthenticationController extends Controller
 
 
 
-    // Handle editor application
-    public function requestEditor(Request $request)
+   // Handle editor application submission
+    public function requestEditorSubmit(Request $request)
     {
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'phone' => 'required|string|max:20',
+            'experience' => 'required|string|in:none,beginner,intermediate,advanced,professional',
+            'category' => 'required|string',
+            'motivation' => 'required|string',
+            'sample' => 'required|string',
+            'terms' => 'required|accepted',
+        ]);
+
+        $apiUrl = config('api.base_url') . '/request-editor';
+        Log::info('Connecting to API URL: ' . $apiUrl);
+
         try {
-            $validated = $request->validate([
-                'full_name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|exists:users,email',
-                'phone' => 'required|string|max:20',
-                'experience' => 'required|string|in:none,beginner,intermediate,advanced,professional',
-                'category' => 'required|string',
-                'motivation' => 'required|string',
-                'sample' => 'required|string',
-                'terms' => 'required|accepted',
-            ]);
+            $response = Http::post($apiUrl, $validated);
 
-            $user = User::where('email', $validated['email'])->first();
+            // Log::info('API Response Status: ' . $response->status());
+            // Log::info('API Response Body: ' . $response->body());
 
-            if ($user->role !== 'user') {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Only users with the "user" role can apply to become an editor.',
-                ], 403);
+            if ($response->successful()) {
+                $responseData = $response->json();
+                return redirect()->route('user.login')->with('success', $responseData['message']);
+            } else {
+                return back()->withErrors(['editor_error' => $response->json()['message'] ?? 'Failed to submit application.']);
             }
-
-            // Update user role to editor (assuming immediate approval)
-            $user->update([
-                'role' => 'editor',
-            ]);
-
-            // Optionally store application details somewhere or notify admins
-            Log::info('Editor application approved:', [
-                'user_id' => $user->id,
-                'email' => $validated['email'],
-                'details' => $validated,
-            ]);
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Editor application approved. Your role has been updated to editor.',
-            ], 200);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Validation failed.',
-                'errors' => $e->errors(),
-            ], 422);
         } catch (\Exception $e) {
-            Log::error('Error in requestEditor: ' . $e->getMessage());
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to process editor application.',
-                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
-            ], 500);
+            Log::error('Exception occurred during editor application: ' . $e->getMessage());
+            return back()->withErrors(['editor_error' => 'An error occurred: ' . $e->getMessage()]);
         }
     }
+
+
+
+ public function manageEditor(Request $request)
+{
+    $apiUrl = config('api.base_url') . '/list-editors';
+    Log::info('[Manage Editor] Sending request to API:', ['url' => $apiUrl]);
+
+    try {
+        $token = session('api_token');
+        Log::debug('[Manage Editor] Using API token:', ['token' => $token]);
+
+        $response = Http::withToken($token)->get($apiUrl);
+
+        Log::info('[Manage Editor] API Response Status: ' . $response->status());
+
+        if ($response->successful()) {
+            $editors = $response->json()['editors'] ?? [];
+
+            Log::debug('[Manage Editor] Editors fetched:', [
+                'count' => count($editors),
+                'editors_sample' => array_slice($editors, 0, 3) // Only show first 3 for brevity
+            ]);
+
+            return view('admin.manage-editor', compact('editors'));
+        } else {
+            Log::warning('[Manage Editor] Failed to fetch editors.', [
+                'response_status' => $response->status(),
+                'response_body' => $response->body()
+            ]);
+
+            return back()->withErrors(['error' => 'Failed to load editors.']);
+        }
+    } catch (\Exception $e) {
+        Log::error('[Manage Editor] Exception occurred: ' . $e->getMessage(), [
+            'trace' => config('app.debug') ? $e->getTraceAsString() : 'Trace hidden in production'
+        ]);
+
+        return back()->withErrors(['error' => 'Error connecting to the editor API.']);
+    }
+}
+
+
+public function approveEditor(Request $request, $id)
+{
+    $url = config('api.base_url') . "/approve-editor/{$id}";
+
+    try {
+        $response = Http::withToken(session('api_token'))->post($url);
+
+        if ($response->successful()) {
+            return back()->with('success', 'Editor approved successfully.');
+        }
+
+        return back()->withErrors(['error' => $response->json()['message'] ?? 'Approval failed.']);
+    } catch (\Exception $e) {
+        Log::error('Approval failed: ' . $e->getMessage());
+        return back()->withErrors(['error' => 'Approval failed.']);
+    }
+}
+
+public function rejectEditor(Request $request, $id)
+{
+    $validated = $request->validate([
+        'reason' => 'required|string|max:255'
+    ]);
+
+    $url = config('api.base_url') . "/reject-editor/{$id}";
+
+    try {
+        $response = Http::withToken(session('api_token'))->post($url, [
+            'reason' => $validated['reason']
+        ]);
+
+        if ($response->successful()) {
+            return back()->with('success', 'Editor rejected successfully.');
+        }
+
+        return back()->withErrors(['error' => $response->json()['message'] ?? 'Rejection failed.']);
+    } catch (\Exception $e) {
+        Log::error('Rejection failed: ' . $e->getMessage());
+        return back()->withErrors(['error' => 'Rejection failed.']);
+    }
+}
+
 
 
 

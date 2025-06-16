@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ObituaryController;
 use App\Http\Controllers\RemembranceController;
 use App\Http\Controllers\changeOfNameController;
+use App\Http\Controllers\ExchangeController;
 use App\Http\Controllers\StolenVehicle;
 use Illuminate\Routing\RouteUrlGenerator;
 
@@ -156,3 +157,7 @@ Route::get('/upload/photo/news', [NewsPostController::class, 'uploadPhoto'])->na
 Route::post('/admin/upload-photo-news', [NewsPostController::class, 'uploadPhotoNews'])->name('admin.upload-photo-news');
 Route::get('/manage/photos', [NewsPostController::class, 'showAllImages'])->name('manage-photos');
 Route::get('/news/latest-image', [NewsPostController::class, 'showLatestImage'])->name('news.latest-image');
+
+
+// currency exchange
+Route::get('/exchange-rate', [ExchangeController::class, 'showCurrency'])->name('exchange-rate');

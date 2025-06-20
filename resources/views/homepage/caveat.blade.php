@@ -139,7 +139,7 @@
                                                 alt=""
                                                 class="w-24 h-24 object-cover mr-4">
                                         @else
-                                            <img src="/images/news-image.jpeg" alt="Music News {{ $index + 1 }}"
+                                            <img src="/images/news-image.jpeg" alt="$post['slug'] ?? '#'"
                                                 class="w-24 h-24 object-cover mr-4">
                                         @endif
 

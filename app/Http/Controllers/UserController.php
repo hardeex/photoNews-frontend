@@ -60,6 +60,8 @@ public function userDashboard(Request $request)
         // fetch pride of nigeria posts
         $listPrideOfNigeriaPostsData = $this->listPrideOfNigeriaPosts();
 
+        // dd($listPrideOfNigeriaPostsData);
+        // exit();
 
 
         // Fetch the approved music posts

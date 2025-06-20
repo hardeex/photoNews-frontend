@@ -10,22 +10,7 @@ use Cloudinary\Cloudinary;
 class NewsPostController extends Controller
 {
 
-    protected $cloudinary;
-
-    public function __construct()
-    {
-        // Configure Cloudinary
-        $this->cloudinary = new Cloudinary([
-            'cloud' => [
-                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
-                'api_key' => env('CLOUDINARY_API_KEY'),
-                'api_secret' => env('CLOUDINARY_API_SECRET'),
-            ],
-            'url' => [
-                'secure' => true
-            ]
-        ]);
-    }
+  
 
 
     public function uploadPhoto()
@@ -33,52 +18,6 @@ class NewsPostController extends Controller
         return view('admin.upload-photo');
     }
 
-
-    // public function uploadPhotoNews(Request $request)
-    // {
-    //     Log::info('Uploading news headline image...');
-
-    //     // Validate the request
-    //     $validated = $request->validate([
-    //         'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    //     ]);
-
-    //     $apiUrl = config('api.base_url') . '/upload-photo-news';
-    //     Log::info('API URL for image upload:', ['url' => $apiUrl]);
-
-    //     try {
-    //         // Get JWT token from session or authentication mechanism
-    //         $token = session('api_token'); 
-
-    //         if (!$token) {
-    //             Log::error('No JWT token found in session');
-    //             return redirect()->route('admin.upload-photo-news')
-    //                 ->with('error', 'You must be logged in to upload images');
-    //         }
-
-    //         // Make API call to upload image
-    //         $response = Http::withToken($token)
-    //             ->attach('image', file_get_contents($request->file('image')->getRealPath()), $request->file('image')->getClientOriginalName())
-    //             ->post($apiUrl);
-
-    //         if ($response->successful()) {
-    //             $responseData = $response->json();
-    //             Log::info('Image uploaded successfully', ['response' => $responseData]);
-
-    //             return redirect()->route('upload-photo')
-    //                 ->with('success', $responseData['message'])
-    //                 ->with('image_url', $responseData['data']['image_url']);
-    //         } else {
-    //             Log::error('Error uploading image: ' . $response->status());
-    //             return redirect()->route('admin.upload-photo-news')
-    //                 ->with('error', 'Failed to upload image: ' . ($response->json()['message'] ?? 'Unknown error'));
-    //         }
-    //     } catch (\Exception $e) {
-    //         Log::error('Error uploading image: ' . $e->getMessage());
-    //         return redirect()->route('admin.upload-photo-news')
-    //             ->with('error', 'An error occurred during image upload: ' . $e->getMessage());
-    //     }
-    // }
 
 
     public function uploadPhotoNews(Request $request)

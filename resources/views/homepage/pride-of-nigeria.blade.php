@@ -1,18 +1,19 @@
- <section class="bg-green-100 p-4">
+@if (!empty($listPrideOfNigeriaPostsData['prideOfNigeriaPostsData']) && count($listPrideOfNigeriaPostsData['prideOfNigeriaPostsData']) > 0)
+    <section class="bg-green-100 p-4">
         <h2 class="text-2xl font-bold mb-4 text-center text-green-800">PRIDE OF NIGERIA</h2>
 
         <!-- Top News Items -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
             @foreach ($listPrideOfNigeriaPostsData['prideOfNigeriaPostsData'] as $post)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <img src="{{ $post['featured_image'] }}" alt="{{ $post['title'] }}"
+                    <img src="{{ $post['featured_image'] ?? asset('default-image.jpg') }}" alt="{{ $post['title'] ?? 'No title' }}"
                         class="w-full h-40 object-cover">
                     <div class="p-4">
-                        <h3 class="font-semibold text-sm mb-2">{{ $post['title'] }}</h3>
+                        <h3 class="font-semibold text-sm mb-2">{{ $post['title'] ?? 'Untitled' }}</h3>
                         <p class="text-xs text-gray-600">
-                            {{ $post['meta_description'] }}
+                            {{ $post['meta_description'] ?? 'No description available.' }}
                         </p>
-                        <a href="{{ route('post.details', ['slug' => $post['slug']]) }}"
+                        <a href="{{ route('post.details', ['slug' => $post['slug'] ?? '#']) }}"
                             class="inline-block mt-2 text-blue-500 text-xs font-semibold hover:underline">
                             Read More
                         </a>
@@ -52,11 +53,10 @@
             @endif
         </div>
 
-
-
         <div class="text-center">
             <button class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700 transition">
                 See more
             </button>
         </div>
     </section>
+@endif

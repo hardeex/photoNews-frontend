@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'frontend' => [
+    'url' => env('FRONTEND_URLS', 'http://photonews-frontend.test'),
+],
+
+
 ];

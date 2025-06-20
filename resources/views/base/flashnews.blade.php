@@ -2,7 +2,8 @@
 <div class="fixed top-27 left-0 right-0 z-50 overflow-hidden bg-red-600 text-white h-8 flex items-center">
     {{-- Play/Pause Button --}}
     <button onclick="toggleAnimation(this)" class="px-2 focus:outline-none flex-shrink-0 h-full border-r border-red-500">
-        <i class="fas fa-pause text-yellow-300 text-xs"></i>
+        {{-- <i class="fas fa-pause text-yellow-300 text-xs"></i> --}}
+        <h2>Breaking News</h2>
     </button>
     
     {{-- News Container --}}
@@ -117,7 +118,7 @@
 }
 
 .animate-news-scroll {
-    animation: news-scroll 60s linear infinite;
+    animation: news-scroll 20s linear infinite;
 }
 
 .animate-news-scroll:hover {

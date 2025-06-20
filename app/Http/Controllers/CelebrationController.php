@@ -6,14 +6,151 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Arr;
-
+use Illuminate\Support\Facades\Route;
 
 class CelebrationController extends Controller
 {
-    public function createBirthday()
-    {
-        return view("birthday.create");
+    // public function createBirthday()
+    // {
+    //     return view("birthday.create");
+    // }
+
+// public function createBirthday(Request $request)
+// {
+//     try {
+//         Log::info('Starting createBirthday method.');
+
+//         $token = session('api_token');
+//         if (!$token) {
+//             Log::warning('JWT token missing from session.');
+//             return redirect()->route('login')->with('error', 'Authentication token missing.');
+//         }
+
+//         Log::info('JWT token found, calling payment check endpoint.', ['token' => $token]);
+
+//         $response = Http::withHeaders([
+//             'Authorization' => 'Bearer ' . $token,
+//             'Accept' => 'application/json',
+//         ])->get(config('api.base_url') . '/payment/check/birthday');
+
+//         Log::info('Received response from payment check endpoint.', [
+//             'status' => $response->status(),
+//             'body' => $response->body(),
+//         ]);
+
+//         if (!$response->successful()) {
+//             Log::error('Payment check response not successful.', [
+//                 'status' => $response->status(),
+//                 'body' => $response->body(),
+//             ]);
+//             return redirect()->route('payment.initiate')->with('error', 'Failed to verify payment status.');
+//         }
+
+//         $data = $response->json();
+
+//         Log::info('Payment check response parsed.', ['parsed_data' => $data]);
+
+//         if (isset($data['status'], $data['data']['has_paid']) && 
+//             $data['status'] === 'success' && $data['data']['has_paid']) {
+//             Log::info('User has paid for birthday post.', [
+//                 'payment_id' => $data['data']['payment_id'] ?? null,
+//             ]);
+//             return view('birthday.create', [
+//                 'payment_id' => $data['data']['payment_id'],
+//             ]);
+//         }
+
+//         Log::warning('Payment not verified or incomplete.', ['data' => $data]);
+
+//         // Verify route exists before redirecting
+//         if (!Route::has('payment.initiate')) {
+//             Log::error('Route payment.initiate not found.');
+//             return redirect()->back()->with('error', 'Payment initiation route not found.');
+//         }
+
+//         return redirect()->route('payment.initiate')->with('error', 'Please complete payment to create a birthday post.');
+//     } catch (\Exception $e) {
+//         Log::error('Exception in createBirthday method.', [
+//             'exception' => $e->getMessage(),
+//             'trace' => $e->getTraceAsString(),
+//         ]);
+//         return redirect()->back()->with('error', 'Failed to verify payment. Please try again.');
+//     }
+// }
+
+
+public function createBirthday(Request $request)
+{
+    try {
+        Log::info('Starting createBirthday method.');
+
+        if ($request->query('status') === 'success' && $request->query('payment_id')) {
+            Log::info('User redirected with successful payment in query.', [
+                'payment_id' => $request->query('payment_id')
+            ]);
+            return view('birthday.create', [
+                'payment_id' => $request->query('payment_id'),
+            ]);
+        }
+
+        $token = session('api_token');
+        if (!$token) {
+            Log::warning('JWT token missing from session.');
+            return redirect()->route('login')->with('error', 'Authentication token missing.');
+        }
+
+        Log::info('JWT token found, calling payment check endpoint.', ['token' => $token]);
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ])->get(config('api.base_url') . '/payment/check/birthday');
+
+        Log::info('Received response from payment check endpoint.', [
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
+
+        if (!$response->successful()) {
+            Log::error('Payment check response not successful.', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+            return redirect()->route('payment.initiate')->with('error', 'Failed to verify payment status.');
+        }
+
+        $data = $response->json();
+
+        Log::info('Payment check response parsed.', ['parsed_data' => $data]);
+
+        if (isset($data['status'], $data['data']['has_paid']) && 
+            $data['status'] === 'success' && $data['data']['has_paid']) {
+            Log::info('User has paid for birthday post.', [
+                'payment_id' => $data['data']['payment_id'] ?? null,
+            ]);
+            return view('birthday.create', [
+                'payment_id' => $data['data']['payment_id'],
+            ]);
+        }
+
+        Log::warning('Payment not verified or incomplete.', ['data' => $data]);
+
+        if (!Route::has('payment.initiate')) {
+            Log::error('Route payment.initiate not found.');
+            return redirect()->back()->with('error', 'Payment initiation route not found.');
+        }
+
+        return redirect()->route('payment.initiate')->with('error', 'Please complete payment to create a birthday post.');
+    } catch (\Exception $e) {
+        Log::error('Exception in createBirthday method.', [
+            'exception' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ]);
+        return redirect()->back()->with('error', 'Failed to verify payment. Please try again.');
     }
+}
+
+
 
     public function submitBirthday(Request $request)
     {

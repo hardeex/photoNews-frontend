@@ -18,7 +18,7 @@
 
 </head>
 
-<body>
+<body >
 
 
     {{-- 
@@ -89,7 +89,7 @@
 
                 <li class="relative group">
                     <a href="#" class="hover:text-green-600">Account</a>
-                    <div class="absolute hidden bg-white shadow-lg mt-2 rounded-md w-40 group-hover:block">
+                    <div class="absolute hidden bg-white shadow-lg mt-2 rounded-md w-40 group-hover:block z-30">
                         <ul class="flex flex-col">
                             @if (session('api_token'))
                                 <!-- Check if the user is logged in -->

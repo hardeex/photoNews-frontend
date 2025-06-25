@@ -50,10 +50,10 @@
                                     <p class="text-sm text-gray-500">Premium feature</p>
                                 </div>
                             </div>
-                            <div class="text-right">
+                            {{-- <div class="text-right">
                                 <p class="font-bold text-lg text-gray-900">₦2,500</p>
                                 <p class="text-xs text-gray-500">One-time</p>
-                            </div>
+                            </div> --}}
                         </div>
 
                         <!-- Security Notice -->

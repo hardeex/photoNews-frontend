@@ -2,11 +2,11 @@
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <h2 class="text-xl sm:text-2xl font-bold mb-6 bg-red-600 text-white p-2 rounded">Featured Entertainment News</h2>
 
-    <div class="flex flex-wrap gap-2 mb-6">
+    {{-- <div class="flex flex-wrap gap-2 mb-6">
         @foreach (['Gold Market', 'Nigeria\'s Inflation Rate Eases to 33.40%', 'Adekunle Gold', 'Nigeria and Guinea Strengthen Ties', 'Nigeria\'s Economic Activity Declines Again'] as $tag)
             <span class="bg-purple-200 text-purple-800 text-xs px-2 py-1 rounded">{{ $tag }}</span>
         @endforeach
-    </div>
+    </div> --}}
 
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- Breaking News Section -->

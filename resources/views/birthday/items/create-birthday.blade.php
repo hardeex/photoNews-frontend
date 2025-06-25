@@ -104,6 +104,9 @@
                 @csrf
 
                 <input type="hidden" name="post_id" id="post_id" value="{{ $post->id ?? '' }}">
+                {{-- <input type="hidden" name="post_id" value="{{ $post_id }}"> --}}
+                        <input type="hidden" name="payment_id" value="{{ $payment_id }}">
+                        <input type="hidden" name="post_model" value="{{ $post_model }}">
 
                 <!-- Name of the Celebrant -->
                 <div class="mb-6">

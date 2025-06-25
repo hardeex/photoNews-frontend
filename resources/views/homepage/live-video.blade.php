@@ -3,13 +3,7 @@
                     <h2 class="text-2xl font-bold">Topics</h2>
                 </div>
 
-                <div class="flex flex-wrap gap-2 mb-6 overflow-x-auto whitespace-nowrap">
-                    @foreach (['Gold Market', 'Nigeria\'s Inflation Rate Eases to 33.40%', 'Adekunle Gold', 'Nigeria and Guinea Strengthen Ties', 'Nigeria\'s Economic Activity Declines Again'] as $topic)
-                        <span
-                            class="bg-purple-200 text-purple-800 text-xs px-3 py-1 rounded-full">{{ $topic }}</span>
-                    @endforeach
-                </div>
-
+               
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="md:col-span-2">
                         <!-- Video Content Area -->
@@ -107,17 +101,7 @@
                         </div>
                     </div>
 
-                    {{-- <div class="space-y-4">
-                        <div class="bg-red-600 p-4 text-white text-center font-bold">
-                            ADVERTISE HERE!
-                        </div>
-                        <div class="bg-gray-200 p-4 text-center">
-                            <p class="font-semibold">ADVERTISE HERE !!</p>
-                        </div>
-                        <div class="bg-blue-600 p-4 text-white text-center">
-                            <p class="font-bold">ADVERTIZE YOUR BUSINESS HERE!</p>
-                        </div>
-                    </div> --}}
+                  
 
                     <div class="space-y-4">
   <!-- Main Hero Banner -->
@@ -129,7 +113,7 @@
         <p class="text-lg mb-3">Premium Hotel Management Solutions</p>
         <p class="text-sm mb-4">Streamline your hospitality business with professional management services</p>
         <div class="inline-flex items-center bg-white bg-opacity-20 px-4 py-2 rounded-full">
-          <span class="text-sm font-semibold">Visit: ebnbhotel.com</span>
+          <a href="https://ebnbhotel.com/" class="text-sm font-semibold">Visit: ebnbhotel.com</a>
         </div>
       </div>
       <div class="ml-6">
@@ -141,9 +125,9 @@
   </div>
 
   <!-- Secondary Banner -->
-  <div class="bg-gradient-to-r from-amber-500 to-orange-600 p-4 rounded-lg text-center text-white hover-scale cursor-pointer">
+  <div class="hidden sm:block bg-gradient-to-r from-amber-500 to-orange-600 p-4 rounded-lg text-center text-white hover-scale cursor-pointer">
     <p class="font-bold text-xl">🏨 EBNB Hotel Management Services</p>
-    <p class="text-sm mt-1">Professional • Reliable • Results-Driven | ebnbhotel.com</p>
+    <a href="https://ebnbhotel.com/" class="text-sm mt-1">Professional • Reliable • Results-Driven | ebnbhotel.com</a>
   </div>
 
   {{-- <!-- Compact Banner -->

@@ -133,6 +133,8 @@ public function userDashboard(Request $request)
         // Fetch Birthday Posts Data using the private method
         $birthdayPostsData = $this->listBirthdayPostsData();
 
+        // dd($birthdayPostsData);
+        // exit();
         // Get the total post count from the data
         $totalBirthdayPosts = count($birthdayPostsData);
 
@@ -182,6 +184,13 @@ public function userDashboard(Request $request)
         $recentVideo = $this->getLiveVideos();
 
          $image = $this->fetchLatestImage();
+
+
+           // Get categories with posts
+        $categoriesWithPosts = $this->fetchCategoriesWithPosts();
+
+        // dd($categoriesWithPosts);
+        // exit();
 
 
         // Pass both sets of posts data to the view
@@ -249,9 +258,289 @@ public function userDashboard(Request $request)
             'recentVideo',
 
             'image',
+            'categoriesWithPosts'
 
         ));
     }
+
+
+    private function fetchCategoriesWithPosts()
+{
+    Log::info('Fetching categories with posts...');
+
+    $apiUrl = config('api.base_url') . '/categories-with-posts';
+
+    try {
+        $response = Http::get($apiUrl); // No auth needed
+
+        if ($response->successful()) {
+            $data = $response->json()['data'] ?? [];
+            Log::info('Categories fetched successfully', ['count' => count($data)]);
+            return $data;
+        } else {
+            Log::error('API responded with error', [
+                'status_code' => $response->status(),
+                'message' => $response->json()['message'] ?? 'Unknown error',
+            ]);
+        }
+    } catch (\Exception $e) {
+        Log::error('Exception fetching categories', ['error' => $e->getMessage()]);
+    }
+
+    return []; // fallback
+}
+
+
+/**
+ * Show all categories page
+ */
+public function ShowAllCategoryPosts(Request $request)
+{
+    try {
+        // Get all categories with posts from API
+        $categoriesWithPosts = $this->fetchCategoriesWithPosts();
+        
+        // Sort by posts_count in descending order
+        $categoriesWithPosts = collect($categoriesWithPosts)
+            ->sortByDesc('posts_count')
+            ->values()
+            ->toArray();
+
+        // dd($categoriesWithPosts);
+        // exit();
+
+        return view('components.all-categories', compact('categoriesWithPosts'));
+        
+    } catch (\Exception $e) {
+        Log::error('Error fetching all categories', ['error' => $e->getMessage()]);
+        
+        return view('categories.all', [
+            'categoriesWithPosts' => [],
+            'error' => 'Unable to load categories at this time.'
+        ]);
+    }
+}
+
+
+/**
+ * Show posts for a specific category
+ */
+
+// public function showCategoryPostDetails(Request $request, $slug)
+// {
+//     try {
+//         // Step 1: Fetch category details using slug
+//         $category = $this->fetchCategoryBySlug($slug);
+
+//         if (!$category) {
+//             abort(404, 'Category not found');
+//         }
+
+//         // Step 2: Build API URL and pass category_name explicitly
+//         $categoryName = $category['name']; // e.g., "Local", "Politics"
+//         $apiUrl = config('api.base_url') . '/posts/category/' . urlencode($categoryName);
+
+//         $response = Http::get($apiUrl, [
+//             'page' => $request->input('page', 1),
+//             'category_name' => $categoryName, // <-- Ensures backend validation passes
+//         ]);
+
+//         // Step 3: Handle failed response
+//         if (!$response->successful()) {
+//             Log::error('Failed to fetch posts', [
+//                 'slug' => $slug,
+//                 'status' => $response->status(),
+//                 'message' => $response->json()['message'] ?? 'Unknown error'
+//             ]);
+//             abort($response->status(), 'Failed to fetch posts');
+//         }
+
+//         // Step 4: Decode and pass data to view
+//         $data = $response->json();
+//         $posts = $data['posts'] ?? [];
+
+//         // dd($posts);
+//         // exit();
+//         return view('components.category-post', compact('category', 'posts'));
+
+//     } catch (\Exception $e) {
+//         Log::error('Error fetching category posts', [
+//             'slug' => $slug,
+//             'error' => $e->getMessage()
+//         ]);
+
+//         abort(500, 'Unable to load category posts');
+//     }
+// }
+
+
+public function showCategoryPostDetails(Request $request, $slug)
+{
+    try {
+        // Step 1: Fetch category details using slug
+        $category = $this->fetchCategoryBySlug($slug);
+
+        if (!$category) {
+            abort(404, 'Category not found');
+        }
+
+        // Step 2: Build API URL and pass category_name explicitly
+        $categoryName = $category['name']; // e.g., "Local", "Politics"
+        $apiUrl = config('api.base_url') . '/posts/category/' . urlencode($categoryName);
+
+        $response = Http::get($apiUrl, [
+            'page' => $request->input('page', 1),
+            'category_name' => $categoryName, // <-- Ensures backend validation passes
+        ]);
+
+        // Step 3: Handle failed response
+        if (!$response->successful()) {
+            Log::error('Failed to fetch posts', [
+                'slug' => $slug,
+                'status' => $response->status(),
+                'message' => $response->json()['message'] ?? 'Unknown error'
+            ]);
+            abort($response->status(), 'Failed to fetch posts');
+        }
+
+        // Step 4: Decode and fix pagination URLs
+        $data = $response->json();
+        $posts = $data['posts'] ?? [];
+
+        $posts = $this->fixPaginationUrls($posts, $slug);
+
+        // dd($posts);
+        // exit();
+
+        return view('components.category-post', compact('category', 'posts'));
+
+    } catch (\Exception $e) {
+        Log::error('Error fetching category posts', [
+            'slug' => $slug,
+            'error' => $e->getMessage()
+        ]);
+
+        abort(500, 'Unable to load category posts');
+    }
+}
+
+/**
+ * Fix pagination URLs from API to point to frontend route with slug and page query parameter
+ */
+private function fixPaginationUrls(array $posts, string $slug): array
+{
+    $query = request()->query();
+    unset($query['page']); // remove current page if present
+
+    foreach (['next_page_url', 'prev_page_url'] as $key) {
+        if (!empty($posts[$key])) {
+            $page = parse_url($posts[$key], PHP_URL_QUERY);
+            parse_str($page, $params);
+            $pageNumber = $params['page'] ?? 1;
+
+            $posts[$key] = route('categories.show', ['slug' => $slug]) . '?' . http_build_query(array_merge($query, ['page' => $pageNumber]));
+        }
+    }
+
+    if (!empty($posts['links'])) {
+        foreach ($posts['links'] as &$link) {
+            if (!empty($link['url'])) {
+                $page = parse_url($link['url'], PHP_URL_QUERY);
+                parse_str($page, $params);
+                $pageNumber = $params['page'] ?? 1;
+
+                $link['url'] = route('categories.show', ['slug' => $slug]) . '?' . http_build_query(array_merge($query, ['page' => $pageNumber]));
+            }
+        }
+    }
+
+    return $posts;
+}
+
+
+/**
+ * Fetch category details by slug from API
+ */
+private function fetchCategoryBySlug($slug)
+{
+    Log::info('Fetching category by slug', ['slug' => $slug]);
+
+    $apiUrl = config('api.base_url') . '/category/' . $slug;
+
+    try {
+        $response = Http::get($apiUrl);
+
+        if ($response->successful()) {
+            $data = $response->json();
+            Log::info('Category fetched successfully', ['category' => $data['data']]);
+            return $data['data'] ?? null;
+        } else {
+            Log::error('API responded with error for category', [
+                'slug' => $slug,
+                'status_code' => $response->status(),
+                'message' => $response->json()['message'] ?? 'Unknown error',
+            ]);
+        }
+    } catch (\Exception $e) {
+        Log::error('Exception fetching category', [
+            'slug' => $slug,
+            'error' => $e->getMessage()
+        ]);
+    }
+
+    return null;
+}
+
+/**
+ * Fetch posts by category name from API
+ */
+private function fetchPostsByCategory($categoryName, Request $request)
+{
+    Log::info('Fetching posts by category', ['category' => $categoryName]);
+
+    $page = $request->get('page', 1);
+    $perPage = $request->get('per_page', 12);
+
+    $apiUrl = config('api.base_url') . '/posts/category/' . urlencode($categoryName);
+
+    try {
+        $response = Http::get($apiUrl, [
+            'page' => $page,
+            'per_page' => $perPage
+        ]);
+
+        if ($response->successful()) {
+            $data = $response->json();
+            Log::info('Posts fetched successfully', [
+                'category' => $categoryName,
+                'count' => count($data['data'] ?? [])
+            ]);
+            return $data;
+        } else {
+            Log::error('API responded with error for posts', [
+                'category' => $categoryName,
+                'status_code' => $response->status(),
+                'message' => $response->json()['message'] ?? 'Unknown error',
+            ]);
+        }
+    } catch (\Exception $e) {
+        Log::error('Exception fetching posts by category', [
+            'category' => $categoryName,
+            'error' => $e->getMessage()
+        ]);
+    }
+
+    return [
+        'data' => [],
+        'meta' => [
+            'current_page' => 1,
+            'last_page' => 1,
+            'per_page' => $perPage,
+            'total' => 0
+        ]
+    ];
+}
+
 
 
     private function fetchLatestImage()
@@ -581,7 +870,7 @@ public function userDashboard(Request $request)
         try {
             // Make an API call to fetch the approved posts with 'caveat' = true
             $response = Http::get($apiUrl, [
-                'per_page' => 28,
+                'per_page' => 1,
                 'event' => true,
                 'sort' => 'desc',
                 'sort_by' => 'created_at',
@@ -622,7 +911,7 @@ public function userDashboard(Request $request)
         try {
             // Make an API call to fetch the approved posts with 'caveat' = true
             $response = Http::get($apiUrl, [
-                'per_page' => 8,
+                'per_page' => 1,
                 'event' => true,
             ]);
 
@@ -661,7 +950,7 @@ public function userDashboard(Request $request)
         try {
             // Make an API call to fetch the approved child dedication posts
             $response = Http::get($apiUrl, [
-                'per_page' => 4,
+                'per_page' => 1,
                 'event' => true,
             ]);
 
@@ -700,7 +989,7 @@ public function userDashboard(Request $request)
         try {
             // Make an API call to fetch the approved stolen vehicle posts
             $response = Http::get($apiUrl, [
-                'per_page' => 4,
+                'per_page' => 1,
                 'event' => true,
             ]);
 
@@ -739,7 +1028,7 @@ public function userDashboard(Request $request)
         try {
             // Make the API call to fetch Pride of Nigeria posts with the 'event' filter and pagination
             $response = Http::get($apiUrl, [
-                'per_page' => 10, // Set the number of posts per page
+                'per_page' => 4, // Set the number of posts per page
                 'event' => true,  // Assuming this filter is specific to Pride of Nigeria posts
             ]);
 
@@ -833,7 +1122,7 @@ public function userDashboard(Request $request)
         try {
             // Make an API call to fetch published posts
             $response = Http::get($apiUrl, [
-                'per_page' => 6,    // Limit the result to 6 posts per page
+                'per_page' => 1,    // Limit the result to 6 posts per page
                 'status' => 'published',
             ]);
 
@@ -949,7 +1238,7 @@ public function userDashboard(Request $request)
         try {
             // Make an API call to the caveat endpoint to fetch the 12 most recent posts
             $response = Http::get($apiUrl, [
-                'per_page' => 12,
+                'per_page' => 1,
                 'order' => 'desc',
             ]);
 
@@ -1173,7 +1462,7 @@ public function userDashboard(Request $request)
         try {
             // Make an API call to the  endpoint to fetch the posts
             $response = Http::get($apiUrl, [
-                'per_page' => 10,
+                'per_page' => 5,
             ]);
 
             // Check if the response was successful
@@ -1229,7 +1518,7 @@ public function userDashboard(Request $request)
         try {
             // Make an API call to the endpoint to fetch posts
             $response = Http::get($apiUrl, [
-                'per_page' => 8,
+                'per_page' => 1,
             ]);
 
             // Check if the response was successful
@@ -1292,7 +1581,7 @@ public function userDashboard(Request $request)
         try {
             $response = Http::get($apiUrl, [
                 'option' => 'missing',
-                'per_page' => $request->get('per_page', 6),
+                'per_page' => $request->get('per_page', 1),
             ]);
 
             if ($response->successful()) {
@@ -1317,7 +1606,7 @@ public function userDashboard(Request $request)
         try {
             $response = Http::get($apiUrl, [
                 'option' => 'wanted',
-                'per_page' => $request->get('per_page', 6),
+                'per_page' => $request->get('per_page', 1),
             ]);
 
             if ($response->successful()) {
@@ -1350,7 +1639,7 @@ public function userDashboard(Request $request)
         try {
             // Prepare query parameters (pagination and filters)
             $queryParams = [
-                'per_page' => $request->get('per_page', 8),  // Default to 10 posts per page if not provided
+                'per_page' => $request->get('per_page', 1),  // Default to 10 posts per page if not provided
             ];
 
             // Add any additional filters to the query parameters
@@ -1430,7 +1719,7 @@ public function userDashboard(Request $request)
         try {
             // Prepare query parameters (pagination and filters)
             $queryParams = [
-                'per_page' => $request->get('per_page', 6),  // Default to 10 posts per page if not provided
+                'per_page' => $request->get('per_page', 1),  // Default to 10 posts per page if not provided
             ];
 
             // Add any additional filters to the query parameters

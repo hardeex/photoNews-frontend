@@ -18,7 +18,8 @@
             @include('homepage.latest')
             @include('banner.editor')
             @include('homepage.public-notice')
-            @include('homepage.annocement')
+            @include('homepage.category')
+            {{-- @include('homepage.annocement') --}}
             @include('homepage.edirect-banner')
             @include('homepage.entertainment')
             @include('homepage.caveat')
@@ -28,7 +29,7 @@
             @include('homepage.event')
             @include('homepage.featured-topic')
             @include('homepage.missing-wanted-data')
-            @include('homepage.category')
+            
             @include('homepage.top-topic')
 
 @include('homepage.obituary')
@@ -39,7 +40,7 @@
    @include('homepage.pride-of-nigeria')
 @include('homepage.event-ticket')
 
-@include('homepage.who-is-taken')
+{{-- @include('homepage.who-is-taken') --}}
 
 
   @include('homepage.hotel-intro')
@@ -50,6 +51,7 @@
 
 
 @include('homepage.naming')
+@include('homepage.what-you-missed')
 
   
     </main>

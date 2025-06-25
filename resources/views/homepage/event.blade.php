@@ -53,9 +53,9 @@
                     </div>
                 </div>
 
-                <div class="text-center mt-4">
+                {{-- <div class="text-center mt-4">
                     <a href="#"
                         class="bg-purple-600 text-white px-6 py-2 rounded-full inline-block hover:bg-purple-700 transition duration-300">See
                         more</a>
-                </div>
+                </div> --}}
             </section>

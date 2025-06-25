@@ -1,4 +1,4 @@
-<!-- Enhanced News Section with Blue & Red Brand Colors -->
+
 <section class="relative py-16 overflow-hidden">
     <!-- Background with gradient and animated elements -->
     <div class="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/50 to-red-50/30"></div>
@@ -109,14 +109,17 @@
                                 <div class="flex items-center space-x-4">
                                     <span class="flex items-center hover:text-blue-600 transition-colors">
                                         <i class="fas fa-eye mr-1"></i>
+                                        Views
                                         {{ number_format($post['views']) }}
                                     </span>
                                     <span class="flex items-center hover:text-green-600 transition-colors">
                                         <i class="fas fa-share-alt mr-1"></i>
+                                        Shares
                                         {{ number_format($post['shares']) }}
                                     </span>
                                     <span class="flex items-center hover:text-red-600 transition-colors">
                                         <i class="fas fa-heart mr-1"></i>
+                                        Likes
                                         {{ number_format($post['likes']) }}
                                     </span>
                                 </div>

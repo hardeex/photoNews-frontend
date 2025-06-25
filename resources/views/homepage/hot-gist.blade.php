@@ -1,4 +1,4 @@
-<section class="max-w-6xl mx-auto px-4 py-8">
+<section class="max-w-6xl mx-auto px-4 ">
     <h2 class="text-2xl font-bold mb-6">Hot Gist</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

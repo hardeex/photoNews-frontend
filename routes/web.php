@@ -63,6 +63,11 @@ Route::get('/fetch-categories', [NewsPostController::class, 'listCategoriesFromA
 Route::get('/manage/posts', [NewsPostController::class, 'managePosts'])->name('manage-posts');
 Route::get('/posts/edit/{slug}', [NewsPostController::class, 'fetchPostForEdit'])->name('fetch.post.edit');
 Route::put('/posts/edit/{slug}', [NewsPostController::class, 'updatePost'])->name('update.post');
+Route::get('/categories-with-post', [NewsPostController::class, 'getCategories'])->name('categories.with.post');
+Route::get('/categories', [UserController::class, 'ShowAllCategoryPosts'])->name('categories.all');
+// Route::get('/category/post/{slug}', [UserController::class, 'showCategoryPostDetails'])->name('categories.show');
+Route::get('/category/post/{slug}', [UserController::class, 'showCategoryPostDetails'])->name('categories.show');
+
 
 // public notice routes
 Route::get('/create/public-notice', [PublicNoticeController::class, 'createPost'])->name('public-notice.create');
@@ -121,6 +126,8 @@ Route::post('/submit-tag', [NewsPostController::class, 'submitTag'])->name('subm
 // seeder category routes
 Route::get('/create-category-seeder', [NewsPostController::class, 'createCategorySeeder'])->name('create-category-seeder');
 Route::post('/submit-category-seeder', [NewsPostController::class, 'submitCategorySeeder'])->name('submit-category-seeder');
+
+Route::get('/category/{slug}', [NewsPostController::class, 'show'])->name('category.show');
 
 
 // celebration routes

@@ -79,17 +79,205 @@ class CelebrationController extends Controller
 // }
 
 
+// public function createBirthday(Request $request)
+// {
+//     try {
+//         Log::info('Starting createBirthday method.');
+
+//         if ($request->query('status') === 'success' && $request->query('payment_id')) {
+//             Log::info('User redirected with successful payment in query.', [
+//                 'payment_id' => $request->query('payment_id')
+//             ]);
+
+           
+//             return view('birthday.create', [
+//                 'payment_id' => $request->query('payment_id'),
+//             ]);
+//         }
+
+//         $token = session('api_token');
+//         if (!$token) {
+//             Log::warning('JWT token missing from session.');
+//             return redirect()->route('login')->with('error', 'Authentication token missing.');
+//         }
+
+//         Log::info('JWT token found, calling payment check endpoint.', ['token' => $token]);
+
+//         $response = Http::withHeaders([
+//             'Authorization' => 'Bearer ' . $token,
+//             'Accept' => 'application/json',
+//         ])->get(config('api.base_url') . '/payment/check/birthday');
+
+//         Log::info('Received response from payment check endpoint.', [
+//             'status' => $response->status(),
+//             'body' => $response->body(),
+//         ]);
+
+//         if (!$response->successful()) {
+//             Log::error('Payment check response not successful.', [
+//                 'status' => $response->status(),
+//                 'body' => $response->body(),
+//             ]);
+//             return redirect()->route('payment.initiate')->with('error', 'Failed to verify payment status.');
+//         }
+
+//         $data = $response->json();
+      
+//         Log::info('Payment check response parsed.', ['parsed_data' => $data]);
+
+//         if (isset($data['status'], $data['data']['has_paid']) && 
+//             $data['status'] === 'success' && $data['data']['has_paid']) {
+//             Log::info('User has paid for birthday post.', [
+//                 'payment_id' => $data['data']['payment_id'] ?? null,
+//             ]);
+
+           
+//             return view('birthday.create', [
+//                 'payment_id' => $data['data']['payment_id'],
+//             ]);
+//         }
+
+//         Log::warning('Payment not verified or incomplete.', ['data' => $data]);
+
+//         if (!Route::has('payment.initiate')) {
+//             Log::error('Route payment.initiate not found.');
+//             return redirect()->back()->with('error', 'Payment initiation route not found.');
+//         }
+
+//         return redirect()->route('payment.initiate')->with('error', 'Please complete payment to create a birthday post.');
+//     } catch (\Exception $e) {
+//         Log::error('Exception in createBirthday method.', [
+//             'exception' => $e->getMessage(),
+//             'trace' => $e->getTraceAsString(),
+//         ]);
+//         return redirect()->back()->with('error', 'Failed to verify payment. Please try again.');
+//     }
+// }
+
+
+
+//     public function submitBirthday(Request $request)
+//     {
+//         Log::info('Birthday Post submission method is called...', [
+//             'request_data' => $request->all(),
+//         ]);
+
+//         // Validate the incoming form data
+//         $validated = $request->validate([
+//             'title' => 'required|string|max:255',  // Name of the birthday celebrant
+//             'celebrant_age' => 'required|integer|min:0',  // Age of the birthday celebrant
+//             'dob' => 'required|date',  // Date of Birth
+//             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',  // Featured Image
+//             'content' => 'required|string',  // Description of the birthday event
+//             'event_location' => 'nullable|string|max:255',  // Event location (if available)
+//             'rsvp' => 'nullable|string',  // RSVP details or instructions
+//             'gift_suggestions' => 'nullable|string',  // Gift suggestions for the celebrant
+//             'is_featured' => 'nullable|boolean',  // Whether the post is featured
+//             'is_draft' => 'nullable|boolean',  // Whether the post is in draft mode
+//             'is_scheduled' => 'nullable|boolean',  // Whether the post is scheduled
+//             'scheduled_time' => 'nullable|date|after:now',  // Scheduled time for the post to be published
+//             'allow_comments' => 'nullable|boolean',  // Whether to allow comments
+//             'meta_title' => 'nullable|string|max:155',  // Meta title for SEO
+//             'meta_description' => 'nullable|string|max:155',  // Meta description for SEO
+//             'review_feedback' => 'nullable|string',  // Review feedback (for admin use)
+//         ]);
+
+//         // Get the JWT token from session (after login)
+//         $jwtToken = session('api_token');
+
+//         // If the JWT token is missing or expired, redirect to the login page
+//         if (empty($jwtToken)) {
+//             Log::warning('JWT token missing or expired');
+//             return redirect()->route('user.login')->with('error', 'Please log in first');
+//         }
+
+//         // Prepare the form data
+//         $formData = [
+//             'title' => $validated['title'],
+//             'slug' => ($validated['title']),
+//             'celebrant_age' => $validated['celebrant_age'],
+//             'dob' => $validated['dob'],
+//             'content' => $validated['content'],
+//             'event_location' => $validated['event_location'] ?? null,
+//             'rsvp' => $validated['rsvp'] ?? null,
+//             'gift_suggestions' => $validated['gift_suggestions'] ?? null,
+//             'is_featured' => $validated['is_featured'] ?? false,
+//             'is_draft' => $validated['is_draft'] ?? false,
+//             'is_scheduled' => $validated['is_scheduled'] ?? false,
+//             'scheduled_time' => $validated['scheduled_time'] ?? null,
+//             'allow_comments' => $validated['allow_comments'] ?? true,
+//             'meta_title' => $validated['meta_title'] ?? null,
+//             'meta_description' => $validated['meta_description'] ?? null,
+//             'review_feedback' => $validated['review_feedback'] ?? null,
+//         ];
+
+//         Log::info('Request Payload:', $formData);
+
+//         // API URL for post submission
+//         $apiUrl = config('api.base_url') . '/submit/birthday';
+//         Log::info('Connecting to API URL for birthday post creation', [
+//             'api_url' => $apiUrl,
+//         ]);
+
+//         // Prepare file upload if image exists
+//         try {
+//             $response = Http::withHeaders([
+//                 'Authorization' => 'Bearer ' . $jwtToken,
+//             ])->attach(
+//                 'featured_image',
+//                 $request->hasFile('featured_image') ?
+//                     file_get_contents($request->file('featured_image')->getRealPath()) :
+//                     null,
+//                 $request->hasFile('featured_image') ?
+//                     $request->file('featured_image')->getClientOriginalName() :
+//                     null
+//             )->post($apiUrl, $formData);
+
+//             // Log the response from the external API
+//             if ($response->successful()) {
+//                 Log::info('Birthday Post successfully created through external API', [
+//                     'response_data' => $response->json(),
+//                 ]);
+
+//                 return redirect()->back()->with('success', 'Birthday Post created successfully!');
+//             } else {
+//                 // Handle API errors
+//                 Log::error('Error returned from external API', [
+//                     'status_code' => $response->status(),
+//                     'error_message' => $response->json()['message'] ?? 'An error occurred creating the birthday post.',
+//                 ]);
+//                 return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
+//             }
+//         } catch (\Exception $e) {
+//             // Log any exceptions during the API call
+//             Log::error('API request failed', [
+//                 'exception_message' => $e->getMessage(),
+//                 'exception_trace' => $e->getTraceAsString(),
+//             ]);
+//             return back()->withErrors(['error' => 'An error occurred while submitting the birthday post.']);
+//         }
+//     }
+
+
+
+
 public function createBirthday(Request $request)
 {
     try {
         Log::info('Starting createBirthday method.');
 
-        if ($request->query('status') === 'success' && $request->query('payment_id')) {
+        // Handle payment callback redirect
+        if ($request->query('status') === 'success' && $request->query('payment_id') && $request->query('post_id') && $request->query('post_model')) {
             Log::info('User redirected with successful payment in query.', [
-                'payment_id' => $request->query('payment_id')
+                'payment_id' => $request->query('payment_id'),
+                'post_id' => $request->query('post_id'),
+                'post_model' => $request->query('post_model'),
             ]);
+
             return view('birthday.create', [
                 'payment_id' => $request->query('payment_id'),
+                'post_id' => $request->query('post_id'),
+                'post_model' => $request->query('post_model'),
             ]);
         }
 
@@ -99,12 +287,23 @@ public function createBirthday(Request $request)
             return redirect()->route('login')->with('error', 'Authentication token missing.');
         }
 
-        Log::info('JWT token found, calling payment check endpoint.', ['token' => $token]);
+        // Get post_id and post_model from session or query (if resuming a draft)
+        $postId = $request->query('post_id');
+        $postModel = $request->query('post_model') ?? 'App\Models\BirthdayModel';
+
+        Log::info('Checking payment status.', [
+            'token' => $token,
+            'post_id' => $postId,
+            'post_model' => $postModel,
+        ]);
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json',
-        ])->get(config('api.base_url') . '/payment/check/birthday');
+        ])->get(config('api.base_url') . '/payment/check/birthday', [
+            'post_id' => $postId,
+            'post_model' => $postModel,
+        ]);
 
         Log::info('Received response from payment check endpoint.', [
             'status' => $response->status(),
@@ -120,16 +319,20 @@ public function createBirthday(Request $request)
         }
 
         $data = $response->json();
-
         Log::info('Payment check response parsed.', ['parsed_data' => $data]);
 
         if (isset($data['status'], $data['data']['has_paid']) && 
             $data['status'] === 'success' && $data['data']['has_paid']) {
             Log::info('User has paid for birthday post.', [
                 'payment_id' => $data['data']['payment_id'] ?? null,
+                'post_id' => $data['data']['post_id'] ?? null,
+                'post_model' => $data['data']['post_model'] ?? null,
             ]);
+
             return view('birthday.create', [
                 'payment_id' => $data['data']['payment_id'],
+                'post_id' => $data['data']['post_id'],
+                'post_model' => $data['data']['post_model'],
             ]);
         }
 
@@ -151,108 +354,112 @@ public function createBirthday(Request $request)
 }
 
 
+public function submitBirthday(Request $request)
+{
+    Log::info('Birthday Post submission method is called...', [
+        'request_data' => $request->all(),
+    ]);
 
-    public function submitBirthday(Request $request)
-    {
-        Log::info('Birthday Post submission method is called...', [
-            'request_data' => $request->all(),
-        ]);
+    // Validate the incoming form data
+    $validated = $request->validate([
+        'post_id' => 'required|integer',
+        'payment_id' => 'required|integer',
+        'post_model' => 'required|string|in:App\Models\BirthdayModel',
+        'title' => 'required|string|max:255',
+        'celebrant_age' => 'required|integer|min:0',
+        'dob' => 'required|date',
+        'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        'content' => 'required|string',
+        'event_location' => 'nullable|string|max:255',
+        'rsvp' => 'nullable|string',
+        'gift_suggestions' => 'nullable|string',
+        'is_featured' => 'nullable|boolean',
+        'is_draft' => 'nullable|boolean',
+        'is_scheduled' => 'nullable|boolean',
+        'scheduled_time' => 'nullable|date|after:now',
+        'allow_comments' => 'nullable|boolean',
+        'meta_title' => 'nullable|string|max:155',
+        'meta_description' => 'nullable|string|max:155',
+        'review_feedback' => 'nullable|string',
+    ]);
 
-        // Validate the incoming form data
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',  // Name of the birthday celebrant
-            'celebrant_age' => 'required|integer|min:0',  // Age of the birthday celebrant
-            'dob' => 'required|date',  // Date of Birth
-            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',  // Featured Image
-            'content' => 'required|string',  // Description of the birthday event
-            'event_location' => 'nullable|string|max:255',  // Event location (if available)
-            'rsvp' => 'nullable|string',  // RSVP details or instructions
-            'gift_suggestions' => 'nullable|string',  // Gift suggestions for the celebrant
-            'is_featured' => 'nullable|boolean',  // Whether the post is featured
-            'is_draft' => 'nullable|boolean',  // Whether the post is in draft mode
-            'is_scheduled' => 'nullable|boolean',  // Whether the post is scheduled
-            'scheduled_time' => 'nullable|date|after:now',  // Scheduled time for the post to be published
-            'allow_comments' => 'nullable|boolean',  // Whether to allow comments
-            'meta_title' => 'nullable|string|max:155',  // Meta title for SEO
-            'meta_description' => 'nullable|string|max:155',  // Meta description for SEO
-            'review_feedback' => 'nullable|string',  // Review feedback (for admin use)
-        ]);
+    // Get the JWT token from session
+    $jwtToken = session('api_token');
 
-        // Get the JWT token from session (after login)
-        $jwtToken = session('api_token');
-
-        // If the JWT token is missing or expired, redirect to the login page
-        if (empty($jwtToken)) {
-            Log::warning('JWT token missing or expired');
-            return redirect()->route('user.login')->with('error', 'Please log in first');
-        }
-
-        // Prepare the form data
-        $formData = [
-            'title' => $validated['title'],
-            'slug' => ($validated['title']),
-            'celebrant_age' => $validated['celebrant_age'],
-            'dob' => $validated['dob'],
-            'content' => $validated['content'],
-            'event_location' => $validated['event_location'] ?? null,
-            'rsvp' => $validated['rsvp'] ?? null,
-            'gift_suggestions' => $validated['gift_suggestions'] ?? null,
-            'is_featured' => $validated['is_featured'] ?? false,
-            'is_draft' => $validated['is_draft'] ?? false,
-            'is_scheduled' => $validated['is_scheduled'] ?? false,
-            'scheduled_time' => $validated['scheduled_time'] ?? null,
-            'allow_comments' => $validated['allow_comments'] ?? true,
-            'meta_title' => $validated['meta_title'] ?? null,
-            'meta_description' => $validated['meta_description'] ?? null,
-            'review_feedback' => $validated['review_feedback'] ?? null,
-        ];
-
-        Log::info('Request Payload:', $formData);
-
-        // API URL for post submission
-        $apiUrl = config('api.base_url') . '/submit/birthday';
-        Log::info('Connecting to API URL for birthday post creation', [
-            'api_url' => $apiUrl,
-        ]);
-
-        // Prepare file upload if image exists
-        try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $jwtToken,
-            ])->attach(
-                'featured_image',
-                $request->hasFile('featured_image') ?
-                    file_get_contents($request->file('featured_image')->getRealPath()) :
-                    null,
-                $request->hasFile('featured_image') ?
-                    $request->file('featured_image')->getClientOriginalName() :
-                    null
-            )->post($apiUrl, $formData);
-
-            // Log the response from the external API
-            if ($response->successful()) {
-                Log::info('Birthday Post successfully created through external API', [
-                    'response_data' => $response->json(),
-                ]);
-
-                return redirect()->back()->with('success', 'Birthday Post created successfully!');
-            } else {
-                // Handle API errors
-                Log::error('Error returned from external API', [
-                    'status_code' => $response->status(),
-                    'error_message' => $response->json()['message'] ?? 'An error occurred creating the birthday post.',
-                ]);
-                return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
-            }
-        } catch (\Exception $e) {
-            // Log any exceptions during the API call
-            Log::error('API request failed', [
-                'exception_message' => $e->getMessage(),
-                'exception_trace' => $e->getTraceAsString(),
-            ]);
-            return back()->withErrors(['error' => 'An error occurred while submitting the birthday post.']);
-        }
+    if (empty($jwtToken)) {
+        Log::warning('JWT token missing or expired');
+        return redirect()->route('user.login')->with('error', 'Please log in first');
     }
+
+    // Prepare the form data
+    $formData = [
+        'post_id' => $validated['post_id'],
+        'payment_id' => $validated['payment_id'],
+        'post_model' => $validated['post_model'],
+        'title' => $validated['title'],
+        'slug' => ($validated['title']),
+        'celebrant_age' => $validated['celebrant_age'],
+        'dob' => $validated['dob'],
+        'content' => $validated['content'],
+        'event_location' => $validated['event_location'] ?? null,
+        'rsvp' => $validated['rsvp'] ?? null,
+        'gift_suggestions' => $validated['gift_suggestions'] ?? null,
+        'is_featured' => $validated['is_featured'] ?? false,
+        'is_draft' => $validated['is_draft'] ?? false,
+        'is_scheduled' => $validated['is_scheduled'] ?? false,
+        'scheduled_time' => $validated['scheduled_time'] ?? null,
+        'allow_comments' => $validated['allow_comments'] ?? true,
+        'meta_title' => $validated['meta_title'] ?? null,
+        'meta_description' => $validated['meta_description'] ?? null,
+        'review_feedback' => $validated['review_feedback'] ?? null,
+    ];
+
+    // API URL for post submission
+    $apiUrl = config('api.base_url') . '/submit/birthday';
+
+    Log::info('Connecting to API URL for birthday post submission', [
+        'api_url' => $apiUrl,
+    ]);
+
+    try {
+        // Send API request with file attachment
+        $httpBuilder = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $jwtToken,
+            'Accept' => 'application/json',
+        ]);
+
+        if ($request->hasFile('featured_image')) {
+            $httpBuilder->attach(
+                'featured_image',
+                file_get_contents($request->file('featured_image')->getRealPath()),
+                $request->file('featured_image')->getClientOriginalName()
+            );
+        }
+
+        $response = $httpBuilder->post($apiUrl, $formData);
+
+        // Handle API response
+        if ($response->successful()) {
+            Log::info('Birthday Post successfully submitted through external API', [
+                'response_data' => $response->json(),
+            ]);
+
+            return redirect()->back()->with('success', 'Birthday Post successfully created!');
+        } else {
+            Log::error('Error returned from external API', [
+                'status_code' => $response->status(),
+                'error_message' => $response->json()['message'] ?? 'An error occurred while submitting the birthday post.',
+            ]);
+            return back()->withErrors(['error' => $response->json()['message'] ?? 'An error occurred.']);
+        }
+    } catch (\Exception $e) {
+        Log::error('API request failed', [
+            'exception_message' => $e->getMessage(),
+            'exception_trace' => $e->getTraceAsString(),
+        ]);
+        return back()->withErrors(['error' => 'An error occurred while submitting the birthday post.']);
+    }
+}
 
     public function listBirthdayPosts(Request $request)
     {

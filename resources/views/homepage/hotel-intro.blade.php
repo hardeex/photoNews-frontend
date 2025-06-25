@@ -1,4 +1,5 @@
   <section class="container mx-auto px-4 py-8">
+    <a href="https://ebnbhotel.com/"></a>
         <h2 class="text-3xl font-bold mb-6">Book A Hotel Before Leaving</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -36,4 +37,5 @@
                     class="w-full h-48 object-cover rounded-lg">
             </div>
         </div>
+    </a>
     </section>

@@ -23,13 +23,11 @@
           <p class="text-lg">✓ Grow Your Network • Boost Your Visibility</p>
         </div>
         
-        <div class="flex items-center space-x-4">
+        <div class=" space-x-4">
           <div class="bg-white bg-opacity-20 px-6 py-3 rounded-full">
-            <span class="text-xl font-bold">edirect.ng</span>
+            <a href="https://edirect.ng/signup" class="text-xl font-bold">Register Now!</span>
           </div>
-          <div class="bg-yellow-400 text-black px-6 py-3 rounded-full">
-            <span class="font-bold">Join Today!</span>
-          </div>
+         
         </div>
       </div>
       

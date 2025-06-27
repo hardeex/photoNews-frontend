@@ -322,58 +322,6 @@ public function ShowAllCategoryPosts(Request $request)
 }
 
 
-/**
- * Show posts for a specific category
- */
-
-// public function showCategoryPostDetails(Request $request, $slug)
-// {
-//     try {
-//         // Step 1: Fetch category details using slug
-//         $category = $this->fetchCategoryBySlug($slug);
-
-//         if (!$category) {
-//             abort(404, 'Category not found');
-//         }
-
-//         // Step 2: Build API URL and pass category_name explicitly
-//         $categoryName = $category['name']; // e.g., "Local", "Politics"
-//         $apiUrl = config('api.base_url') . '/posts/category/' . urlencode($categoryName);
-
-//         $response = Http::get($apiUrl, [
-//             'page' => $request->input('page', 1),
-//             'category_name' => $categoryName, // <-- Ensures backend validation passes
-//         ]);
-
-//         // Step 3: Handle failed response
-//         if (!$response->successful()) {
-//             Log::error('Failed to fetch posts', [
-//                 'slug' => $slug,
-//                 'status' => $response->status(),
-//                 'message' => $response->json()['message'] ?? 'Unknown error'
-//             ]);
-//             abort($response->status(), 'Failed to fetch posts');
-//         }
-
-//         // Step 4: Decode and pass data to view
-//         $data = $response->json();
-//         $posts = $data['posts'] ?? [];
-
-//         // dd($posts);
-//         // exit();
-//         return view('components.category-post', compact('category', 'posts'));
-
-//     } catch (\Exception $e) {
-//         Log::error('Error fetching category posts', [
-//             'slug' => $slug,
-//             'error' => $e->getMessage()
-//         ]);
-
-//         abort(500, 'Unable to load category posts');
-//     }
-// }
-
-
 public function showCategoryPostDetails(Request $request, $slug)
 {
     try {

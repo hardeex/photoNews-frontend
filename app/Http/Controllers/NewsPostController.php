@@ -889,64 +889,7 @@ public function getCategories()
         }
     }
 
-    public function fetchPostForEdit2($slug)
-    {
-        Log::info('Fetching post for edit with slug: ' . $slug);
-        $user = session('user');
-        if (!$user) {
-            return redirect()->route('login')->withErrors(['error' => 'You must be logged in to edit a post.']);
-        }
-
-        $jwtToken = session('api_token');
-        if (empty($jwtToken)) {
-            Log::warning('JWT token missing or expired');
-            return redirect()->route('login')->with('error', 'Please log in first');
-        }
-
-        Log::info('Post slug: ', ['slug' => $slug]);
-        try {
-            $response = Http::withToken($jwtToken)
-                ->get(config('api.base_url') . '/posts/edit/' . $slug);
-
-            Log::info('API response:', ['response' => $response->json()]);
-
-            if ($response->successful()) {
-                Log::error('API request failed', [
-                    'status_code' => $response->status(),
-                    'error_message' => $response->json()['message'] ?? 'Unknown error',
-                ]);
-                $post = $response->json()['post'];
-
-                //dd($post);
-                return view('posts.edit', [
-                    'post' => $post,
-                    'user' => $user
-                ]);
-            }
-
-            // Handle specific error cases
-            $statusCode = $response->status();
-            $errorMessage = $response->json()['message'] ?? 'An error occurred';
-
-            if ($statusCode === 403) {
-                return redirect()->route('manage-posts')->with('error', 'You are not authorized to edit this post');
-            }
-
-            if ($statusCode === 404) {
-                return redirect()->route('manage-posts')->with('error', 'Post not found');
-            }
-
-            return redirect()->route('manage-posts')->with('error', $errorMessage);
-        } catch (\Exception $e) {
-            Log::error('Error fetching post for edit', [
-                'error' => $e->getMessage(),
-                'slug' => $slug
-            ]);
-            return redirect()->route('manage-posts')->with('error', 'An error occurred while fetching the post');
-        }
-    }
-
-
+    
 
     public function fetchPostForEdit($slug)
     {

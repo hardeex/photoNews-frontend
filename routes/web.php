@@ -13,6 +13,7 @@ use App\Http\Controllers\ObituaryController;
 use App\Http\Controllers\RemembranceController;
 use App\Http\Controllers\changeOfNameController;
 use App\Http\Controllers\ExchangeController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StolenVehicle;
 use Illuminate\Routing\RouteUrlGenerator;
 use Illuminate\Support\Facades\Http;
@@ -171,29 +172,16 @@ Route::get('/news/latest-image', [NewsPostController::class, 'showLatestImage'])
 Route::get('/exchange-rate', [ExchangeController::class, 'showCurrency'])->name('exchange-rate');
 
 
-// Route::get('/payment/initiate', function () {
-//     return view('payment.initiate');
-// })->name('payment.initiate');
+// payment routes
+Route::post('/pay/{postType}/{slug}', [PaymentController::class, 'initiate'])->name('post.payment.initiate');
+
 
 Route::get('/payment/initiate', function () {
     return view('payment.initiate');
 })->name('payment.initiate');
 
 
-// Route::get('/payment/initiate/{post_type}', function ($post_type) {
-//     try {
-//         $response = Http::get(config('api.base_url') . '/post-types/prices');
-//         if ($response->successful()) {
-//             $prices = $response->json()['data'];
-//             $price = $prices[$post_type] ?? 500;
-//         } else {
-//             $price = 500;
-//         }
-//         return view('payment.initiate', compact('post_type', 'price'));
-//     } catch (\Exception $e) {
-//         return view('payment.initiate', ['post_type' => $post_type, 'price' => 500]);
-//     }
-// })->name('payment.initiate');
+
 
 Route::post('/payment/start/{post_type}', [ExchangeController::class, 'startPayment'])->name('payment.start');
 

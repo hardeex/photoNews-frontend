@@ -6,7 +6,7 @@
         <div class="max-w-7xl mx-auto">
             <!-- Newspaper Header -->
             <div class="text-center border-b-4 border-black pb-4 mb-6">
-                <h1 class="text-4xl md:text-6xl font-serif font-bold tracking-tight mb-2">The Daily Chronicle</h1>
+                <h1 class="text-4xl md:text-6xl font-serif font-bold tracking-tight mb-2">Essential Nigeria News</h1>
                 <div
                     class="text-sm border-t border-b border-gray-400 py-2 my-2 flex flex-col md:flex-row justify-between items-center">
                     <span>{{ \Carbon\Carbon::now()->format('l, F d, Y') }}</span>

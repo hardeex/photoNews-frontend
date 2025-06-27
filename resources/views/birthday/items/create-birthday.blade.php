@@ -104,9 +104,9 @@
                 @csrf
 
                 <input type="hidden" name="post_id" id="post_id" value="{{ $post->id ?? '' }}">
-                {{-- <input type="hidden" name="post_id" value="{{ $post_id }}"> --}}
-                        <input type="hidden" name="payment_id" value="{{ $payment_id }}">
-                        <input type="hidden" name="post_model" value="{{ $post_model }}">
+            
+                        {{-- <input type="hidden" name="payment_id" value="{{ $payment_id }}"> --}}
+                        {{-- <input type="hidden" name="post_model" value="{{ $post_model }}"> --}}
 
                 <!-- Name of the Celebrant -->
                 <div class="mb-6">
@@ -137,10 +137,10 @@
 
                 <!-- Date of Birth -->
                 <div class="mb-6">
-                    <label for="dob" class="block text-sm font-medium text-gray-700 mb-2">Date of Birth *</label>
+                    <label for="dob" class="block text-sm font-medium text-gray-700 mb-2">Date of Birth (Optional) </label>
                     <input type="date" id="dob" name="dob"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
-                        value="{{ old('dob', $post->dob ?? '') }}" required>
+                        value="{{ old('dob', $post->dob ?? '') }}" >
                 </div>
 
                 <!-- Featured Image -->
@@ -152,7 +152,7 @@
                                 <label for="featured_image"
                                     class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
                                     <span>Upload a file</span>
-                                    <input id="featured_image" name="featured_image" type="file" class="sr-only"
+                                    <input id="featured_image" name="featured_image" type="file" class="sr-only" required
                                         accept="image/*">
                                 </label>
                             </div>
